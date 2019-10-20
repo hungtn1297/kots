@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->integer('role');
             $table->string('image')->default('images/default-avatar.png');
             $table->integer('team_id')->nullable();
-            $table->string('password')->nullalbe();
+            $table->string('password')->nullable();
             $table->timestamps();
         });
     }
