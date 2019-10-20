@@ -49,4 +49,43 @@ class KnightController extends Controller
             return view('admin/error')->with(compact('error'));
         }
     }
+
+    public function findKnight(){
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+        try{
+            $json = json_decode(file_get_contents('php://input'), true);
+            if(isset($json)){
+                $id = $json['phone'];
+                $id = str_replace('+84','0',$id);
+                $knight = Users::find($id);
+                if($knight->count()>0){
+                    $resultCode = 200;
+                    $message = "Knight exist";
+                    $data = [
+                        'name' => $knight->name,
+                        'address' => $knight->address,
+                        'status' => $knight->status,
+                        'isDisalbe' => $knight->isDisable
+                    ];
+                }else{
+                    $resultCode = 404;
+                    $message = "Not found Knight";
+                }
+            }else{
+                $resultCode = 3000;
+                $message = "Đã xảy ra lỗi";
+            }
+        }catch(Exception $e){
+            $resultCode = 3000;
+            $message = $e->getMessage();
+        }finally{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }
+    }
 }

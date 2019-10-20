@@ -385,6 +385,7 @@ class ComposerStaticInit70dc1427aaba1a3727b9983d019c8712
     );
 
     public static $classMap = array (
+        'App\\Case' => __DIR__ . '/../..' . '/app/Case.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -395,6 +396,7 @@ class ComposerStaticInit70dc1427aaba1a3727b9983d019c8712
         'App\\Http\\Controllers\\CitizenController' => __DIR__ . '/../..' . '/app/Http/Controllers/CitizenController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\KnightController' => __DIR__ . '/../..' . '/app/Http/Controllers/KnightController.php',
+        'App\\Http\\Controllers\\MessageController' => __DIR__ . '/../..' . '/app/Http/Controllers/MessageController.php',
         'App\\Http\\Controllers\\NewsController' => __DIR__ . '/../..' . '/app/Http/Controllers/NewsController.php',
         'App\\Http\\Controllers\\OtherController' => __DIR__ . '/../..' . '/app/Http/Controllers/OtherController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',

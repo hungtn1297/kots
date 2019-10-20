@@ -37,5 +37,7 @@ Route::prefix('admin')->group(function(){
             $news = App\News::find($request->id);
             return view('admin/News/EditNews')->with(compact('news'));
         });
+        Route::post('create', 'NewsController@create');
+        Route::delete('delete', 'NewsController@delete');
     });
 });

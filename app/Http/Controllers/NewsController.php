@@ -42,10 +42,10 @@ class NewsController extends Controller
     }
 
     public function getContent($link, $imagePath){
-        $flag = News::where('unitlink',$link)
-                ->get();
-        echo($flag->count()."<br>");                
-        if($flag->count()==0){
+        // $flag = News::where('unitlink',$link)
+        //         ->get();
+        // echo($flag->count()."<br>");                
+        // if($flag->count()==0){
             $response = Curl::to($link)
                         ->returnResponseObject()
                         ->get()->content;
@@ -54,20 +54,62 @@ class NewsController extends Controller
 
             $htmlResult = new \DomXpath($domDoc);
             $title = $htmlResult->query('//div[@class="nld-detail clearfix fl w828"]/h1[@class="title-content"]')->item(0);
-            $content = $htmlResult->query('//div[@id="content-id"]')->item(0);
-            $a = $content->ownerDocument->saveHTML($content);
-            // dd($title->textContent);
-            $news = new News();
-            $news->title = $title->textContent;
-            $news->image = $imagePath;
-            $news->content = $content->ownerDocument->saveHTML($content);
-            $news->unitlink = $link;
-            $news->save();
-        }
+            $flag = News::where('title', $title->textContent);
+            if($flag->count() == 0){
+                $content = $htmlResult->query('//div[@id="content-id"]')->item(0);
+                $a = $content->ownerDocument->saveHTML($content);
+                // dd($title->textContent);
+                $news = new News();
+                $news->title = $title->textContent;
+                $news->image = $imagePath;
+                $news->content = $content->ownerDocument->saveHTML($content);
+                $news->unitlink = $link;
+                $news->save();
+            }
+        // }
     }
 
     public function get(){
         $listNews = News::get();
         return view('admin/News/ListNews')->with(compact('listNews'));
+    }
+
+    public function create(Request $request){
+        $title = $request->title;
+        $image = $request->image;
+        $content = $request->content;
+        $id = $request->id;
+
+        if(isset($id)){ //Update
+            $news = News::find($id);
+        }else{          //Insert
+            $news = new News();
+        }
+
+        $news->title = $title;
+        $news->content = $content;
+        if(isset($image)){
+            $imageLink = 'images/'.$image->getClientOriginalName();
+            $image->move('images',$image->getClientOriginalName());
+            $news->image = $imageLink;
+        }elseif(!isset($id)){
+            $error = "Vui lòng tải hình ảnh lên";
+            return view('error')->with(compact('error'));
+        }
+
+        $news->save();
+        return redirect()->action('NewsController@get');
+    }
+
+    public function delete(Request $request){
+        $id = $request->id;
+        if(isset($id)){
+            $news = News::find($id);
+            $news->delete();
+            return redirect()->action('NewsController@get');
+        }else{
+            $error = "Không tìm thấy tin tức";
+            return view('admin/error')->with(compact('error'));
+        }
     }
 }

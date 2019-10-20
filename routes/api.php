@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('login','OtherController@checkLogin');
+Route::get('findKnight','KnightController@findKnight');
+Route::get('receiveMessage','MessageController@receiveMessage');

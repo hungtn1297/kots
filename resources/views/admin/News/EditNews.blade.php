@@ -20,6 +20,7 @@
                     <!-- /.col-lg-12 -->
                     <form action="{{url('admin/news/create')}}" enctype="multipart/form-data" method="post">
                         @csrf
+                        <input type="hidden" name="id" value="{{$news->id}}">
                         <div class="form-group">
                                 <label>Tiêu đề</label>
                             <input class="form-control" name="title" value="{{$news->title}}" required />
@@ -31,17 +32,17 @@
                                 <input type="file" name="image" />
                         </div>
                         <br>
-                        <img src="{{$news->image}}" alt="">
+                        <img src="{{URL::asset("$news->image")}}" alt="">
                         <br>
 
                         <div class="form-group">
                                 <label>Nội dung</label>
-                                <textarea name="post_content" id="post_content" rows="10" cols="150">
+                                <textarea name="content" id="content" rows="10" cols="150">
                                     {{$news->content}}
                                 </textarea>
                         </div>
                         <br>
-        
+                        
                             <button type="submit" class="btn btn-success">Cập nhật</button>
                             <br>
                             <br>
@@ -55,7 +56,7 @@
     @include('admin/footer')
     <script>
         // Thay thế <textarea id="post_content"> với CKEditor
-        CKEDITOR.replace( 'post_content' );// tham số là biến name của textarea
+        CKEDITOR.replace( 'content' );// tham số là biến name của textarea
     </script>
 </body>
 </html>

@@ -37,12 +37,13 @@
                                         <td>
                                             <form action="{{url('admin/news/edit')}}" method="get">
                                                 <input type="hidden" name="id" value="{{$news->id}}">
-                                                <input type="submit" class="btn btn-info" value="Chi tiết">
+                                                <input type="submit" class="btn btn-info" value="Chỉnh sửa">
                                             </form>    
                                         </td>
                                         <td>
-                                            <form action="{{url('admin/news/disable')}}" method="post">
+                                            <form action="{{url('admin/news/delete')}}" method="post">
                                                 @csrf
+                                                @method('delete')
                                                 <input type="hidden" name="id" value="{{$news->id}}">
                                                 <input type="submit" class="btn btn-danger" value="Xoá">
                                             </form>

@@ -34,7 +34,7 @@
 
                         <div class="form-group">
                                 <label>Nội dung</label>
-                                <textarea name="post_content" id="post_content" rows="10" cols="150"></textarea>
+                                <textarea name="content" id="content" rows="10" cols="200"></textarea>
                         </div>
                         <br>
         
@@ -50,7 +50,7 @@
     @include('admin/footer')
     <script>
         // Thay thế <textarea id="post_content"> với CKEditor
-        CKEDITOR.replace( 'post_content' );// tham số là biến name của textarea
+        CKEDITOR.replace( 'content' );// tham số là biến name của textarea
     </script>
 </body>
 </html>
