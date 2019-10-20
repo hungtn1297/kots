@@ -10,6 +10,7 @@ class KnightController extends Controller
     public function get(){
         // Function dùng để lấy danh sách các hiệp sĩ
         $listKnights = Users::where('role',2)->get();
+        // dd($listKnights);
         return view('admin/Knight/ListKnight')->with(compact('listKnights'));
     }
 

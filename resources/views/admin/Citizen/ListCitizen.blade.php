@@ -48,7 +48,7 @@
                                         </td>
                                         <td>
                                             <form action="{{url('admin/citizen/viewprofile')}}" method="get">
-                                                <input type="hidden" name="id" value="{{$citizen->id}}">
+                                                <input type="hidden" name="id" value="{{sprintf('%010d',$citizen->id)}}">
                                                 <input type="submit" class="btn btn-info" value="Chi tiết">
                                             </form>    
                                         </td>
@@ -56,13 +56,13 @@
                                             @if ($citizen->isDisable == 1)
                                                 <form action="{{url('admin/citizen/disable')}}" method="post">
                                                     @csrf
-                                                    <input type="hidden" name="id" value="{{$citizen->id}}">
+                                                    <input type="hidden" name="id" value="{{sprintf('%010d',$citizen->id)}}">
                                                     <input type="submit" class="btn btn-success" value="Kích hoạt">
                                                 </form>
                                             @else
                                                 <form action="{{url('admin/citizen/disable')}}" method="post">
                                                     @csrf
-                                                    <input type="hidden" name="id" value="{{$citizen->id}}">
+                                                    <input type="hidden" name="id" value="{{sprintf('%010d',$citizen->id)}}">
                                                     <input type="submit" class="btn btn-danger" value="Khoá">
                                                 </form>
                                             @endif 
