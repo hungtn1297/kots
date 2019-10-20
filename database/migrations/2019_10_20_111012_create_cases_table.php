@@ -15,6 +15,15 @@ class CreateCasesTable extends Migration
     {
         Schema::create('cases', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('status');
+            $table->string('citizenId');
+            $table->text('message');
+            $table->string('knightConfirmId')->nullable();
+            $table->string('knightCloseId')->nullable();
+            $table->string('startLongitude');
+            $table->string('startLatitude');
+            $table->string('endLongitude')->nullable();
+            $table->string('endLatitute')->nullable();
             $table->timestamps();
         });
     }
