@@ -68,6 +68,12 @@ class CaseController extends Controller
         return $case;
     }
 
+    public function get(){
+        $listCases = Cases::get();
+        
+        return view('admin/Case/ListCase')->with(compact('listCases'));
+    }
+
     public function form(){
         $resultCode = 3000;
         $message = "";
@@ -88,4 +94,5 @@ class CaseController extends Controller
             ]);
         }
     }
+    
 }

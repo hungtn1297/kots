@@ -24,4 +24,6 @@ Route::post('confirmCase', 'CaseController@changeCaseStatus');
 Route::post('closeCase','CaseController@changeCaseStatus');
 Route::post('pendingCase','CaseController@changeCaseStatus');
 
+Route::post('findUser','UserController@findUser');
+
 Route::post('createProfile','UserController@createProfile');

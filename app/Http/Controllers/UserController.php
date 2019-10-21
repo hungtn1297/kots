@@ -11,6 +11,7 @@ class UserController extends Controller
     private $ACTIVE = 1;
     private $CITIZEN_ROLE = 1;
     private $KNIGHT_ROLE = 2;
+    private $ADMIN_ROLE = 3;
 
     public function createProfile(){
         $resultCode = 3000;
@@ -18,11 +19,11 @@ class UserController extends Controller
         $data = array();
         try{
             $json = json_decode(file_get_contents('php://input'), true);
-            $id = $json['phone'];
+            $id = str_replace("+84","0",$json['phone']);
             $user = Users::find($id);
             if(!isset($user)){
                 $user = new Users();
-                $user->id = str_replace("+84","0",$id);
+                $user->id = $id;
                 $user->name = $json['name'];
                 $user->address = $json['address'];
                 $role = $json['role'];
@@ -52,4 +53,53 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function findUser(){
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+        try{
+            $json = json_decode(file_get_contents('php://input'), true);
+            if(isset($json)){
+                $id = $json['phone'];
+                $id = str_replace('+84','0',$id);             
+                if(isset($json['role'])){
+                    $role = $json['role'];
+                    $user = Users::where("id",$id)
+                            ->where("role",$role)->first();
+                }else{
+                    $user = Users::find($id);
+                }
+                if(isset($user)){
+                    $resultCode = 200;
+                    $message = "user exist";
+                    // dd($user);
+                    $data = [
+                        'name' => $user->name,
+                        'address' => $user->address,
+                        'status' => $user->status,
+                        'isDisalbe' => $user->isDisable
+                    ];
+                }else{
+                    $resultCode = 404;
+                    $message = "Not found user";
+                }
+            }else{
+                $resultCode = 3000;
+                $message = "Đã xảy ra lỗi";
+            }
+        }catch(Exception $e){
+            $resultCode = 3000;
+            $message = $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }
+    }
+
+
 }

@@ -25,6 +25,7 @@ class MessageController extends Controller
                 $userName = $user->name;
                 $userPhone = $user->id;
                 $case = $caseController->createCase($id, $longitude, $latitude, $userMessage);
+                $resultCode = 200;
                 $data = $case;
             }
         }catch(Exception $e){
@@ -34,7 +35,7 @@ class MessageController extends Controller
         }
         finally{
             return response()->json([
-                'resultCode' => $resultCode,
+                'result' => $resultCode,
                 'message' => $message,
                 'data' => $data,
             ]);
