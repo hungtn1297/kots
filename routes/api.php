@@ -23,3 +23,5 @@ Route::post('sendCase','MessageController@receiveMessage');
 Route::post('confirmCase', 'CaseController@changeCaseStatus');
 Route::post('closeCase','CaseController@changeCaseStatus');
 Route::post('pendingCase','CaseController@changeCaseStatus');
+
+Route::post('createProfile','UserController@createProfile');
