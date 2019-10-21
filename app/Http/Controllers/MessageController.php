@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Users;
-use App\Controllers\CaseController;
+use App\Http\Controllers\CaseController;
 
 class MessageController extends Controller
 {
@@ -32,13 +32,13 @@ class MessageController extends Controller
             $resultCode = 404;
             $message = $e->getMessage();
         }
-        // finally{
-        //     return response()->json([
-        //         'resultCode' => $resultCode,
-        //         'message' => $message,
-        //         'data' => $data,
-        //     ]);
-        // }
+        finally{
+            return response()->json([
+                'resultCode' => $resultCode,
+                'message' => $message,
+                'data' => $data,
+            ]);
+        }
         
     }
 }

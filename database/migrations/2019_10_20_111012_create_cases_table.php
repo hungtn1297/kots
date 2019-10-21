@@ -23,7 +23,7 @@ class CreateCasesTable extends Migration
             $table->string('startLongitude');
             $table->string('startLatitude');
             $table->string('endLongitude')->nullable();
-            $table->string('endLatitute')->nullable();
+            $table->string('endLatitude')->nullable();
             $table->timestamps();
         });
     }
