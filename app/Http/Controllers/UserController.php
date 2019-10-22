@@ -61,8 +61,7 @@ class UserController extends Controller
         try{
             $json = json_decode(file_get_contents('php://input'), true);
             if(isset($json)){
-                $id = $json['phone'];
-                $id = str_replace('+84','0',$id);             
+                $id = str_replace('+84','0',$json['phone']);             
                 if(isset($json['role'])){
                     $role = $json['role'];
                     $user = Users::where("id",$id)

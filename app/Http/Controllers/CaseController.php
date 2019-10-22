@@ -28,12 +28,12 @@ class CaseController extends Controller
             $case = Cases::find($caseId);
             if(isset($case)){
                 if($status == $this->CONFIRM){
-                    $knightId = $json['phone'];
+                    $knightId = str_replace("+84","0",$json['phone']);
                     $case->knightConfirmId = $knightId;
                     $case->status = $status;
                     $case->save();             
                 }elseif($status == $this->SUCCESS || $status == $this->FAIL){
-                    $knightId = $json['phone'];
+                    $knightId = str_replace("+84","0",$json['phone']);
                     $case->knightCloseId = $knightId;
                     $case->status = $status;
                     $case->endLongitude = $json['longitude'];
