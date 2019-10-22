@@ -27,8 +27,9 @@ class CaseController extends Controller
             $json = json_decode(file_get_contents('php://input'), true);
             $status = $json['status'];
             $caseId = $json['caseId'];
-            $case = Cases::find($caseId);
+            $case = Cases::find($caseId);          
             if(isset($case)){
+                $flag = true;
                 if($status == $this->CONFIRM){
                     $knightId = str_replace("+84","0",$json['phone']);
                     $knightController = new KnightController();
@@ -37,7 +38,7 @@ class CaseController extends Controller
                         $case->knightConfirmId = $knightId;
                         $case->status = $status;
                         $case->save();
-                        $knightController->joinCase($knightId, $case->id);
+                        $caseDetail = $knightController->joinCase($knightId, $case->id);
                         DB::commit();      
                     }catch (Exception $e) {
                         DB::rollBack();
@@ -46,19 +47,29 @@ class CaseController extends Controller
                     }       
                 }elseif($status == $this->SUCCESS || $status == $this->FAIL){
                     $knightId = str_replace("+84","0",$json['phone']);
-                    // $caseDetail = CaseDetail::
-                    $case->knightCloseId = $knightId;
-                    $case->status = $status;
-                    $case->endLongitude = $json['longitude'];
-                    $case->endLatitude = $json['latitude'];
-                    $case->save();
+                    $caseDetail = CaseDetail::where('caseId', $caseId)
+                                            ->where('knightId',$knightId)->first();
+                    if(isset($caseDetail)){
+                        $case->knightCloseId = $knightId;
+                        $case->status = $status;
+                        $case->endLongitude = $json['longitude'];
+                        $case->endLatitude = $json['latitude'];
+                        $case->save();
+                    }else{
+                        $flag = false;
+                    }
                 }elseif($status == $this->PENDING){
                     $case->status = $status;
                     $case->save();
                 }
-                $resultCode = 200;
-                $message = "Success";
-                $data = $case;
+                if($flag){
+                    $resultCode = 200;
+                    $message = "Success";
+                    $data = $case;
+                }else{
+                    $resultCode = 3000;
+                    $message = "Knight not in case";
+                }
             }else{
                 $resultCode = 404;
                 $message = "Not found case";

@@ -91,10 +91,18 @@ class KnightController extends Controller
     }
 
     public function joinCase($knightId, $caseId){
-        $caseDetail = new CaseDetail();
-        $caseDetail->knightId = $knightId;
-        $caseDetail->caseId = $caseId;
-        $caseDetail->save();
-        return $caseDetail;
+        $knight = CaseDetail::where('caseId', $caseId)
+                                ->where('knightId',$knightId)->first();
+
+        if(!isset($knight)){
+            $caseDetail = new CaseDetail();
+            $caseDetail->knightId = $knightId;
+            $caseDetail->caseId = $caseId;
+            $caseDetail->save();
+            return $caseDetail;
+        }else{
+
+        }
+        
     }
 }
