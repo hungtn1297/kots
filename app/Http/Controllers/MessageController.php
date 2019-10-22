@@ -23,14 +23,11 @@ class MessageController extends Controller
                 
                 $user = Users::find($id);
                 $caseController = new CaseController();
-                $userName = $user->name;
-                $userPhone = $user->id;
                 $case = $caseController->createCase($id, $longitude, $latitude, $userMessage, $type);
                 $resultCode = 200;
                 $data = $case;
             }
         }catch(Exception $e){
-            dd($e->getMessage());
             $resultCode = 404;
             $message = $e->getMessage();
         }
