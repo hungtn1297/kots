@@ -31,13 +31,13 @@ class MessageController extends Controller
             $resultCode = 404;
             $message = $e->getMessage();
         }
-        // finally{
-        //     return response()->json([
-        //         'result' => $resultCode,
-        //         'message' => $message,
-        //         'data' => $data,
-        //     ]);
-        // }
+        finally{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data,
+            ]);
+        }
         
     }
 }
