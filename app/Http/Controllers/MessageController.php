@@ -15,7 +15,7 @@ class MessageController extends Controller
         try{
             $jsonData = json_decode(file_get_contents('php://input'),true);
             if(isset($jsonData)){
-                $id = $jsonData['phone'];
+                $id = str_replace("+84","0",$jsonData['phone']);
                 $userMessage = $jsonData['message'];
                 $longitude = $jsonData['longitude'];
                 $latitude = $jsonData['latitude'];
