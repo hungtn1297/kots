@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cases;
+use App\CaseDetail;
 
 class CaseController extends Controller
 {
@@ -11,6 +12,10 @@ class CaseController extends Controller
     private $SUCCESS = 2;
     private $FAIL = 3;
     private $PENDING = 4;
+    private $NORMAL_CASE = 1;
+    private $SOS = 2;
+    private $CITIZEN_ROLE = 1;
+    private $KNIGHT_ROLE = 2;
 
     public function changeCaseStatus(){
         $resultCode = 3000;
@@ -57,21 +62,67 @@ class CaseController extends Controller
         }
     }
 
-    public function createCase($citizenId, $longitude, $latitude, $message){
+    public function createCase($citizenId, $longitude, $latitude, $message, $type){
         $case = new Cases();
         $case->citizenId = $citizenId;
         $case->startLongitude = $longitude;
         $case->startLatitude = $latitude;
         $case->message = $message;
+        $case->type = $type;
         $case->status = 0;
         $case->save();
         return $case;
     }
 
     public function get(){
-        $listCases = Cases::get();
-        
-        return view('admin/Case/ListCase')->with(compact('listCases'));
+        $json = json_decode(file_get_contents('php://input'), true);
+        if(isset($json)){
+            $resultCode = 3000;
+            $message = "";
+            $data = array();
+            try{
+                $id = str_replace("+84","0",$json['phone']);
+                $role = $json ['role'];
+                if($role == $this->CITIZEN_ROLE){
+
+                }elseif($role == $this->KNIGHT_ROLE){
+                    $case = $this->getCaseByKnightId($id);
+                    $data = $case;
+                }
+                $resultCode = 200;
+                $message = "Success";
+            }catch(Exception $e){
+                $message = $e->getMessage();
+            }
+            finally{
+                return response()->json([
+                    'result' => $resultCode,
+                    'message' => $message,
+                    'data' => $data
+                ]);
+            }
+        }else{
+            $listCases = Cases::get();
+            return view('admin/Case/ListCase')->with(compact('listCases'));
+        }
+    }
+
+    public function getCaseByKnightId($knightId){
+        $caseDetails  = CaseDetail::where('knightId', $knightId)->get();
+        $case = array();
+        $listCaseId = array();
+        foreach ($caseDetails as $caseDetail) {
+            // dd($caseDetail->case->id);
+            $citizenName = $caseDetail->case->user->name;
+            $caseDetail->case['citizenName']  = $citizenName;
+            $caseId = $caseDetail->case->id;
+            if(!in_array($caseId, $listCaseId)){
+                array_push($listCaseId, $caseId);
+                array_push($case, $caseDetail->case);    
+                // dd($case);
+            }
+        }
+        return $case;
     }
 
     public function form(){

@@ -18,6 +18,7 @@ class CreateCasesTable extends Migration
             $table->integer('status');
             $table->string('citizenId');
             $table->text('message');
+            $table->integer('type');
             $table->string('knightConfirmId')->nullable();
             $table->string('knightCloseId')->nullable();
             $table->string('startLongitude');

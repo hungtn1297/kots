@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('login','OtherController@checkLogin');
 Route::post('findKnight','KnightController@findKnight');
+
+Route::post('getCase','CaseController@get');
 Route::post('sendCase','MessageController@receiveMessage');
 Route::post('confirmCase', 'CaseController@changeCaseStatus');
 Route::post('closeCase','CaseController@changeCaseStatus');

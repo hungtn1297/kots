@@ -19,12 +19,13 @@ class MessageController extends Controller
                 $userMessage = $jsonData['message'];
                 $longitude = $jsonData['longitude'];
                 $latitude = $jsonData['latitude'];
+                $type = $jsonData['type'];
                 
                 $user = Users::find($id);
                 $caseController = new CaseController();
                 $userName = $user->name;
                 $userPhone = $user->id;
-                $case = $caseController->createCase($id, $longitude, $latitude, $userMessage);
+                $case = $caseController->createCase($id, $longitude, $latitude, $userMessage, $type);
                 $resultCode = 200;
                 $data = $case;
             }
