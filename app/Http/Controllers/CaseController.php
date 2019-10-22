@@ -109,8 +109,20 @@ class CaseController extends Controller
 
     public function getCaseByKnightId($knightId){
         $caseDetails  = CaseDetail::where('knightId', $knightId)->get();
+        $newCases = Cases::where('status',0)->get();
         $case = array();
         $listCaseId = array();
+        foreach ($newCases as $newCase) {
+            // dd($newCase->case->id);
+            $citizenName = $newCase->user->name;
+            $newCase['citizenName']  = $citizenName;
+            $caseId = $newCase->id;
+            if(!in_array($caseId, $listCaseId)){
+                array_push($listCaseId, $caseId);
+                array_push($case, $newCase);    
+                // dd($case);
+            }
+        }
         foreach ($caseDetails as $caseDetail) {
             // dd($caseDetail->case->id);
             $citizenName = $caseDetail->case->user->name;
@@ -122,6 +134,7 @@ class CaseController extends Controller
                 // dd($case);
             }
         }
+        
         return $case;
     }
 
