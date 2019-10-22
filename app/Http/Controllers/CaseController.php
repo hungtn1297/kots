@@ -60,11 +60,12 @@ class CaseController extends Controller
                 $message = "Success";
                 $data = $case;
             }else{
+                $resultCode = 404;
                 $message = "Not found case";
             }
         }catch(Exception $e){
             $message = $e->getMessage();
-            dd($message);
+            // dd($message);
         }
         // finally{
         //     return response()->json([
