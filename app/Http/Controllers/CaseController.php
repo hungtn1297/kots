@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Cases;
 use App\CaseDetail;
+use App\Http\Controllers\KnightController;
+use DB;
 
 class CaseController extends Controller
 {
@@ -29,9 +31,19 @@ class CaseController extends Controller
             if(isset($case)){
                 if($status == $this->CONFIRM){
                     $knightId = str_replace("+84","0",$json['phone']);
-                    $case->knightConfirmId = $knightId;
-                    $case->status = $status;
-                    $case->save();             
+                    $knightController = new KnightController();
+                    DB::beginTransaction();
+                    try{
+                        $case->knightConfirmId = $knightId;
+                        $case->status = $status;
+                        $case->save();
+                        $knightController->joinCase($knightId, $case->id);
+                        DB::commit();      
+                    }catch (Exception $e) {
+                        DB::rollBack();
+                        $resultCode = 3000;
+                        $message = $e->getMessage();
+                    }       
                 }elseif($status == $this->SUCCESS || $status == $this->FAIL){
                     $knightId = str_replace("+84","0",$json['phone']);
                     $case->knightCloseId = $knightId;
@@ -43,9 +55,9 @@ class CaseController extends Controller
                     $case->status = $status;
                     $case->save();
                 }
-                    $resultCode = 200;
-                    $message = "Success";
-                    $data = $case;
+                $resultCode = 200;
+                $message = "Success";
+                $data = $case;
             }else{
                 $message = "Not found case";
             }

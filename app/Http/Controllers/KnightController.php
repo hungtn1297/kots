@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Users;
+use App\CaseDetail;
 
 class KnightController extends Controller
 {
@@ -87,5 +88,13 @@ class KnightController extends Controller
                 'data' => $data
             ]);
         }
+    }
+
+    public function joinCase($knightId, $caseId){
+        $caseDetail = new CaseDetail();
+        $caseDetail->knightId = $knightId;
+        $caseDetail->caseId = $caseId;
+        $caseDetail->save();
+        return $caseDetail;
     }
 }
