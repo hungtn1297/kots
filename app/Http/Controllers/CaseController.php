@@ -183,5 +183,19 @@ class CaseController extends Controller
             ]);
         }
     }
+
+    public function detail(Request $request){
+        $id = $request->id;
+        $case = Cases::find($id);
+        if(isset($case)){
+            // foreach ($case->caseDetail as $detail) {
+            //     dd($detail->knight);
+            // }
+            return view('admin/Case/DetailCase')->with(compact('case'));
+        }else{
+            $error = "Không tìm thấy Sự cố";
+            return view('admin/error')->with(compact('error'));
+        }
+    }
     
 }

@@ -42,5 +42,6 @@ Route::prefix('admin')->group(function(){
     });
     Route::prefix('case')->group(function(){
         Route::get('list','CaseController@get');
+        Route::get('detail','CaseController@detail');
     });
 });

@@ -52,7 +52,7 @@
                                     @endif
                                     <td>{{$case->created_at}}</td>
                                     <td>
-                                        <form action="{{url('admin/case/viewprofile')}}" method="get">
+                                        <form action="{{url('admin/case/detail')}}" method="get">
                                             <input type="hidden" name="id" value="{{$case->id}}">
                                             <input type="submit" class="btn btn-info" value="Chi tiết">
                                         </form>    

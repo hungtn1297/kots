@@ -11,4 +11,8 @@ class Cases extends Model
     public function user(){
         return $this->belongsTo('App\Users','citizenId');
     }
+
+    public function caseDetail(){
+        return $this->hasMany('App\CaseDetail','caseId');
+    }
 }
