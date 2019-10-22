@@ -94,13 +94,13 @@ class CaseController extends Controller
             }catch(Exception $e){
                 $message = $e->getMessage();
             }
-            finally{
-                return response()->json([
-                    'result' => $resultCode,
-                    'message' => $message,
-                    'data' => $data
-                ]);
-            }
+            // finally{
+            //     return response()->json([
+            //         'result' => $resultCode,
+            //         'message' => $message,
+            //         'data' => $data
+            //     ]);
+            // }
         }else{
             $listCases = Cases::get();
             return view('admin/Case/ListCase')->with(compact('listCases'));
