@@ -46,6 +46,7 @@ class CaseController extends Controller
                     }       
                 }elseif($status == $this->SUCCESS || $status == $this->FAIL){
                     $knightId = str_replace("+84","0",$json['phone']);
+                    // $caseDetail = CaseDetail::
                     $case->knightCloseId = $knightId;
                     $case->status = $status;
                     $case->endLongitude = $json['longitude'];
@@ -65,13 +66,13 @@ class CaseController extends Controller
             $message = $e->getMessage();
             dd($message);
         }
-        finally{
-            return response()->json([
-                'result' => $resultCode,
-                'message' => $message,
-                'data' => $data
-            ]);
-        }
+        // finally{
+        //     return response()->json([
+        //         'result' => $resultCode,
+        //         'message' => $message,
+        //         'data' => $data
+        //     ]);
+        // }
     }
 
     public function createCase($citizenId, $longitude, $latitude, $message, $type){

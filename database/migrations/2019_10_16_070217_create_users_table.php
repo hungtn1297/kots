@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->text('address');
             $table->integer('status');
+            $table->string('gender');
+            $table->string('token');
             $table->integer('isDisable')->default(0);
             $table->integer('role');
             $table->string('image')->default('images/default-avatar.png');

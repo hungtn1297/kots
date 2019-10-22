@@ -54,6 +54,40 @@ class UserController extends Controller
         }
     }
 
+    public function updateProfile(){
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+        try{
+            $json = json_decode(file_get_contents('php://input'), true);
+            $id = str_replace("+84","0",$json['phone']);
+            $user = Users::find($id);
+            if(isset($user)){
+                $user->name = $json['name'];
+                $user->address = $json['address'];
+                $user->gender = $json['gender'];
+                $user->token = $json['token'];
+            
+                $user->save();
+                $resultCode = 200;
+                $message = "Success";
+                $data = $user;
+            }else{
+                $resultCode= 404;
+                $message = "Not Found User";
+            }
+        }catch(Exception $e){
+            $message = $e->getMessage();
+        }
+        finally{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }
+    }
+
     public function findUser(){
         $resultCode = 3000;
         $message = "";
