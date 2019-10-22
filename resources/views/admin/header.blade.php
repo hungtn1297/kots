@@ -105,12 +105,12 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                                <a href="#"><img src="{{URL::asset('admin/image/warning.png')}}" width="20" height="20"> Sự cố<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="{{url('admin/knight/list')}}">Danh sách sự cố</a>
-                                    </li>
-                                </ul>
+                            <a href="#"><img src="{{URL::asset('admin/image/warning.png')}}" width="20" height="20"> Sự cố<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('admin/case/list')}}">Danh sách sự cố</a>
+                                </li>
+                            </ul>
                                 <!-- /.nav-second-level -->
                             </li>
                         <li>

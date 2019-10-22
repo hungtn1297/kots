@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Users;
+use App\CaseDetail;
 
 class KnightController extends Controller
 {
     public function get(){
         // Function dùng để lấy danh sách các hiệp sĩ
         $listKnights = Users::where('role',2)->get();
+        // dd($listKnights);
         return view('admin/Knight/ListKnight')->with(compact('listKnights'));
     }
 
@@ -48,5 +50,59 @@ class KnightController extends Controller
             $error = "Không tìm thấy thông tin chi tiết của hiệp sĩ này";
             return view('admin/error')->with(compact('error'));
         }
+    }
+
+    public function findKnight(){
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+        try{
+            $json = json_decode(file_get_contents('php://input'), true);
+            if(isset($json)){
+                $id = str_replace("+84","0",$json['phone']);
+                $knight = Users::find($id);
+                if($knight->count()>0){
+                    $resultCode = 200;
+                    $message = "Knight exist";
+                    $data = [
+                        'name' => $knight->name,
+                        'address' => $knight->address,
+                        'status' => $knight->status,
+                        'isDisalbe' => $knight->isDisable
+                    ];
+                }else{
+                    $resultCode = 404;
+                    $message = "Not found Knight";
+                }
+            }else{
+                $resultCode = 3000;
+                $message = "Đã xảy ra lỗi";
+            }
+        }catch(Exception $e){
+            $resultCode = 3000;
+            $message = $e->getMessage();
+        }finally{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }
+    }
+
+    public function joinCase($knightId, $caseId){
+        $knight = CaseDetail::where('caseId', $caseId)
+                                ->where('knightId',$knightId)->first();
+
+        if(!isset($knight)){
+            $caseDetail = new CaseDetail();
+            $caseDetail->knightId = $knightId;
+            $caseDetail->caseId = $caseId;
+            $caseDetail->save();
+            return $caseDetail;
+        }else{
+
+        }
+        
     }
 }

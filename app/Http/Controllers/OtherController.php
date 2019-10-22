@@ -35,6 +35,6 @@ class OtherController extends Controller
                 $error = "Wrong phone or password";
                 return view('login')->with(compact('error'));
             }
-        }      
+        } 
     }
 }
