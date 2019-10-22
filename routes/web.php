@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Route::post('login', 'OtherController@checkLogin');
 
+Route::get('message','MessageController@sendMessage');
+
 Route::prefix('admin')->group(function(){
     Route::prefix('citizen')->group(function(){
         Route::get('list','CitizenController@get');
