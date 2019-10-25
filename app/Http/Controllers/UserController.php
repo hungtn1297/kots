@@ -118,7 +118,6 @@ class UserController extends Controller
                         'isDisalbe' => $user->isDisable
                     ];
                 }else{
-                    $resultCode = 404;
                     $message = "Not found user";
                 }
             }else{
