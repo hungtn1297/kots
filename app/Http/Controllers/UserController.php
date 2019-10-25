@@ -19,6 +19,7 @@ class UserController extends Controller
         $data = array();
         try{
             $json = json_decode(file_get_contents('php://input'), true);
+            // dd($json);
             $id = str_replace("+84","0",$json['phone']);
             $user = Users::find($id);
             if(!isset($user)){
@@ -26,6 +27,8 @@ class UserController extends Controller
                 $user->id = $id;
                 $user->name = $json['name'];
                 $user->address = $json['address'];
+                $user->token = $json['token'];
+                $user->gender = $json['gender'];
                 $role = $json['role'];
                 if($role == $this->CITIZEN_ROLE){
                     $user->role = 1;
