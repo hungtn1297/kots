@@ -134,7 +134,9 @@ class CaseController extends Controller
 
     public function getCaseByKnightId($knightId){
         $caseDetails  = CaseDetail::where('knightId', $knightId)->get();
-        $newCases = Cases::where('status',0)->get();
+        $newCases = Cases::where('status',0)
+                        ->orWhere('status',1)
+                        ->get();
         $case = array();
         $listCaseId = array();
         foreach ($newCases as $newCase) {
