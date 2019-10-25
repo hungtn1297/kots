@@ -111,12 +111,7 @@ class UserController extends Controller
                     $resultCode = 200;
                     $message = "user exist";
                     // dd($user);
-                    $data = [
-                        'name' => $user->name,
-                        'address' => $user->address,
-                        'status' => $user->status,
-                        'isDisalbe' => $user->isDisable
-                    ];
+                    $data = $user;
                 }else{
                     $message = "Not found user";
                 }
