@@ -25,10 +25,11 @@ class UserController extends Controller
             if(!isset($user)){
                 $user = new Users();
                 $user->id = $id;
-                $user->name = $json['name'];
-                $user->address = $json['address'];
                 $user->token = $json['token'];
-                $user->gender = $json['gender'];
+                $user->isFirstLogin = 1;
+                // $user->name = $json['name'];
+                // $user->address = $json['address']; 
+                // $user->gender = $json['gender'];
                 $role = $json['role'];
                 if($role == $this->CITIZEN_ROLE){
                     $user->role = 1;
@@ -36,7 +37,7 @@ class UserController extends Controller
                 }elseif($role == $this->KNIGHT_ROLE){
                     $user->role = 2;
                     $user->status = $this->WAIT;
-                    $user->team_id = $json['teamId'];
+                    // $user->team_id = $json['teamId'];
                 }
                 $user->save();
                 $resultCode = 200;
@@ -69,8 +70,8 @@ class UserController extends Controller
                 $user->name = $json['name'];
                 $user->address = $json['address'];
                 $user->gender = $json['gender'];
-                $user->token = $json['token'];
-            
+                // $user->token = $json['token'];
+                $user->isFirstLogin = 0;
                 $user->save();
                 $resultCode = 200;
                 $message = "Success";
