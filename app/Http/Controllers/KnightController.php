@@ -81,13 +81,14 @@ class KnightController extends Controller
         }catch(Exception $e){
             $resultCode = 3000;
             $message = $e->getMessage();
-        }finally{
-            return response()->json([
-                'result' => $resultCode,
-                'message' => $message,
-                'data' => $data
-            ]);
         }
+        // finally{
+        //     return response()->json([
+        //         'result' => $resultCode,
+        //         'message' => $message,
+        //         'data' => $data
+        //     ]);
+        // }
     }
 
     public function joinCase($knightId, $caseId){

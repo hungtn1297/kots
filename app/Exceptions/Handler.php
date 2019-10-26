@@ -46,6 +46,26 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        if($request->is('api/*')){
+            return response()->json([
+                'result' => 3000,
+                'message' => $exception->getMessage(),
+                'data' => []
+            ]);
+        }
+
+        // if ($request->is('api/*')){
+        //     $status = $exception->getStatusCode()?$exception->getStatusCode():$exception->getCode();
+        //     return response()->json([
+        //                             "code"			=>	$status,
+        //                             "message"		=>	$exception->getMessage(),
+        //                             "data"			=> 	[]
+        //                         ], $status)
+        //                         ->header('Content-Type', 'application/vnd.api+json');
+        // }
+
+
         return parent::render($request, $exception);
     }
 }

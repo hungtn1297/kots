@@ -48,14 +48,15 @@ class UserController extends Controller
             }
         }catch(Exception $e){
             $message = $e->getMessage();
+            dd($message);
         }
-        finally{
-            return response()->json([
-                'result' => $resultCode,
-                'message' => $message,
-                'data' => $data
-            ]);
-        }
+        // finally{
+        //     return response()->json([
+        //         'result' => $resultCode,
+        //         'message' => $message,
+        //         'data' => $data
+        //     ]);
+        // }
     }
 
     public function updateProfile(){
@@ -83,13 +84,13 @@ class UserController extends Controller
         }catch(Exception $e){
             $message = $e->getMessage();
         }
-        finally{
-            return response()->json([
-                'result' => $resultCode,
-                'message' => $message,
-                'data' => $data
-            ]);
-        }
+        // finally{
+        //     return response()->json([
+        //         'result' => $resultCode,
+        //         'message' => $message,
+        //         'data' => $data
+        //     ]);
+        // }
     }
 
     public function findUser(){
