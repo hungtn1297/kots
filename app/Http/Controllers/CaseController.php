@@ -102,30 +102,26 @@ class CaseController extends Controller
     public function get(){
         $json = json_decode(file_get_contents('php://input'), true);
         if(isset($json)){
-            $resultCode = 3000;
-            $message = "";
-            $data = array();
-            try{
-                $id = str_replace("+84","0",$json['phone']);
-                $role = $json ['role'];
-                if($role == $this->CITIZEN_ROLE){
-
-                }elseif($role == $this->KNIGHT_ROLE){
-                    $case = $this->getCaseByKnightId($id);
-                    $data = $case;
+            $id = str_replace("+84","0",$json['phone']);
+            $role = $json ['role'];
+            if($role == $this->CITIZEN_ROLE){
+                //TODO
+            }elseif($role == $this->KNIGHT_ROLE){
+                $cases = $this->getCaseByKnightId($id);
+                // dd($cases);
+                foreach ($cases as $case) {
+                    $case['inCase'] = $this->checkKnightInCase($case->id, $id);
                 }
-                $resultCode = 200;
-                $message = "Success";
-            }catch(Exception $e){
-                $message = $e->getMessage();
+                $data = $cases;
             }
-            finally{
-                return response()->json([
-                    'result' => $resultCode,
-                    'message' => $message,
-                    'data' => $data
-                ]);
-            }
+            $resultCode = 200;
+            $message = "Success";
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+            
         }else{
             $listCases = Cases::get();
             return view('admin/Case/ListCase')->with(compact('listCases'));
@@ -197,6 +193,38 @@ class CaseController extends Controller
         }else{
             $error = "Không tìm thấy Sự cố";
             return view('admin/error')->with(compact('error'));
+        }
+    }
+
+    public function getKnightInCase(){
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+    
+        $json = json_decode(file_get_contents('php://input'), true);
+        if(json_last_error()==0){
+            $resultCode = 200;
+            $message = "Success";
+
+
+
+        }else{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => json_last_error_msg(),
+                'data' => $data
+            ]);
+        }       
+    }
+
+    public function checkKnightInCase($caseId, $knightId){
+        $caseDetail = CaseDetail::where('caseId', $caseId)
+                                ->where('knightId', $knightId)
+                                ->first();
+        if(isset($caseDetail)){
+            return true;
+        }else{
+            return false;
         }
     }
     
