@@ -7,4 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class KnightTeam extends Model
 {
     protected $table = 'knight_teams';
+
+    public function knight(){
+        return $this->hasMany('App\Users','team_id');
+    }
 }

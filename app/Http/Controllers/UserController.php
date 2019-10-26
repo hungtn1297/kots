@@ -72,8 +72,12 @@ class UserController extends Controller
                 $user->address = $json['address'];
                 $user->gender = $json['gender'];
                 // $user->token = $json['token'];
+                if(isset($json['teamId'])){
+                    $user->team_id = $json['teamId'];
+                }
                 $user->isFirstLogin = 0;
                 $user->save();
+
                 $resultCode = 200;
                 $message = "Success";
                 $data = $user;
@@ -84,13 +88,13 @@ class UserController extends Controller
         }catch(Exception $e){
             $message = $e->getMessage();
         }
-        // finally{
-        //     return response()->json([
-        //         'result' => $resultCode,
-        //         'message' => $message,
-        //         'data' => $data
-        //     ]);
-        // }
+        finally{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }
     }
 
     public function findUser(){

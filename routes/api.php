@@ -30,3 +30,5 @@ Route::post('findUser','UserController@findUser');
 
 Route::post('updateProfile','UserController@updateProfile');
 Route::post('createProfile','UserController@createProfile');
+
+Route::post('getTeamInfoByKnightId','KnightTeamController@getTeamInfoByKnightId');

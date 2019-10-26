@@ -15,7 +15,7 @@ class CreateKnightTeamsTable extends Migration
     {
         Schema::create('knight_teams', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('leaderId');
+            $table->string('leaderId');
             $table->string('name');
             $table->timestamps();
         });
