@@ -69,13 +69,13 @@ class NewsController extends Controller
         // }
     }
 
-    public function get(){
+    public function get(Request $request){
         $resultCode = 3000;
         $message = "";
         $data = array();
         
-        $json = json_decode(file_get_contents('php://input'), true);
-        if(isset($json)){
+        
+        if($request->is('api/*')){
             $news = News::get();
 
             $resultCode = 200;
