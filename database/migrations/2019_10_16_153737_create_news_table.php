@@ -17,6 +17,7 @@ class CreateNewsTable extends Migration
             $table->bigIncrements('id');
             $table->text('title');
             $table->text('content');
+            $table->text('subContent');
             $table->text('image');
             $table->text('unitlink')->nullable();
             $table->text('source');
