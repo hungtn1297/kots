@@ -33,4 +33,6 @@ Route::post('createProfile','UserController@createProfile');
 
 Route::get('getNews','NewsController@get');
 
+Route::get('getPoliceContact','PoliceContactController@get');
+
 Route::post('getTeamInfoByKnightId','KnightTeamController@getTeamInfoByKnightId');

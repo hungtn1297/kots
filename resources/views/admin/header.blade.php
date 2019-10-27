@@ -129,6 +129,18 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
+                            <a href="#"><img src="{{URL::asset('admin/image/policeman.png')}}" width="20" height="20"> Thông tin liên lạc công an<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('admin/policeContact/list')}}">Danh sách thông tin</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('admin/policeContact/create')}}">Tạo mới thông tin</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
                             <a href="#"><img src="{{URL::asset('admin/image/map.png')}}" width="20" height="20"> Đoạn đường nguy hiểm</a>
                             
                             <!-- /.nav-second-level -->

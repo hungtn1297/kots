@@ -48,5 +48,8 @@ Route::prefix('admin')->group(function(){
         Route::get('list','CaseController@get');
         Route::get('detail','CaseController@detail');
     });
+    Route::prefix('policeContact')->group(function(){
+        Route::get('list','PoliceContactController@get');
+    });
 });
 
