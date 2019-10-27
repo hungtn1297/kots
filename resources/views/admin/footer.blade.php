@@ -10,7 +10,7 @@
     <script src="{{ URL::asset('admin/dist/js/sb-admin-2.js') }}"></script>
 
     <!-- DataTables JavaScript -->
-    <script src="{{ URL::asset('admin/bower_components/DataTables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('admin/bower_components/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
