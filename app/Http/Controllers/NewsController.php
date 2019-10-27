@@ -57,13 +57,16 @@ class NewsController extends Controller
             $flag = News::where('title', $title->textContent);
             if($flag->count() == 0){
                 $content = $htmlResult->query('//div[@id="content-id"]')->item(0);
-                $a = $content->ownerDocument->saveHTML($content);
-                // dd($title->textContent);
+                // $a = trim($content->textContent);
+                // dd($a);
                 $news = new News();
                 $news->title = $title->textContent;
                 $news->image = $imagePath;
-                $news->content = $content->ownerDocument->saveHTML($content);
+                // $news->content = $content->ownerDocument->saveHTML($content);
+                $news->content = (string) strip_tags(trim($content->textContent));
+                // dd(strval(strip_tags(trim($content->textContent))));
                 $news->unitlink = $link;
+                $news->source = "https://nld.com.vn";
                 $news->save();
             }
         // }
