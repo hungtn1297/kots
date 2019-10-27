@@ -115,6 +115,7 @@ class UserController extends Controller
                 if(isset($user)){
                     $resultCode = 200;
                     $message = "user exist";
+                    $user->id = $json['phone'];
                     // dd($user);
                     $data = $user;
                 }else{
