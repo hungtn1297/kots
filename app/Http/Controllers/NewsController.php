@@ -70,8 +70,27 @@ class NewsController extends Controller
     }
 
     public function get(){
-        $listNews = News::get();
-        return view('admin/News/ListNews')->with(compact('listNews'));
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+        
+        $json = json_decode(file_get_contents('php://input'), true);
+        if(isset($json)){
+            $news = News::get();
+
+            $resultCode = 200;
+            $message = "Success";
+            $data = $news;
+
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }else{
+            $listNews = News::get();
+            return view('admin/News/ListNews')->with(compact('listNews'));
+        }
     }
 
     public function create(Request $request){

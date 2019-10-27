@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Users;
 use App\CaseDetail;
+use App\Knight;
 
 class KnightController extends Controller
 {
@@ -60,16 +61,12 @@ class KnightController extends Controller
             $json = json_decode(file_get_contents('php://input'), true);
             if(isset($json)){
                 $id = str_replace("+84","0",$json['phone']);
-                $knight = Users::find($id);
-                if($knight->count()>0){
+                $knight = Knight::where('id',$id)
+                            ->where('role',2)->first();
+                if(isset($knight)){
                     $resultCode = 200;
                     $message = "Knight exist";
-                    $data = [
-                        'name' => $knight->name,
-                        'address' => $knight->address,
-                        'status' => $knight->status,
-                        'isDisalbe' => $knight->isDisable
-                    ];
+                    $data = $knight;
                 }else{
                     $resultCode = 404;
                     $message = "Not found Knight";
@@ -82,13 +79,13 @@ class KnightController extends Controller
             $resultCode = 3000;
             $message = $e->getMessage();
         }
-        // finally{
-        //     return response()->json([
-        //         'result' => $resultCode,
-        //         'message' => $message,
-        //         'data' => $data
-        //     ]);
-        // }
+        finally{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }
     }
 
     public function joinCase($knightId, $caseId){
