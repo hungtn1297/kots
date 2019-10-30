@@ -50,13 +50,13 @@ class UserController extends Controller
             $message = $e->getMessage();
             dd($message);
         }
-        // finally{
-        //     return response()->json([
-        //         'result' => $resultCode,
-        //         'message' => $message,
-        //         'data' => $data
-        //     ]);
-        // }
+        finally{
+            return response()->json([
+                'result' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }
     }
 
     public function updateProfile(){
