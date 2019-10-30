@@ -10,19 +10,26 @@ class OtherController extends Controller
     public function checkLogin(Request $request){
         // Function dùng để kiểm tra login 
 
-        $data = json_decode(file_get_contents('php://input'), true);
-        if(isset($data)){
-            $phone = $data['phone'];
-            $user = Users::where('phone', $phone)->get();
+        $json = json_decode(file_get_contents('php://input'), true);
+        if(isset($json)){
+            $resultCode = 3000;
+            $message = '';
+            $data = [];
+            $id = str_replace('+84','0',$json['phone']);
+            $user = Users::find($id);
             if($user->count()>0){
-                return response()->json([
-                    'user' => $user
-                ]);
+                $user->token = $json['token'];
+                $user->save();
+                $resultCode = 200;
             }else{
-                return response()->json([
-                    'result' => 'fail'
-                ]);
+                $user = [];
+                $message = 'error';
             }
+            return response()->json([
+                'resultCode' => $resultCode,
+                'message' => $message,
+                'data' => $user
+            ]);
         }else{
             $phone = $request->phone;
             $password = $request->password;
