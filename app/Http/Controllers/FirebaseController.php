@@ -42,6 +42,7 @@ class FirebaseController extends Controller
         foreach ($knightLocation as $knight) {
             $knightDistance = $controller->getDistance($knight['la'],$knight['long'],10.838312,106.672020,'K');
             if($knightDistance < $radius){
+                $knight['distance'] = $knightDistance;
                 array_push($result, $knight);
             }
             // echo $controller->getDistance(10.838387, 106.670402,10.836658, 106.664859,'K')."<br>";
