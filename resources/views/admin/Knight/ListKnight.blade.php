@@ -23,6 +23,7 @@
                             <tr align="center">                        
                                 <th>Tên</th>
                                 <th>Địa Chỉ</th>
+                                <th>Số Điện Thoại</th>
                                 <th>Trạng Thái Tài Khoản</th>
                                 <th>Ảnh đại diện</th>
                                 <th>Chi tiết</th>
@@ -38,6 +39,7 @@
                                 @endif        
                                         <td>{{$knight->name}}</td>
                                         <td>{{$knight->address}}</td>
+                                        <td>{{substr_replace($knight->id,'***',strlen($knight->id)-3)}}</td>
                                         @if ($knight->isDisable == 1)
                                             <td style="color: gray">Bị Khoá</td>
                                         @else

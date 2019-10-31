@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <title>Thông tin chi tiết sự cố</title>
 </head>
 <body>
@@ -71,6 +72,21 @@
                                     @endforeach 
                             </table>
                             
+                            <br>
+
+                            <div class="form-group">
+                                <label for="">Đoạn đường sự cố</label> 
+                            </div>
+
+                            <div class="">
+                                <iframe id="gmap"
+                                    style="width:100%;height:500px;"
+                                    frameborder="0" style="border:0"
+                                    src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyDRJl0JFqHhM8jQ24VrJnzJE8HarKJ1qF0
+                                        &origin={{$case->startLatitude}},{{$case->startLongitude}}
+                                        &destination={{$case->endLatitude}},{{$case->endLongitude}}" allowfullscreen disableDefaultUI: true>
+                                </iframe>
+                            </div>
                             <input type="button" onclick="goBack()" value="Trở về" class="btn btn-primary">
                             
                     </div>
@@ -80,7 +96,6 @@
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
-
 
     @include('admin/footer')
 </body>
