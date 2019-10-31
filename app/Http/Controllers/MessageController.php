@@ -33,7 +33,7 @@ class MessageController extends Controller
                 $case = $caseController->createCase($id, $longitude, $latitude, $userMessage, $type);
                 
                 $controller = new FirebaseController();
-                $knightList = $controller->index(5);
+                $knightList = $controller->index(200);
                 //Send message to Knight
                 $this->sendMessage($case, $knightList);
                 $resultCode = 200;
