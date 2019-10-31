@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Users;
-use App\Cases;
-use App\Http\Controllers\CaseController;
-use LaravelFCM\Message\OptionsBuilder;
-use LaravelFCM\Message\PayloadDataBuilder;
-use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
+use App\Cases;
+use App\Users;
+use Illuminate\Http\Request;
+use LaravelFCM\Message\OptionsBuilder;
+use App\Http\Controllers\CaseController;
+use LaravelFCM\Message\PayloadDataBuilder;
+use App\Http\Controllers\FirebaseController;
+use LaravelFCM\Message\PayloadNotificationBuilder;
 
 class MessageController extends Controller
 {
@@ -25,11 +26,16 @@ class MessageController extends Controller
                 $longitude = $jsonData['longitude'];
                 $latitude = $jsonData['latitude'];
                 $type = $jsonData['type'];
+                $radius = $jsonData['radius'];
                 
                 $user = Users::find($id);
                 $caseController = new CaseController();
                 $case = $caseController->createCase($id, $longitude, $latitude, $userMessage, $type);
-                $this->sendMessage($case);
+                
+                $controller = new FirebaseController();
+                $knightList = $controller->index($radius);
+                //Send message to Knight
+                $this->sendMessage($case, $knightList);
                 $resultCode = 200;
                 $data = $case;
             }
@@ -47,7 +53,8 @@ class MessageController extends Controller
         
     }
 
-    public function sendMessage($case){
+    public function sendMessage($case, $knightList){
+        // dd($knightList);
         try {
             $optionBuilder = new OptionsBuilder();
             $optionBuilder->setTimeToLive(60*20);
@@ -65,9 +72,17 @@ class MessageController extends Controller
             $notification = $notificationBuilder->build();
             $data = $dataBuilder->build();
 
-            $token = "cd_f6oqOOhM:APA91bEM62sYFugW3Gxu5kLUCGnawXbZpbz0ZPanhAIUiyMEoz0w9pMM8AZLS2NuCW9Ht2I3gHGW_hpQAjQzok_QAKdAdmaOjkQsga6q9G-izGaEo-QFgJXY34m2Y96xbestr5v7fIyC";
-
-            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+            // $token = "cd_f6oqOOhM:APA91bEM62sYFugW3Gxu5kLUCGnawXbZpbz0ZPanhAIUiyMEoz0w9pMM8AZLS2NuCW9Ht2I3gHGW_hpQAjQzok_QAKdAdmaOjkQsga6q9G-izGaEo-QFgJXY34m2Y96xbestr5v7fIyC";
+            $tokens = array();
+            foreach ($knightList as $knight) {
+                $id = $knight['id'];
+                $k = Users::find(str_replace('+84','0',$id));
+                if(!in_array($k->token, $tokens)){
+                    array_push($tokens,$k->token);
+                }           
+            }
+            // dd($tokens);
+            $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
 
             return $downstreamResponse->numberSuccess();
         } catch (Exception $e) {
