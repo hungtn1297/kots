@@ -74,4 +74,29 @@ class MessageController extends Controller
             dd($e->getMessage());
         }
     }
+
+    public function sendMessageToCitizen($case, $knightId, $citizenToken){
+        $case = $case->where("id",$case->id)->with('user')->first();
+        $knight = Knight::find($knightId);
+
+        $optionBuilder = new OptionsBuilder();
+        $dataBuilder = new PayloadDataBuilder();
+        $notificationBuilder = new PayloadNotificationBuilder('Hiệp Sĩ '.$knight->name.' Tham Gia');
+        
+
+        $optionBuilder->setTimeToLive(60*20);
+        $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã tham gia xử lí sự cố')
+                            ->setSound('default');
+        $dataBuilder->addData(['item' => $case]);
+
+        $option = $optionBuilder->build();
+        $notification = $notificationBuilder->build();
+        $data = $dataBuilder->build();
+
+        $token = $citizenToken;
+
+        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+
+        return $downstreamResponse->numberSuccess();
+    }
 }

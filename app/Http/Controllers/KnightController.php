@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Users;
 use App\CaseDetail;
+use App\Cases;
 use App\Knight;
 
 class KnightController extends Controller
@@ -91,12 +92,16 @@ class KnightController extends Controller
     public function joinCase($knightId, $caseId){
         $knight = CaseDetail::where('caseId', $caseId)
                                 ->where('knightId',$knightId)->first();
+        $messageController = new MessageController();
 
         if(!isset($knight)){
+            $case = Cases::find($caseId);
+            $citizen = Users::find($case->citizenId);
             $caseDetail = new CaseDetail();
             $caseDetail->knightId = $knightId;
             $caseDetail->caseId = $caseId;
             $caseDetail->save();
+            $messageController->sendMessage($case, $knightId, $citizen->token);
             return $caseDetail;
         }else{
 

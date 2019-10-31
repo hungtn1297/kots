@@ -141,7 +141,7 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><img src="{{URL::asset('admin/image/map.png')}}" width="20" height="20"> Đoạn đường nguy hiểm</a>
+                            <a href="{{url('admin/dangerousStreets/')}}"><img src="{{URL::asset('admin/image/map.png')}}" width="20" height="20"> Đoạn đường nguy hiểm</a>
                             
                             <!-- /.nav-second-level -->
                         </li>

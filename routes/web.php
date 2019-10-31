@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,6 +22,9 @@ Route::post('login', 'OtherController@checkLogin');
 Route::get('message','MessageController@sendMessage');
 
 Route::get('/firebase','FireBaseController@index');
+Route::get('map', function(){
+    return view('admin/DangerousStreets/map');
+});
 
 Route::prefix('admin')->group(function(){
     Route::prefix('citizen')->group(function(){
@@ -50,6 +55,11 @@ Route::prefix('admin')->group(function(){
     });
     Route::prefix('policeContact')->group(function(){
         Route::get('list','PoliceContactController@get');
+    });
+    Route::prefix('dangerousStreets')->group(function(){
+        Route::get('/', function(){
+            return view('admin/DangerousStreets/DangerousStreets');
+        });
     });
 });
 

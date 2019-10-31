@@ -26,7 +26,7 @@ class OtherController extends Controller
                 $message = 'error';
             }
             return response()->json([
-                'resultCode' => $resultCode,
+                'result' => $resultCode,
                 'message' => $message,
                 'data' => $user
             ]);
