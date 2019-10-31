@@ -95,7 +95,7 @@ class MessageController extends Controller
 
     public function sendMessageToCitizen($case, $knightId, $citizenToken){
         $case = $case->where("id",$case->id)->with('user')->first();
-        $knight = Knight::find($knightId);
+        $knight = Users::find($knightId);
 
         $optionBuilder = new OptionsBuilder();
         $dataBuilder = new PayloadDataBuilder();
@@ -112,7 +112,7 @@ class MessageController extends Controller
         $data = $dataBuilder->build();
 
         $token = $citizenToken;
-
+        // dd($token);
         $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
 
         return $downstreamResponse->numberSuccess();

@@ -101,7 +101,7 @@ class KnightController extends Controller
             $caseDetail->knightId = $knightId;
             $caseDetail->caseId = $caseId;
             $caseDetail->save();
-            $messageController->sendMessage($case, $knightId, $citizen->token);
+            $messageController->sendMessageToCitizen($case, $knightId, $citizen->token);
             return $caseDetail;
         }else{
 
