@@ -26,14 +26,14 @@ class MessageController extends Controller
                 $longitude = $jsonData['longitude'];
                 $latitude = $jsonData['latitude'];
                 $type = $jsonData['type'];
-                $radius = $jsonData['radius'];
+                // $radius = $jsonData['radius'];
                 
                 $user = Users::find($id);
                 $caseController = new CaseController();
                 $case = $caseController->createCase($id, $longitude, $latitude, $userMessage, $type);
                 
                 $controller = new FirebaseController();
-                $knightList = $controller->index($radius);
+                $knightList = $controller->index(5);
                 //Send message to Knight
                 $this->sendMessage($case, $knightList);
                 $resultCode = 200;
