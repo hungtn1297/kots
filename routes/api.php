@@ -30,6 +30,7 @@ Route::post('findUser','UserController@findUser');
 
 Route::post('updateProfile','UserController@updateProfile');
 Route::post('createProfile','UserController@createProfile');
+Route::post('removeToken','UserController@removeToken');
 
 Route::get('getNews','NewsController@get');
 

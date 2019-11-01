@@ -138,5 +138,29 @@ class UserController extends Controller
         }
     }
 
+    public function removeToken(){
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+        $json = $json = json_decode(file_get_contents('php://input'), true);
+
+        $id = str_replace('+84','0',$json['phone']);
+        $user = Users::find($id);
+
+        if(isset($user)){
+            $user->token = '';
+            $user->save();
+            $data = $user;
+        }else{
+            $message = "Not found user";
+        }
+
+        return response()->json([
+            'result' => $resultCode,
+            'message' => $message,
+            'data' => $data
+        ]);
+    }
+
 
 }
