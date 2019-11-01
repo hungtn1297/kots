@@ -105,7 +105,9 @@ class CaseController extends Controller
             $id = str_replace("+84","0",$json['phone']);
             $role = $json ['role'];
             if($role == $this->CITIZEN_ROLE){
-                //TODO
+                $case = $this->getCaseByCitizenId($id);
+                // $case['detail'] = $case;
+                $data = $case;
             }elseif($role == $this->KNIGHT_ROLE){
                 $cases = $this->getCaseByKnightId($id);
                 // dd($cases);
@@ -159,6 +161,16 @@ class CaseController extends Controller
         }
         
         return $case;
+    }
+
+    public function getCaseByCitizenId($citizenId){
+        $case = Cases::with('caseDetail')->where('citizenId', $citizenId)->get();
+        if($case->count()>0){
+            $case;
+            return $case;
+        }else{
+            return [];
+        }
     }
 
     public function form(){

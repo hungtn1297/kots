@@ -9,7 +9,7 @@ use App\Http\Controllers\OtherController;
 
 class FirebaseController extends Controller
 {
-    public function index($radius = 5){
+    public function index($radius = 5, $longitude, $latitude){
 
         $controller = new OtherController();
         $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/FirebaseKey.json');
@@ -40,7 +40,7 @@ class FirebaseController extends Controller
         }
         // dd($knightLocation);
         foreach ($knightLocation as $knight) {
-            $knightDistance = $controller->getDistance($knight['la'],$knight['long'],10.838312,106.672020,'K');
+            $knightDistance = $controller->getDistance($knight['la'],$knight['long'],$latitude,$longitude,'K');
             if($knightDistance < $radius){
                 $knight['distance'] = $knightDistance;
                 array_push($result, $knight);
