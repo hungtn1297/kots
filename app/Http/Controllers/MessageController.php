@@ -113,8 +113,11 @@ class MessageController extends Controller
 
         $token = $citizenToken;
         // dd($token);
-        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-
-        return $downstreamResponse->numberSuccess();
+        if(!empty($token)){
+            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+            return $downstreamResponse->numberSuccess();
+        }
+        
+        return 0;
     }
 }
