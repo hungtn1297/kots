@@ -27,7 +27,8 @@ class CaseController extends Controller
         $json = json_decode(file_get_contents('php://input'), true);
         $status = $json['status'];
         $caseId = $json['caseId'];
-        $case = Cases::find($caseId);          
+        $case = Cases::find($caseId);
+        // dd(isset($case));     
         if(isset($case)){
             $flag = true;
             if($status == $this->CONFIRM){
@@ -67,11 +68,9 @@ class CaseController extends Controller
                 $message = "Success";
                 $data = $case;
             }else{
-                $resultCode = 3000;
                 $message = "Knight not in case";
             }
         }else{
-            $resultCode = 404;
             $message = "Not found case";
         }
     
