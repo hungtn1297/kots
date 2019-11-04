@@ -77,8 +77,10 @@ class MessageController extends Controller
             foreach ($knightList as $knight) {
                 $id = $knight['id'];
                 $k = Users::find(str_replace('+84','0',$id));
-                if(!in_array($k->token, $tokens)){
-                    array_push($tokens,$k->token);
+                if(!empty($k->token)){
+                    if(!in_array($k->token, $tokens)){
+                        array_push($tokens,$k->token);
+                    }
                 }           
             }
             // array_push($token,"djVTbMvNrLI:APA91bHAhY0Y0ZAnzVzrX3eWqveogdxpa2j2vcPLVcwKUdAVzfx735TgxXGVyj2gl7z9EavgGoPajN8YCr2rTgHAOG9k8pj52V5JdsZHrAc2EtXO6SruPwIY04xnx16Gd7U07EmfGFy-");
