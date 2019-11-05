@@ -179,7 +179,6 @@ class CaseController extends Controller
                 // dd($case);
             }
         }
-        
         return $case;
     }
 
