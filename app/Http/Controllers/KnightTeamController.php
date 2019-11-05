@@ -36,4 +36,15 @@ class KnightTeamController extends Controller
             'data' => $data
         ]);   
     }
+
+    public function getTeam(Request $request){
+        $teams = KnightTeam::get();
+        if($request->is('api/*')){
+            return response()->json([
+                'result' => 200,
+                'message' => 'ok',
+                'data' => $teams
+            ]);
+        }
+    }
 }
