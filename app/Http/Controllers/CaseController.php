@@ -93,8 +93,8 @@ class CaseController extends Controller
         $case->status = 0;
         $case->save();
 
-        $case->key = base64_encode($case->id);
-        $case->save();
+        // $case->key = base64_encode($case->id);
+        // $case->save();
         return $case;
     }
 
@@ -114,8 +114,8 @@ class CaseController extends Controller
         }
         $case->save();
 
-        $case->key = base64_encode($case->id);
-        $case->save();
+        // $case->key = base64_encode($case->id);
+        // $case->save();
         return $case;
     }
 
