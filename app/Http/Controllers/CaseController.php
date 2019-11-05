@@ -159,7 +159,10 @@ class CaseController extends Controller
         $listCaseId = array();
         foreach ($newCases as $newCase) {
             // dd($newCase->case->id);
-            dd($newCase->user);
+            // dd($newCase->user);
+            if(is_null($newCase->user->name)){
+                dd($newCase);
+            }
             $citizenName = $newCase->user->name;
             $newCase['citizenName']  = $citizenName;
             $caseId = $newCase->id;
