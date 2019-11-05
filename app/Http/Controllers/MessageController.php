@@ -14,7 +14,7 @@ use LaravelFCM\Message\PayloadNotificationBuilder;
 
 class MessageController extends Controller
 {
-    public function receiveMessage(Request $request){
+    public function receiveMessage(){
         $resultCode = 3000;
         $message = "";
         $data = array();

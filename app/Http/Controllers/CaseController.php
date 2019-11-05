@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use DB;
 use App\Cases;
 use App\CaseDetail;
+use Illuminate\Http\Request;
 use App\Http\Controllers\KnightController;
-use DB;
+use App\Http\Controllers\FirebaseController;
 
 class CaseController extends Controller
 {
@@ -82,7 +83,7 @@ class CaseController extends Controller
         
     }
 
-    public function createCase($citizenId, $longitude, $latitude, $message, $type){
+    public function createSOS($citizenId, $longitude, $latitude, $message, $type){
         $case = new Cases();
         $case->citizenId = $citizenId;
         $case->startLongitude = $longitude;
@@ -90,6 +91,30 @@ class CaseController extends Controller
         $case->message = $message;
         $case->type = $type;
         $case->status = 0;
+        $case->save();
+
+        $case->key = base64_encode($case->id);
+        $case->save();
+        return $case;
+    }
+
+    public function createCase($citizenId, $longitude, $latitude, $message, $media, $mediatype, $type){
+        $case = new Cases();
+        $case->citizenId = $citizenId;
+        $case->startLongitude = $longitude;
+        $case->startLatitude = $latitude;
+        $case->message = $message;
+        $case->type = $type;
+        $case->status = 0;
+        if($mediatype == 'sound'){
+            $case->sound = $media;
+        }
+        if($mediatype =='image'){
+            $case->image = $media;
+        }
+        $case->save();
+
+        $case->key = base64_encode($case->id);
         $case->save();
         return $case;
     }
@@ -233,6 +258,51 @@ class CaseController extends Controller
         }else{
             return false;
         }
+    }
+
+    public function sendCase(){
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+
+        $json = json_decode(file_get_contents('php://input'),true);
+        if(isset($json)){
+            $id = str_replace("+84","0",$json['phone']);
+            $userMessage = $json['message'];
+            $longitude = $json['longitude'];
+            $latitude = $json['latitude'];
+            $type = $json['type'];
+            // $radius = $json['radius'];
+            
+            if($type == $this->SOS){
+                $case = $this->createSOS($id, $longitude, $latitude, $userMessage, $type);
+            }elseif($type == $this->NORMAL_CASE){
+                if(isset($json['image'])){
+                    $media = $json['image'];
+                    $mediatype = 'image';
+                }else{
+                    $media = $json['sound'];
+                    $mediatype = 'sound';
+                }
+                $case = $this->createCase($id, $longitude, $latitude, $userMessage, $media, $mediatype, $type);
+            }
+
+            // $user = Users::find($id);
+            $firebaseController = new FirebaseController();
+            $knightList = $firebaseController->getKnightInRadius(200, $longitude, $latitude);
+            $messageController = new MessageController();
+            //Send message to Knight
+            $messageController->sendMessage($case, $knightList);
+            $resultCode = 200;
+            $data = $case;
+        }else{
+            $message = 'Not found json';
+        }
+        return response()->json([
+            'result' => $resultCode,
+            'message' => $message,
+            'data' => $data,
+        ]);
     }
     
 }

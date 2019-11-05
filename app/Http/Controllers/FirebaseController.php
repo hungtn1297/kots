@@ -9,7 +9,7 @@ use App\Http\Controllers\OtherController;
 
 class FirebaseController extends Controller
 {
-    public function index($radius = 5, $longitude, $latitude){
+    public function getKnightInRadius($radius = 5, $longitude, $latitude){
 
         $controller = new OtherController();
         $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/FirebaseKey.json');

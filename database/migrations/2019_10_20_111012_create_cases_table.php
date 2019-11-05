@@ -19,12 +19,15 @@ class CreateCasesTable extends Migration
             $table->string('citizenId');
             $table->text('message');
             $table->integer('type');
+            $table->string('image')->nullable();
+            $table->string('sound')->nullable();
             $table->string('knightConfirmId')->nullable();
             $table->string('knightCloseId')->nullable();
             $table->string('startLongitude');
             $table->string('startLatitude');
             $table->string('endLongitude')->nullable();
             $table->string('endLatitude')->nullable();
+            $table->string('key')->nullable();
             $table->timestamps();
         });
     }

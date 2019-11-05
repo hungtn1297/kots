@@ -63,38 +63,37 @@ class UserController extends Controller
         $resultCode = 3000;
         $message = "";
         $data = array();
-        try{
-            $json = json_decode(file_get_contents('php://input'), true);
-            $id = str_replace("+84","0",$json['phone']);
-            $user = Users::find($id);
-            if(isset($user)){
-                $user->name = $json['name'];
-                $user->address = $json['address'];
-                $user->gender = $json['gender'];
-                // $user->token = $json['token'];
-                if(isset($json['teamId'])){
-                    $user->team_id = $json['teamId'];
-                }
-                $user->isFirstLogin = 0;
-                $user->save();
 
-                $resultCode = 200;
-                $message = "Success";
-                $data = $user;
-            }else{
-                $resultCode= 404;
-                $message = "Not Found User";
+        $json = json_decode(file_get_contents('php://input'), true);
+        $id = str_replace("+84","0",$json['phone']);
+        $user = Users::find($id);
+        if(isset($user)){
+            $user->name = $json['name'];
+            $user->address = $json['address'];
+            $user->gender = $json['gender'];
+            // $user->token = $json['token'];
+            $dob = explode('-',$json['dateOfBirth']);
+            $user->dateOfBirth = date('Y-m-d',strtotime("$dob[2]-$dob[1]-$dob[0]"));
+            if(isset($json['teamId'])){
+                $user->team_id = $json['teamId'];
             }
-        }catch(Exception $e){
-            $message = $e->getMessage();
+            $user->isFirstLogin = 0;
+            $user->save();
+
+            $resultCode = 200;
+            $message = "Success";
+            $data = $user;
+        }else{
+            $resultCode= 404;
+            $message = "Not Found User";
         }
-        finally{
-            return response()->json([
-                'result' => $resultCode,
-                'message' => $message,
-                'data' => $data
-            ]);
-        }
+
+        return response()->json([
+            'result' => $resultCode,
+            'message' => $message,
+            'data' => $data
+        ]);
+
     }
 
     public function findUser(){

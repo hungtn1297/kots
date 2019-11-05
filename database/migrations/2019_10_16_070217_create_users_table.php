@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->text('address')->nullable();
             $table->integer('status');
             $table->string('gender')->nullable();
+            $table->date('dateOfBirth')->nullable();
             $table->string('token');
             $table->integer('isDisable')->default(0);
             $table->integer('role');
