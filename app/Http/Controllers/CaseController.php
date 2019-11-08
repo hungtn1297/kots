@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Cases;
+use App\Users;
 use App\CaseDetail;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\KnightController;
 use App\Http\Controllers\FirebaseController;
@@ -42,7 +44,17 @@ class CaseController extends Controller
                     $case->status = $status;
                     $case->save();
                     $caseDetail = $knightController->joinCase($knightId, $case->id);
-                    DB::commit();      
+                    if($caseDetail == 'INCASE'){
+                        $case->delete();
+                        $resultCode = 3000;
+                        $message = 'KNIGHT IS IN ANOTHER CASE';
+                        return self::returnAPI($resultCode, $message, []);
+                    }elseif ($caseDetail == 'ALREADY LEAVED') {
+                        $resultCode = 3000;
+                        $message = 'KNIGHT ALREADY LEAVED CANNOT JOIN AGAIN';
+                        return self::returnAPI($resultCode, $message, []);
+                    }
+                    DB::commit();
                 }catch (Exception $e) {
                     DB::rollBack();
                     $resultCode = 3000;
@@ -75,12 +87,8 @@ class CaseController extends Controller
         }else{
             $message = "Not found case";
         }
-    
-        return response()->json([
-            'result' => $resultCode,
-            'message' => $message,
-            'data' => $data
-        ]);
+
+        return self::returnAPI($resultCode, $message, $data);
         
     }
 
@@ -218,8 +226,6 @@ class CaseController extends Controller
             $resultCode = 200;
             $message = "Success";
 
-
-
         }else{
             return response()->json([
                 'result' => $resultCode,
@@ -232,6 +238,7 @@ class CaseController extends Controller
     public function checkKnightInCase($caseId, $knightId){
         $caseDetail = CaseDetail::where('caseId', $caseId)
                                 ->where('knightId', $knightId)
+                                ->where('status',1)
                                 ->first();
         if(isset($caseDetail)){
             return true;
@@ -267,7 +274,14 @@ class CaseController extends Controller
                 $case = $this->createCase($id, $longitude, $latitude, $userMessage, $media, $mediatype, $type);
             }
 
-            // $user = Users::find($id);
+            $user = Users::find($id);
+            if($user->role == $this->KNIGHT_ROLE){
+                $knightController = new KnightController();
+                if($knightController->joinCase($user->id, $case->id) == 'INCASE'){
+                    $case->delete();
+                    return self::returnAPI($resultCode,'KNIGHT IS IN ANOTHER CASE', []);
+                };
+            }
             $firebaseController = new FirebaseController();
             $knightList = $firebaseController->getKnightInRadius(200, $longitude, $latitude);
             $messageController = new MessageController();

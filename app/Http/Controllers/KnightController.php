@@ -10,6 +10,10 @@ use App\Knight;
 
 class KnightController extends Controller
 {
+    private $BANNED = 0;
+    private $FREE = 1;
+    private $INCASE = 2;
+
     public function get(){
         // Function dùng để lấy danh sách các hiệp sĩ
         $listKnights = Users::where('role',2)->get();
@@ -90,11 +94,30 @@ class KnightController extends Controller
     }
 
     public function joinCase($knightId, $caseId){
-        $knight = CaseDetail::where('caseId', $caseId)
-                                ->where('knightId',$knightId)->first();
+        $knightIsInAnyCase = CaseDetail::where('knightId', $knightId)
+                                        ->where('status', 1)
+                                        ->latest()
+                                        ->first();
+        
+        $knightInCase = CaseDetail::where('caseId', $caseId)
+                                    ->where('knightId',$knightId)
+                                    ->first();
         $messageController = new MessageController();
 
-        if(!isset($knight)){
+
+        //Kiểm tra Hiệp sĩ có đang tham gia sự cố nào không?
+        if(isset($knightIsInAnyCase)){
+            $case = Cases::find($knightIsInAnyCase->caseId);
+            $status = $case->status;
+            //Nếu sự cố đang được xử lí và Hiệp sĩ vẫn còn tham gia trong sự cố
+            if($status == 1 && $knightIsInAnyCase->status == 1){
+                return 'INCASE';
+            }
+            
+        }
+
+        //Kiểm tra Hiệp sĩ đã tham gia vào Sự cố đó hay chưa?
+        if(!isset($knightInCase)){
             $case = Cases::find($caseId);
             $citizen = Users::find($case->citizenId);
             $caseDetail = new CaseDetail();
@@ -102,12 +125,16 @@ class KnightController extends Controller
             $caseDetail->caseId = $caseId;
             $caseDetail->status = 1;
             $caseDetail->save();
+
+            $case->status = 1;
+            $case->save();
+
             $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'join');
             return $caseDetail;
-        }else{
-
+        }elseif(isset($knightInCase) && $knightInCase->status == 0){
+            return 'ALREADY LEAVED';
         }
-        
+
     }
 
     public function leaveCase($knightId, $caseId){
@@ -116,6 +143,16 @@ class KnightController extends Controller
                                 ->first();
         $caseDetail->status = 0;
         $caseDetail->save();
+
+        $knight = Knight::find($knightId);
+        $knight->status = $this->FREE;
+        $knight->save();
         return true;
+    }
+
+    public function changeKnightStatus($knightId, $status){
+        $knight = Users::find($knightId);
+        $knight->status = $status;
+        $knight->save();
     }
 }
