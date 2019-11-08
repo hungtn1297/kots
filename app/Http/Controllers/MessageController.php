@@ -88,6 +88,7 @@ class MessageController extends Controller
             $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
             return $downstreamResponse->numberSuccess();
         }
+        dd($tokens);
         // $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
         
         // $token = 'd3NfHPDPLUg:APA91bHyADW0w7qceVMPM0vsdsejHNGDxsdugGVXfr5Rb14KCSPJQl2mHqopojCKz0rBeDA8zsGzokIKIAvzUTda6zifC700vWnlbmF_y9QHnTzaPuxZzaEaiUH19bW41pKxIxAUFt2X';
