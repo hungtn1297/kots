@@ -71,7 +71,7 @@ class UserController extends Controller
             $user->name = $json['name'];
             $user->address = $json['address'];
             $user->gender = $json['gender'];
-            // $user->token = $json['token'];
+            $user->token = $json['token'];
             $dob = explode('-',$json['dateOfBirth']);
             $user->dateOfBirth = date('Y-m-d',strtotime("$dob[2]-$dob[1]-$dob[0]"));
             if(isset($json['teamId'])){
