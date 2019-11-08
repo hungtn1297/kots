@@ -295,6 +295,7 @@ class CaseController extends Controller
             $messageController = new MessageController();
             //Send message to Knight
             $messageController->sendMessage($case, $knightList);
+            $case['citizenId'] = $json['phone'];
             $resultCode = 200;
             $data = $case;
         }else{

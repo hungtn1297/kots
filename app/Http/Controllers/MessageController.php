@@ -65,12 +65,12 @@ class MessageController extends Controller
         $dataBuilder = new PayloadDataBuilder();
         $case = $case->where("id",$case->id)->with('user')->first();
         // dd($case);
-        $user = Users::find($case->citizenId);
-        if($user->role == 2){
-            $case['inCase'] = true;
-        }else{
-            $case['inCase'] = false;
-        }
+        // $user = Users::find($case->citizenId);
+        // if($user->role == 2 && $user->id == $case->knightConfirmId){
+        //     $case['inCase'] = true;
+        // }else{
+        //     $case['inCase'] = false;
+        // }
         $dataBuilder->addData(['item' => $case]);
         
         $option = $optionBuilder->build();
