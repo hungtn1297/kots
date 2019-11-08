@@ -20,9 +20,11 @@ class KnightTeamController extends Controller
             $knight = Users::find($id);
 
             $teamId = $knight->team_id;
-            $team = KnightTeam::find($teamId);
-            
-            $team['member'] = $team->knight;
+            $team = KnightTeam::find($teamId)->with('knight')->first();
+
+            $leader = Users::find($team->leaderId);
+            $team['leaderName'] = $leader->name;
+            // $team['member'] = $team->knight;
             
             $resultCode = 200;
             $message = "Success";
