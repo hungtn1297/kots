@@ -65,6 +65,7 @@ class MessageController extends Controller
         $dataBuilder = new PayloadDataBuilder();
         $case = $case->where("id",$case->id)->with('user')->first();
         // dd($case);
+        $case['inCase'] = false;
         $dataBuilder->addData(['item' => $case]);
         
         $option = $optionBuilder->build();
