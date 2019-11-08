@@ -100,12 +100,22 @@ class KnightController extends Controller
             $caseDetail = new CaseDetail();
             $caseDetail->knightId = $knightId;
             $caseDetail->caseId = $caseId;
+            $caseDetail->status = 1;
             $caseDetail->save();
-            $messageController->sendMessageToCitizen($case, $knightId, $citizen->token);
+            $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'join');
             return $caseDetail;
         }else{
 
         }
         
+    }
+
+    public function leaveCase($knightId, $caseId){
+        $caseDetail = CaseDetail::where('knightId', $knightId)
+                                ->where('caseId', $caseId)
+                                ->first();
+        $caseDetail->status = 0;
+        $caseDetail->save();
+        return true;
     }
 }

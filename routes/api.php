@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
 
 /*
@@ -25,9 +26,10 @@ Route::post('sendCase','CaseController@sendCase');
 Route::post('confirmCase', 'CaseController@changeCaseStatus');
 Route::post('closeCase','CaseController@changeCaseStatus');
 Route::post('pendingCase','CaseController@changeCaseStatus');
+Route::post('leaveCase', 'CaseController@leaveCase');
+Route::post('cancelCase', 'CaseController@changeCaseStatus');
 
 Route::post('findUser','UserController@findUser');
-
 Route::post('updateProfile','UserController@updateProfile');
 Route::post('createProfile','UserController@createProfile');
 Route::post('removeToken','UserController@removeToken');
@@ -38,3 +40,6 @@ Route::get('getPoliceContact','PoliceContactController@get');
 
 Route::post('getTeamInfoByKnightId','KnightTeamController@getTeamInfoByKnightId');
 Route::get('getTeam','KnightTeamController@getTeam');
+
+Route::post('sendFeedback', 'FeedbackController@sendFeedback');
+Route::post('getFeedbackById', 'FeedbackController@getFeedbackById');

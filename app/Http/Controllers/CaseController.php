@@ -15,6 +15,7 @@ class CaseController extends Controller
     private $SUCCESS = 2;
     private $FAIL = 3;
     private $PENDING = 4;
+    private $CANCEL = 5;
     private $NORMAL_CASE = 1;
     private $SOS = 2;
     private $CITIZEN_ROLE = 1;
@@ -60,7 +61,7 @@ class CaseController extends Controller
                 }else{
                     $flag = false;
                 }
-            }elseif($status == $this->PENDING){
+            }elseif($status == $this->PENDING || $status == $this->CANCEL){
                 $case->status = $status;
                 $case->save();
             }
@@ -193,27 +194,6 @@ class CaseController extends Controller
         }
     }
 
-    public function form(){
-        $resultCode = 3000;
-        $message = "";
-        $data = array();
-        try{
-            $json = json_decode(file_get_contents('php://input'), true);
-
-
-            $resultCode = 200;
-            $message = "Success";
-        }catch(Exception $e){
-            $message = $e->getMessage();
-        }finally{
-            return response()->json([
-                'result' => $resultCode,
-                'message' => $message,
-                'data' => $data
-            ]);
-        }
-    }
-
     public function detail(Request $request){
         $id = $request->id;
         $case = Cases::find($id);
@@ -305,4 +285,30 @@ class CaseController extends Controller
         ]);
     }
     
+    public function leaveCase(){
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+        
+        $json = json_decode(file_get_contents('php://input'), true);
+        // dd($json);
+        if(isset($json)){
+            $knightId = str_replace('+84','0',$json['phone']);
+            $caseId = $json['caseId'];
+            $case = Cases::find($caseId);
+            $knightController = new KnightController();
+            if($knightController->leaveCase($knightId, $caseId)){
+                $messageController = new MessageController();
+                $messageController->sendMessageToCitizen($case, $knightId, $case->citizenId, $type = 'leave');
+
+                $resultCode = 200;
+                $message = 'Success';
+            }
+        }
+        return response()->json([
+            'result' => $resultCode,
+            'message' => $message,
+            'data' => $data
+        ]);
+    }
 }
