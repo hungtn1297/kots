@@ -22,6 +22,7 @@ class CaseController extends Controller
     private $SOS = 2;
     private $CITIZEN_ROLE = 1;
     private $KNIGHT_ROLE = 2;
+    private $FREE = 1;
 
     public function changeCaseStatus(){
         $resultCode = 3000;
@@ -40,7 +41,7 @@ class CaseController extends Controller
                 $knightController = new KnightController();
                 DB::beginTransaction();
                 try{
-                    $case->knightConfirmId = $knightId;
+                    $knightController->confirmCase($knightId, $caseId); //Confirm Case
                     $case->status = $status;
                     $case->save();
                     $caseDetail = $knightController->joinCase($knightId, $case->id);
@@ -70,6 +71,13 @@ class CaseController extends Controller
                     $case->endLongitude = $json['longitude'];
                     $case->endLatitude = $json['latitude'];
                     $case->save();
+
+                    //Release tất cả Hiệp sĩ, set status về bằng free
+                    $knightController = new KnightController();
+                    $caseDetails = CaseDetail::where('caseId',$case->id)->get();
+                    foreach ($caseDetails as $cd) {
+                        $knightController->changeKnightStatus($cd->knightId, $this->FREE);
+                    }
                 }else{
                     $flag = false;
                 }
@@ -195,7 +203,6 @@ class CaseController extends Controller
     public function getCaseByCitizenId($citizenId){
         $case = Cases::with('caseDetail')->where('citizenId', $citizenId)->get();
         if($case->count()>0){
-            $case;
             return $case;
         }else{
             return [];
@@ -274,13 +281,14 @@ class CaseController extends Controller
                 $case = $this->createCase($id, $longitude, $latitude, $userMessage, $media, $mediatype, $type);
             }
 
-            $user = Users::find($id);
-            if($user->role == $this->KNIGHT_ROLE){
+            $knight = Users::find($id);
+            if($knight->role == $this->KNIGHT_ROLE){
                 $knightController = new KnightController();
-                if($knightController->joinCase($user->id, $case->id) == 'INCASE'){
+                if($knightController->joinCase($knight->id, $case->id) == 'INCASE'){
                     $case->delete();
                     return self::returnAPI($resultCode,'KNIGHT IS IN ANOTHER CASE', []);
                 };
+                $knightController->confirmCase($knight->id, $case->id);
             }
             $firebaseController = new FirebaseController();
             $knightList = $firebaseController->getKnightInRadius(200, $longitude, $latitude);

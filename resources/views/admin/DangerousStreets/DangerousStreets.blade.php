@@ -47,37 +47,45 @@
 
 
                         function placeMarker(location) {
-                            var marker = new google.maps.Marker({
+                            if(allMarker.length < 2){
+                                var marker = new google.maps.Marker({
                                 position: location, 
                                 map: map
-                            });
-                            marker.id = id;
-                            id++;
-
-                            google.maps.event.addListener(marker,'click', function(e){
-                                var content = 'Latitude: ' + location.lat() + '<br />Longitude: ' + location.lng();
-                                content += "<br /><input type = 'button' va;ue = 'Delete' onclick = 'removeMarker(" + marker.id + ");' value = 'Delete' />";
-                                var infoWindow = new google.maps.InfoWindow({
-                                    content: content
                                 });
-                                infoWindow.open(map, marker);
-                            });
-                            allLocation.push(location.toString());
-                            allMarker.push(marker);
+                                marker.id = id;
+                                id++;
 
-                            if(allMarker.length % 2 == 0){
-                                $end = location.toString();
+                                google.maps.event.addListener(marker,'click', function(e){
+                                    var content = 'Latitude: ' + location.lat() + '<br />Longitude: ' + location.lng();
+                                    content += "<br /><input type = 'button' va;ue = 'Delete' onclick = 'removeMarker(" + marker.id + ");' value = 'Delete' />";
+                                    var infoWindow = new google.maps.InfoWindow({
+                                        content: content
+                                    });
+                                    infoWindow.open(map, marker);
+                                });
+                                allLocation.push(location.toString());
+                                allMarker.push(marker);
+
+                                if(allMarker.length % 2 == 0){
+                                    end = location.toString();
+                                }else{
+                                    start = location.toString();
+                                }
                             }else{
-                                $start = location.toString();
+                                alert('You must delete one to select another one');
                             }
+
+                            
                         }
-                        
                     }
 
                     function calcRoute() {
+                        // var start = '37.7683909618184, -122.51089453697205';
+                        // var end = '41.850033, -87.6500523';
+                        // start.slice(1,start.length-1);
                         var request = {
-                            origin:'71 Nguyễn Văn Lượng',
-                            destination:'Ngã 6 Gò Vấp',
+                            origin:start.slice(1,start.length-1),
+                            destination:end.slice(1,end.length-1),
                             travelMode: 'DRIVING'
                         };
                         directionsService.route(request, function(response, status) {

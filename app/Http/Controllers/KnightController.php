@@ -99,6 +99,8 @@ class KnightController extends Controller
                                         ->latest()
                                         ->first();
         
+        $knight = Users::find($knightId);
+
         $knightInCase = CaseDetail::where('caseId', $caseId)
                                     ->where('knightId',$knightId)
                                     ->first();
@@ -113,7 +115,10 @@ class KnightController extends Controller
             if($status == 1 && $knightIsInAnyCase->status == 1){
                 return 'INCASE';
             }
-            
+        }
+
+        if($knight->status == $this->INCASE){
+            return 'INCASE';
         }
 
         //Kiểm tra Hiệp sĩ đã tham gia vào Sự cố đó hay chưa?
@@ -128,6 +133,8 @@ class KnightController extends Controller
 
             $case->status = 1;
             $case->save();
+
+            $this->changeKnightStatus($knightId, $this->INCASE);
 
             $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'join');
             return $caseDetail;
@@ -154,5 +161,18 @@ class KnightController extends Controller
         $knight = Users::find($knightId);
         $knight->status = $status;
         $knight->save();
+    }
+
+    public function confirmCase($knightId, $caseId){
+        $caseDetail = CaseDetail::where('caseId', $caseId)
+                                ->first();
+        // dd($caseDetail);
+        if(isset($caseDetail)){
+            $case = Cases::find($caseId);
+            // dd($case);
+            $case->knightConfirmId = $knightId;
+            $case->save();
+            // dd($case);
+        }
     }
 }

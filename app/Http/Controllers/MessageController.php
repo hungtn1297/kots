@@ -72,23 +72,25 @@ class MessageController extends Controller
         $data = $dataBuilder->build();
 
         // $token = "cd_f6oqOOhM:APA91bEM62sYFugW3Gxu5kLUCGnawXbZpbz0ZPanhAIUiyMEoz0w9pMM8AZLS2NuCW9Ht2I3gHGW_hpQAjQzok_QAKdAdmaOjkQsga6q9G-izGaEo-QFgJXY34m2Y96xbestr5v7fIyC";
-        $tokens = array();
-        foreach ($knightList as $knight) {
-            $id = $knight['id'];
-            $k = Users::find(str_replace('+84','0',$id));
-            if(!empty($k->token)){
-                if(!in_array($k->token, $tokens)){
-                    array_push($tokens,$k->token);
-                }
-            }           
-        }
-        // array_push($token,"djVTbMvNrLI:APA91bHAhY0Y0ZAnzVzrX3eWqveogdxpa2j2vcPLVcwKUdAVzfx735TgxXGVyj2gl7z9EavgGoPajN8YCr2rTgHAOG9k8pj52V5JdsZHrAc2EtXO6SruPwIY04xnx16Gd7U07EmfGFy-");
-        foreach ($tokens as $token) {
-            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-            return $downstreamResponse->numberSuccess();
-        }
+        // $tokens = array();
+        // foreach ($knightList as $knight) {
+        //     $id = $knight['id'];
+        //     $k = Users::find(str_replace('+84','0',$id));
+        //     if(!empty($k->token)){
+        //         if(!in_array($k->token, $tokens)){
+        //             array_push($tokens,$k->token);
+        //         }
+        //     }           
+        // }
+        // // array_push($token,"djVTbMvNrLI:APA91bHAhY0Y0ZAnzVzrX3eWqveogdxpa2j2vcPLVcwKUdAVzfx735TgxXGVyj2gl7z9EavgGoPajN8YCr2rTgHAOG9k8pj52V5JdsZHrAc2EtXO6SruPwIY04xnx16Gd7U07EmfGFy-");
+        // foreach ($tokens as $token) {
+        //     $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+        //     return $downstreamResponse->numberSuccess();
+        // }
         // $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
-
+        
+        $token = 'd3NfHPDPLUg:APA91bHyADW0w7qceVMPM0vsdsejHNGDxsdugGVXfr5Rb14KCSPJQl2mHqopojCKz0rBeDA8zsGzokIKIAvzUTda6zifC700vWnlbmF_y9QHnTzaPuxZzaEaiUH19bW41pKxIxAUFt2X';
+        FCM::sendTo($token, $option, $notification, $data);
         return 0;
     }
 
