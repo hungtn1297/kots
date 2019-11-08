@@ -86,9 +86,12 @@ class MessageController extends Controller
         // array_push($token,"djVTbMvNrLI:APA91bHAhY0Y0ZAnzVzrX3eWqveogdxpa2j2vcPLVcwKUdAVzfx735TgxXGVyj2gl7z9EavgGoPajN8YCr2rTgHAOG9k8pj52V5JdsZHrAc2EtXO6SruPwIY04xnx16Gd7U07EmfGFy-");
         foreach ($tokens as $token) {
             $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+        }
+        if(isset($downstreamResponse)){
             return $downstreamResponse->numberSuccess();
         }
-        dd($tokens);
+        
+        // dd($tokens);
         // $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
         
         // $token = 'd3NfHPDPLUg:APA91bHyADW0w7qceVMPM0vsdsejHNGDxsdugGVXfr5Rb14KCSPJQl2mHqopojCKz0rBeDA8zsGzokIKIAvzUTda6zifC700vWnlbmF_y9QHnTzaPuxZzaEaiUH19bW41pKxIxAUFt2X';
