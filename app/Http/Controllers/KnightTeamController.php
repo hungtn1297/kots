@@ -53,6 +53,8 @@ class KnightTeamController extends Controller
         $team = new KnightTeam();
         $team->name = 'Siêu nhân cuồng phong';
         $team->leaderId = '0971930499';
+        $team->save();
 
+        
     }
 }
