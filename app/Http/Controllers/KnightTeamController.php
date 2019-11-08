@@ -38,7 +38,8 @@ class KnightTeamController extends Controller
     }
 
     public function getTeam(Request $request){
-        $teams = KnightTeam::get();
+        $teams = KnightTeam::with('knight')->get();
+        // $teams['member'] = $teams->knight();
         if($request->is('api/*')){
             return response()->json([
                 'result' => 200,
@@ -46,5 +47,12 @@ class KnightTeamController extends Controller
                 'data' => $teams
             ]);
         }
+    }
+
+    public function createTeam(){
+        $team = new KnightTeam();
+        $team->name = 'Siêu nhân cuồng phong';
+        $team->leaderId = '0971930499';
+
     }
 }
