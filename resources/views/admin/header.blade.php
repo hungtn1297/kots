@@ -105,6 +105,18 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
+                            <a href="#"><img src="{{URL::asset('admin/image/team.png')}}" width="20" height="20">Đội hiệp sĩ<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('admin/knightTeam/list')}}">Danh sách đội hiệp sĩ</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('admin/knightTeam/create')}}">Tạo mới đội hiệp sĩ</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
                             <a href="#"><img src="{{URL::asset('admin/image/warning.png')}}" width="20" height="20"> Sự cố<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -136,6 +148,15 @@
                                 </li>
                                 <li>
                                     <a href="{{url('admin/policeContact/create')}}">Tạo mới thông tin</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{URL::asset('admin/image/feedback.png')}}" width="20" height="20"> Phản hồi<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('admin/Feedback/list')}}">Danh sách phản hồi</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

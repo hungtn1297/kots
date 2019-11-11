@@ -18,17 +18,21 @@
                         </h1>
                     </div>
                     <!-- /.col-lg-12 -->
-                    <form action="{{url('admin/news/create')}}" enctype="multipart/form-data" method="post">
+                    <form action="{{url('admin/policeContact/create')}}" enctype="multipart/form-data" method="post">
                         @csrf
                         <div class="form-group">
                                 <label>Tên</label>
                                 <input class="form-control" name="name" required />
                         </div>
                         <br>
-
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input class="form-control" name="phone" required />
+                        </div>
+                        <br>
                         <div class="form-group">
                                 <label>Địa chỉ</label>
-                                <input type="file" name="address" required />
+                                <input class="form-control" name="address" required />
                         </div>
                         <br>
         

@@ -33,40 +33,33 @@ class PoliceContactController extends Controller
     }
 
     public function create(Request $request){
-        $title = $request->title;
-        $image = $request->image;
-        $content = $request->content;
+        $name = $request->name;
+        $phone = $request->phone;
+        $address = $request->address;
         $id = $request->id;
 
         if(isset($id)){ //Update
-            $news = News::find($id);
+            $policeContact = PoliceContact::find($id);
         }else{          //Insert
-            $news = new News();
+            $policeContact = new PoliceContact();
         }
 
-        $news->title = $title;
-        $news->content = $content;
-        if(isset($image)){
-            $imageLink = 'images/'.$image->getClientOriginalName();
-            $image->move('images',$image->getClientOriginalName());
-            $news->image = $imageLink;
-        }elseif(!isset($id)){
-            $error = "Vui lòng tải hình ảnh lên";
-            return view('error')->with(compact('error'));
-        }
+        $policeContact->name = $name;
+        $policeContact->phone = $phone;
+        $policeContact->address = $address;
 
-        $news->save();
-        return redirect()->action('NewsController@get');
+        $policeContact->save();
+        return redirect()->action('PoliceContactController@get');
     }
 
     public function delete(Request $request){
         $id = $request->id;
         if(isset($id)){
-            $news = News::find($id);
-            $news->delete();
-            return redirect()->action('NewsController@get');
+            $policeContact = PoliceContact::find($id);
+            $policeContact->delete();
+            return redirect()->action('PoliceContactController@get');
         }else{
-            $error = "Không tìm thấy tin tức";
+            $error = "Không tìm thấy thông tin";
             return view('admin/error')->with(compact('error'));
         }
     }

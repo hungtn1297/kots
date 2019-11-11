@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DangerousStreetController;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
 
@@ -44,3 +45,5 @@ Route::get('createTeam','KnightTeamController@createTeam');
 
 Route::post('sendFeedback', 'FeedbackController@sendFeedback');
 Route::post('getFeedbackById', 'FeedbackController@getFeedbackById');
+
+Route::get('getDS','DangerousStreetController@getDS');

@@ -1,4 +1,7 @@
 <?php
+
+use App\Http\Controllers\DangerousStreetController;
+use App\Http\Controllers\PoliceContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +40,9 @@ Route::prefix('admin')->group(function(){
         Route::get('viewprofile','KnightController@viewProfile');
         Route::post('disable','KnightController@disable');
     });
+    Route::prefix('knightTeam')->group(function(){
+        Route::get('list','KnightTeamController@getTeam');
+    });
     Route::prefix('news')->group(function(){
         Route::get('crawl', function(){return view('admin/News/CrawlNews');});
         Route::post('crawl', 'NewsController@crawlNews');
@@ -55,11 +61,18 @@ Route::prefix('admin')->group(function(){
     });
     Route::prefix('policeContact')->group(function(){
         Route::get('list','PoliceContactController@get');
+        Route::get('create', function(){
+            return view('admin/PoliceContact/CreatePoliceContact');
+        });
+        Route::post('create', 'PoliceContactController@create');
+        Route::get('edit', function(Request $request){
+            $policeContact = App\PoliceContact::find($request->id);
+            return view('admin/PoliceContact/EditPoliceContact')->with(compact('policeContact'));
+        });
+        Route::delete('delete','PoliceContactController@delete');
     });
     Route::prefix('dangerousStreets')->group(function(){
-        Route::get('/', function(){
-            return view('admin/DangerousStreets/DangerousStreets');
-        });
+        Route::get('/', 'DangerousStreetController@getDS');
     });
 });
 

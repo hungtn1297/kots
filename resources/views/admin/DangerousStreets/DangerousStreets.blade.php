@@ -10,13 +10,17 @@
     @include('admin/header')
     <div id="page-wrapper">
             <div class="container-fluid">
+                {{-- {{$listDSs}} --}}
                 <div id="googleMap" style="width:100%;height:450px;"></div>
 
                 <script>
+                    
                     // var client = new google.loader.ClientLocation();
                     // var lat = client.latitude;
                     // var long = client.longitude;   
-                    // alert(lat);   
+                    // alert(lat);
+                    var listDSs = {!! json_encode($listDSs->toArray()) !!};
+                    // console.log(listDSs);
                     var id = 1;
                     var allMarker = [];
                     var allLocation = [];
@@ -24,6 +28,7 @@
                     var end = 0;  
                     var directionsService;
                     var directionsRenderer;
+                    var map;
                     function myMap() {
                         directionsService = new google.maps.DirectionsService();
                         directionsRenderer = new google.maps.DirectionsRenderer();   
@@ -36,13 +41,13 @@
                         //     icon:'image/address.png',
                         // });
 
-                        var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+                        map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
                         // marker.setMap(map); 
 
                         directionsRenderer.setMap(map);
                         google.maps.event.addListener(map,'click', function(e) {
                             placeMarker(e.latLng, map);
-                            console.log(allLocation);
+                            // console.log(allLocation);
                         });
 
 
@@ -79,6 +84,52 @@
                         }
                     }
 
+                    function drawRoute(startLatitude, startLongtitude, endLatitude, endLongtitude){
+                        console.log('STARTLA: ' + startLatitude);
+                        console.log(startLatitude + ',' + startLongtitude);
+                        console.log(endLatitude + ',' + endLongtitude);
+                        var request = {
+                            origin:startLatitude+','+startLongtitude,
+                            destination:endLatitude+','+endLongtitude,
+                            travelMode: 'DRIVING'
+                        };
+                        directionsService.route(request, function(response, status) {
+                            if (status == 'OK') {
+                            directionsRenderer.setDirections(response);
+                            }
+                        });
+                    }
+
+                    function loadRoute(){
+                        var bounds = new google.maps.LatLngBounds();
+                        for (let i = 0; i < listDSs.length; i++) {
+                            var startPoint = new google.maps.LatLng(listDSs[i]['startLatitude'], listDSs[i]['startLongtitude']);
+                            var endPoint = new google.maps.LatLng(listDSs[i]['endLatitude'], listDSs[i]['endLongtitude']);
+                            var directionsDisplay = new google.maps.DirectionsRenderer({
+                                map: map,
+                                preserveViewport: true
+                            });
+                            calculateAndDisplayRoute(directionsService, directionsDisplay, startPoint, endPoint, bounds);
+                            // drawRoute(listDSs[i].startLatitude, listDSs[i].startLongtitude, listDSs[i].endLatitude, listDSs[i].endLongtitude);                        
+                        }
+                    }
+
+                    function calculateAndDisplayRoute(directionsService, directionsDisplay, startPoint, endPoint, bounds) {
+                        directionsService.route({
+                        origin: startPoint,
+                        destination: endPoint,
+                        travelMode: 'DRIVING'
+                        }, function(response, status) {
+                        if (status === 'OK') {
+                            directionsDisplay.setDirections(response);
+                            bounds.union(response.routes[0].bounds);
+                            map.fitBounds(bounds);
+                        } else {
+                            window.alert('Impossible d afficher la route ' + status);
+                        }
+                        });
+                    }
+
                     function calcRoute() {
                         // var start = '37.7683909618184, -122.51089453697205';
                         // var end = '41.850033, -87.6500523';
@@ -107,25 +158,13 @@
                             }
                         }
                     }
-
-                    function drawPath(directionsService, directionsDisplay,start,end) {
-                        directionsService.route({
-                            origin: start,
-                            destination: end,
-                            waypoints: waypoints,
-                            optimizeWaypoints: true,
-                            travelMode: 'DRIVING'
-                        }, function(response, status) {
-                            if (status === 'OK') {
-                            directionsDisplay.setDirections(response);
-                            } else {
-                            window.alert('Problem in showing direction due to ' + status);
-                            }
-                        });
-                    }
+                window.onload = function(){
+                loadRoute();
+                }
                 </script>
             </div>
             <input type="button" value="Route" id="route" onclick="calcRoute()">
+            <input type="button" value="LoadRoute" onclick="loadRoute()">
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->

@@ -18,34 +18,27 @@
                         </h1>
                     </div>
                     <!-- /.col-lg-12 -->
-                    <form action="{{url('admin/news/create')}}" enctype="multipart/form-data" method="post">
+                    <form action="{{url('admin/policeContact/create')}}" enctype="multipart/form-data" method="post">
                         @csrf
-                        <input type="hidden" name="id" value="{{$news->id}}">
+                        <input type="hidden" name="id" value="{{$policeContact->id}}">
                         <div class="form-group">
-                                <label>Tiêu đề</label>
-                            <input class="form-control" name="title" value="{{$news->title}}" required />
+                                <label>Tên</label>
+                            <input class="form-control" name="name" required value="{{$policeContact->name}}" />
                         </div>
                         <br>
-
                         <div class="form-group">
-                                <label>Hình ảnh</label>
-                                <input type="file" name="image" />
+                            <label>Số điện thoại</label>
+                            <input class="form-control" name="phone" required  value="{{$policeContact->phone}}"/>
                         </div>
                         <br>
-                        <img src="{{URL::asset("$news->image")}}" alt="">
-                        <br>
-
                         <div class="form-group">
-                                <label>Nội dung</label>
-                                <textarea name="content" id="content" rows="10" cols="150">
-                                    {{$news->content}}
-                                </textarea>
+                                <label>Địa chỉ</label>
+                                <input class="form-control" name="address" required value="{{$policeContact->address}}"/>
                         </div>
                         <br>
-                        
+        
                             <button type="submit" class="btn btn-success">Cập nhật</button>
-                            <br>
-                            <br>
+                            <button onclick="goBack()" class="btn btn-warning">Trở về</button>
                     </form>
                 </div>
                 <!-- /.row -->
@@ -54,10 +47,7 @@
         </div>
         <!-- /#page-wrapper -->
     @include('admin/footer')
-    <script>
-        // Thay thế <textarea id="post_content"> với CKEditor
-        CKEDITOR.replace( 'content' );// tham số là biến name của textarea
-    </script>
+   
 </body>
 </html>
 
