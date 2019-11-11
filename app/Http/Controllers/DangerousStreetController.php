@@ -12,11 +12,13 @@ class DangerousStreetController extends Controller
             $listDSs = DangerousStreet::get();
             $data = [];
             foreach ($listDSs as $ds) {
-                $ds['origin'] = $ds->startLatitude.','.$ds->startLongtitude;
-                $ds['destination'] = $ds->endLatitude.','.$ds->endLongtitude;
+                $ds['origin'] = ['latitude' => $ds->startLatitude,
+                                'longitude' => $ds->startLongtitude];
+                $ds['destination'] = ['latitude' => $ds->endLatitude,
+                                    'longitude' => $ds->endLongtitude];
                 array_push($data, $ds);
             }
-            return response([
+            return response()->json([
                 'result' => 200,
                 'message' => 'Success',
                 'data' => $listDSs
