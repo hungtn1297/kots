@@ -105,13 +105,13 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><img src="{{URL::asset('admin/image/team.png')}}" width="20" height="20">Đội hiệp sĩ<span class="fa arrow"></span></a>
+                            <a href="#"><img src="{{URL::asset('admin/image/team.png')}}" width="20" height="20">Nhóm hiệp sĩ<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="{{url('admin/knightTeam/list')}}">Danh sách đội hiệp sĩ</a>
+                                    <a href="{{url('admin/knightTeam/list')}}">Danh sách nhóm hiệp sĩ</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('admin/knightTeam/create')}}">Tạo mới đội hiệp sĩ</a>
+                                    <a href="{{url('admin/knightTeam/create')}}">Tạo mới nhóm hiệp sĩ</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
