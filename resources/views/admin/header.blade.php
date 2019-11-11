@@ -156,7 +156,7 @@
                             <a href="#"><img src="{{URL::asset('admin/image/feedback.png')}}" width="20" height="20"> Phản hồi<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="{{url('admin/Feedback/list')}}">Danh sách phản hồi</a>
+                                    <a href="{{url('admin/feedback/list')}}">Danh sách phản hồi</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

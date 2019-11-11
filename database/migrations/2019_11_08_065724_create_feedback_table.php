@@ -19,6 +19,7 @@ class CreateFeedbackTable extends Migration
             $table->text('content');
             $table->integer('isAnonymous')->default(0);
             $table->timestamps();
+            $table->foreign('userId')->references('id')->on('users');
         });
     }
 

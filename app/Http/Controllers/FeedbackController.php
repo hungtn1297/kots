@@ -63,4 +63,10 @@ class FeedbackController extends Controller
         ]);
 
     }
+
+    public function getFeedback(){
+        $listFeedbacks = Feedback::with('user')->get();
+        // dd($listFeedbacks);
+        return view('admin/Feedback/ListFeedback')->with(compact('listFeedbacks'));
+    }
 }

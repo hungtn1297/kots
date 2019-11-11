@@ -74,5 +74,12 @@ Route::prefix('admin')->group(function(){
     Route::prefix('dangerousStreets')->group(function(){
         Route::get('/', 'DangerousStreetController@getDS');
     });
+    Route::prefix('feedback')->group(function(){
+        Route::get('/list','FeedbackController@getFeedback');
+        Route::get('/detail',function(Request $request){
+            $feedback = App\Feedback::with('user')->find($request->id);
+            return view('admin/Feedback/DetailFeedback')->with(compact('feedback'));
+        });
+    });
 });
 

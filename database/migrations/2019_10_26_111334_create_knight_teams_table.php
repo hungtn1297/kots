@@ -18,6 +18,7 @@ class CreateKnightTeamsTable extends Migration
             $table->string('leaderId');
             $table->string('name');
             $table->timestamps();
+            // $table->foreign('leaderId')->references('id')->on('users')->onDelete('cascade');;
         });
     }
 

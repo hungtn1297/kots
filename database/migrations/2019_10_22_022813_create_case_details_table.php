@@ -15,10 +15,12 @@ class CreateCaseDetailsTable extends Migration
     {
         Schema::create('case_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('caseId');
+            $table->bigInteger('caseId')->unsigned();
             $table->string('knightId');
             $table->integer('status')->nullable();
             $table->timestamps();
+            $table->foreign('caseId')->references('id')->on('cases');
+            $table->foreign('knightId')->references('id')->on('users');
         });
     }
 
