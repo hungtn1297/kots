@@ -41,19 +41,25 @@ class KnightTeamController extends Controller
 
     public function getTeam(Request $request){
         if($request->is('api/*')){
-            $teams = KnightTeam::with('knight')->get();
-            foreach ($teams as $team) {
-                $leader = Users::find($team->leaderId);
-                $team['leaderName'] = $leader->name;
+            $json = json_decode(file_get_contents('php://input'), true);
+            if(isset($json['teamId'])){
+                $teams = KnightTeam::find($json['teamId']);
+                $leader = Users::find($teams->leaderId);
+                $teams['leaderName'] = $leader->name;
+            }else{
+                $teams = KnightTeam::with('knight')->get();
+                foreach ($teams as $team) {
+                    $leader = Users::find($team->leaderId);
+                    $team['leaderName'] = $leader->name;
+                }
             }
             // $teams['member'] = $teams->knight();
-            if($request->is('api/*')){
-                return response()->json([
-                    'result' => 200,
-                    'message' => 'ok',
-                    'data' => $teams
-                ]);
-            }
+            
+            return response()->json([
+                'result' => 200,
+                'message' => 'ok',
+                'data' => $teams
+            ]);
         }else{
             $teams = KnightTeam::with('knight')->get();
             foreach ($teams as $team) {

@@ -40,7 +40,7 @@ Route::get('getNews','NewsController@get');
 Route::get('getPoliceContact','PoliceContactController@get');
 
 Route::post('getTeamInfoByKnightId','KnightTeamController@getTeamInfoByKnightId');
-Route::get('getTeam','KnightTeamController@getTeam');
+Route::post('getTeam','KnightTeamController@getTeam');
 Route::get('createTeam','KnightTeamController@createTeam');
 
 Route::post('sendFeedback', 'FeedbackController@sendFeedback');
