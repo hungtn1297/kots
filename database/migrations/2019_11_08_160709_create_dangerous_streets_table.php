@@ -15,9 +15,9 @@ class CreateDangerousStreetsTable extends Migration
     {
         Schema::create('dangerous_streets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('startLongtitude');
+            $table->string('startLongitude');
             $table->string('startLatitude');
-            $table->string('endLongtitude');
+            $table->string('endLongitude');
             $table->string('endLatitude');
             $table->string('description');
             $table->timestamps();

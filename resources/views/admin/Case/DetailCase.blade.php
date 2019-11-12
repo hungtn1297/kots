@@ -40,16 +40,43 @@
 
                             <div class="form-group">
                                 <label>Trạng thái</label>
-                                <input class="form-control" name="status" value="{{$case->status}}"  disabled/>
+                                @switch($case->status)
+                                    @case(0)
+                                        <input class="form-control" name="status" value="Chưa xử lí"  disabled/>
+                                        @break
+                                    @case(1)
+                                        <input class="form-control" name="status" value="Đang xử lí"  disabled/>
+                                        @break
+                                    @case(2)
+                                        <input class="form-control" name="status" value="Thành công"  disabled/>
+                                        @break
+                                    @case(3)
+                                        <input class="form-control" name="status" value="Thất bại"  disabled/>
+                                        @break
+                                    @case(4)
+                                        <input class="form-control" name="status" value="Tạm hoãn"  disabled/>
+                                        @break
+                                    @case(5)
+                                        <input class="form-control" name="status" value="Đã bị huỷ"  disabled/>
+                                        @break
+                                    @default
+                                        
+                                @endswitch
                             </div>
                             <br>
 
                             <div class="form-group">
                                 <label>Phân loại</label>
-                                <input class="form-control" name="type" value="{{$case->type}}"  disabled/>
+                                @if ($case->type == 1)
+                                    <input class="form-control" name="type" value="Cần liên lạc"  disabled/>
+                                @else
+                                    <input class="form-control" name="type" value="Tín hiệu khẩn cấp"  disabled/>
+                                @endif
+                                
                             </div>
                             <br>
-                            
+                            {{-- {{ $case->caseDetail }} --}}
+                            @if (!empty($case->caseDetail))
                             <div class="form-group">
                                 <label>Các hiệp sĩ tham gia</label>
                             </div>
@@ -58,7 +85,7 @@
                                 <thead>
                                     <tr align="center">                        
                                         <th>Tên Hiệp Sĩ</th>
-                                        <th>Mã Sự cố</th>
+                                        <th>Thời gian tham gia</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,14 +93,15 @@
                                         @foreach ($detail->knight as $knight)
                                         <tr align="center">         
                                             <td>{{$knight->name}}</td>
-                                            <td>{{$case->id}}</td>             
+                                            <td>{{$detail->created_at}}</td>             
                                         </tr>
                                         @endforeach
                                     @endforeach 
                             </table>
-                            
+                            @endif
                             <br>
 
+                            @if($case->endLatitude != null)
                             <div class="form-group">
                                 <label for="">Đoạn đường sự cố</label> 
                             </div>
@@ -87,6 +115,7 @@
                                         &destination={{$case->endLatitude}},{{$case->endLongitude}}" allowfullscreen disableDefaultUI: true>
                                 </iframe>
                             </div>
+                            @endif
                             <input type="button" onclick="goBack()" value="Trở về" class="btn btn-primary">
                             
                     </div>

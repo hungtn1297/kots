@@ -49,4 +49,8 @@ class FirebaseController extends Controller
         }
         return $result;
     }
+
+    public function getLocationOfKnight($knightId){
+        
+    }
 }

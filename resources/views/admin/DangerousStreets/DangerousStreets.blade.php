@@ -84,13 +84,13 @@
                         }
                     }
 
-                    function drawRoute(startLatitude, startLongtitude, endLatitude, endLongtitude){
-                        console.log('STARTLA: ' + startLatitude);
-                        console.log(startLatitude + ',' + startLongtitude);
-                        console.log(endLatitude + ',' + endLongtitude);
+                    function drawRoute(startLatitude, startLongitude, endLatitude, endLongitude){
+                        // console.log('STARTLA: ' + startLatitude);
+                        // console.log(startLatitude + ',' + startLongitude);
+                        // console.log(endLatitude + ',' + endLongitude);
                         var request = {
-                            origin:startLatitude+','+startLongtitude,
-                            destination:endLatitude+','+endLongtitude,
+                            origin:startLatitude+','+startLongitude,
+                            destination:endLatitude+','+endLongitude,
                             travelMode: 'DRIVING'
                         };
                         directionsService.route(request, function(response, status) {
@@ -103,8 +103,10 @@
                     function loadRoute(){
                         var bounds = new google.maps.LatLngBounds();
                         for (let i = 0; i < listDSs.length; i++) {
-                            var startPoint = new google.maps.LatLng(listDSs[i]['startLatitude'], listDSs[i]['startLongtitude']);
-                            var endPoint = new google.maps.LatLng(listDSs[i]['endLatitude'], listDSs[i]['endLongtitude']);
+                            var startPoint = new google.maps.LatLng(listDSs[i]['startLatitude'], listDSs[i]['startLongitude']);
+                            var endPoint = new google.maps.LatLng(listDSs[i]['endLatitude'], listDSs[i]['endLongitude']);
+                            console.log('START: '+startPoint);
+                            console.log('END: '+endPoint);
                             var directionsDisplay = new google.maps.DirectionsRenderer({
                                 map: map,
                                 preserveViewport: true
@@ -144,6 +146,9 @@
                             directionsRenderer.setDirections(response);
                             }
                         });
+
+                        document.getElementById('start').value = start;
+                        document.getElementById('end').value = end;
                     }
 
                     function removeMarker(id){
@@ -158,14 +163,49 @@
                             }
                         }
                     }
+
                 window.onload = function(){
-                loadRoute();
+                    loadRoute();
                 }
                 </script>
             </div>
-            <input type="button" value="Route" id="route" onclick="calcRoute()">
-            <input type="button" value="LoadRoute" onclick="loadRoute()">
+            <div style="text-align: center">
+                <form action="{{url('admin/dangerousStreets/setDS')}}" method="get">
+                    <input type="hidden" name="start" id="start">
+                    <input type="hidden" name="end" id="end">
+                    <input type="button" value="Thiết lập" class="btn btn-success" id="route" onclick="calcRoute()">
+                    <input type="submit" value="Cập nhật" class="btn btn-primary">
+                </form>
+                
+            </div>
+            
+
             <!-- /.container-fluid -->
+            <br>
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr align="center">                        
+                        <th>Mã số</th>
+                        <th>Mô tả</th>
+                        <th>Huỷ bỏ thiết lập</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($listDSs as $ds)
+                        <tr align="center" onclick="drawRoute({{$ds->startLatitude}}, {{$ds->startLongitude}}, {{$ds->endLatitude}}, {{$ds->endLongitude}})">         
+                            <td>{{$ds->id}}</td>
+                            <td>{{$ds->description}}</td>
+                            <td>
+                                <form action="{{url('admin/dangerousStreets/unsetDS')}}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="hidden" name="id" value="{{$ds->id}}">
+                                    <input type="submit" class="btn btn-danger" value="Huỷ bỏ">
+                                </form>
+                            </td>                    
+                        </tr>
+                    @endforeach 
+            </table>
         </div>
         <!-- /#page-wrapper -->
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRJl0JFqHhM8jQ24VrJnzJE8HarKJ1qF0&callback=myMap"></script>

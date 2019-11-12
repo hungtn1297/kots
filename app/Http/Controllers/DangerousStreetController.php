@@ -28,6 +28,33 @@ class DangerousStreetController extends Controller
             // dd($listDSs);
             return view('admin/DangerousStreets/DangerousStreets')->with(compact('listDSs'));
         }
+    }
+
+    public function setDS(Request $request){
+        $start = explode(',',substr($request->start,1,strlen($request->start)-2));
+        $end = explode(',',substr($request->end,1,strlen($request->end)-2));
+        $startLatitude = $start[0];
+        $startLongitude = $start[1];
+        $endLatitude = $end[0];
+        $endLongitude = $end[1];
+
+        $ds = new DangerousStreet();
+        $ds->startLatitude = $startLatitude;
+        $ds->startLongitude = $startLongitude;
+        $ds->endLatitude = $endLatitude;
+        $ds->endLongitude = $endLongitude;
+        $ds->description = 'ABC';
+
+        $ds->save();
+
+        return redirect()->action('DangerousStreetController@getDS');
+    }
+
+    public function unsetDS(Request $request){
+        $ds = DangerousStreet::find($request->id);
         
+        $ds->delete();
+
+        return redirect()->action('DangerousStreetController@getDS');
     }
 }

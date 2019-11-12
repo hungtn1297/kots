@@ -73,6 +73,8 @@ Route::prefix('admin')->group(function(){
     });
     Route::prefix('dangerousStreets')->group(function(){
         Route::get('/', 'DangerousStreetController@getDS');
+        Route::get('/setDS','DangerousStreetController@setDS');
+        Route::delete('/unsetDS','DangerousStreetController@unsetDS');
     });
     Route::prefix('feedback')->group(function(){
         Route::get('/list','FeedbackController@getFeedback');
