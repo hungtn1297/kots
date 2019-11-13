@@ -137,6 +137,7 @@ class KnightController extends Controller
             $case->status = 1;
             $case->save();
 
+            // dd($knightId);
             $this->changeKnightStatus($knightId, $this->INCASE);
 
             $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'join');
@@ -161,39 +162,46 @@ class KnightController extends Controller
         return true;
     }
 
-    public function changeKnightStatus($knightId = 0, $status = 0, Request $request){
+    public function changeKnightStatus($knightId, $status){
         
+        $knight = Users::where('id',$knightId)
+                    ->where('role',2)
+                    ->first();
+        if(isset($knight)){
+            $knight->status = $status;
+            $knight->save();
+        }else{
+            $knight = null;
+        }
+        
+        return $knight;
+    }
+
+    public function changeKnightStatusAPI(){
         $resultCode = 3000;
         $message = 'FAIL';
         $data = [];
-        if($request->is('api/*')){
-            $json = json_decode(file_get_contents('php://input'), true);
-            $knightId = str_replace('+84','0',$json['phone']);
-            $status = $json['status'];
-            $knight = Users::where('id',$knightId)
-                        ->where('role',2)->first();
-            
-            if(isset($knight)){
-                $knight->status = $status;
-                $knight->save();
-                $resultCode = 200;
-                $message = 'SUCCESS';
-                $data = $knight;
-            }
-            return response()->json([
-                'resultCode' => $resultCode,
-                'message' => $message,
-                'data' => $data
-            ]);
-        }else{
-            if(isset($knight)){
-                $knight->status = $status;
-                $knight->save();
-            }else{
-                $knight = null;
-            }
+        
+        $json = json_decode(file_get_contents('php://input'), true);
+        $knightId = str_replace('+84','0',$json['phone']);
+        $status = $json['status'];
+        $knight = Users::where('id',$knightId)
+                    ->where('role',2)
+                    ->first();
+        
+        if(isset($knight)){
+            $knight->status = $status;
+            $knight->save();
+            $resultCode = 200;
+            $message = 'SUCCESS';
+            $data = $knight;
         }
-        return $knight;
+        return response()->json([
+            'resultCode' => $resultCode,
+            'message' => $message,
+            'data' => $data
+        ]);
+        
     }
 
     public function confirmCase($knightId, $caseId){

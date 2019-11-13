@@ -271,8 +271,8 @@ class CaseController extends Controller
         $knightController = new KnightController();
         $messageController = new MessageController();
 
-        $knightSendcaseData = '';
-        $knightSendcaseId = '';
+        // $knightSendcaseData = '';
+        // $knightSendcaseId = '';
 
         $json = json_decode(file_get_contents('php://input'),true);
         if(isset($json)){
@@ -303,14 +303,14 @@ class CaseController extends Controller
                     return self::returnAPI($resultCode,'KNIGHT IS IN ANOTHER CASE', []);
                 };
                 $knightController->confirmCase($knight->id, $case->id);
-                $knightSendcaseData = $firebaseController->getKnightLocation($knight->id, $knight->team_id);
-                $knightSendcaseId = $knight->id;
+                // $knightSendcaseData = $firebaseController->getKnightLocation($knight->id, $knight->team_id);
+                // $knightSendcaseId = $knight->id;
             }
             //Get list knight nearly
             $knightList = $firebaseController->getKnightInRadius(200, $longitude, $latitude);
             //Create new case in firebase
             // dd($knightSendcaseData);
-            $firebaseCase = $firebaseController->createFirebaseCase($case->id, $knightSendcaseId, $knightSendcaseData);
+            // $firebaseCase = $firebaseController->createFirebaseCase($case->id, $knightSendcaseId, $knightSendcaseData);
             //Send message to Knight
             $messageController->sendMessage($case, $knightList);
             $case['citizenId'] = $json['phone'];
