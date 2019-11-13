@@ -68,13 +68,15 @@ class UserController extends Controller
         $id = str_replace("+84","0",$json['phone']);
         $user = Users::find($id);
         if(isset($user)){
+            if(isset($json['token'])){
+                $user->token = $json['token'];
+            }
             if(isset($json['teamId'])){
                 $user->team_id = $json['teamId'];
             }else{
                 $user->name = $json['name'];
                 $user->address = $json['address'];
                 $user->gender = $json['gender'];
-                $user->token = $json['token'];
                 $dob = explode('-',$json['dateOfBirth']);
                 $user->dateOfBirth = date('Y-m-d',strtotime("$dob[2]-$dob[1]-$dob[0]"));
             }
