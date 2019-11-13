@@ -43,13 +43,13 @@
                                         @if ($knight->isDisable == 1)
                                             <td style="color: gray">Bị Khoá</td>
                                         @else
-                                            @if ($knight->status == 0)
+                                            {{-- @if ($knight->status == 0)
                                                 <td style="color: coral">Đang chờ xét duyệt</td>
-                                            @elseif($knight->status == 1)
+                                            @elseif($knight->status == 1) --}}
                                                 <td style="color: green">Đang hoạt động</td>
-                                            @elseif($knight->status == 2)
+                                            {{-- @elseif($knight->status == 2)
                                                 <td style="color: orange">Đang truy đuổi</td>
-                                            @endif  
+                                            @endif   --}}
                                         @endif
                                         <td>
                                             <img src="{{URL::asset("$knight->image")}}" alt="" width="80" height="80">

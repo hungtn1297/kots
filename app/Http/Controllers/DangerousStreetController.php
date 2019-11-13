@@ -13,9 +13,9 @@ class DangerousStreetController extends Controller
             $data = [];
             foreach ($listDSs as $ds) {
                 $ds['origin'] = ['latitude' => $ds->startLatitude,
-                                'longitude' => $ds->startLongtitude];
+                                'longitude' => $ds->startLongitude];
                 $ds['destination'] = ['latitude' => $ds->endLatitude,
-                                    'longitude' => $ds->endLongtitude];
+                                    'longitude' => $ds->endLongitude];
                 array_push($data, $ds);
             }
             return response()->json([

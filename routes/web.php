@@ -24,7 +24,7 @@ Route::post('login', 'OtherController@checkLogin');
 
 Route::get('message','MessageController@sendMessage');
 
-Route::get('/firebase','FireBaseController@index');
+Route::get('/firebase','FireBaseController@welcome');
 Route::get('map', function(){
     return view('admin/DangerousStreets/map');
 });

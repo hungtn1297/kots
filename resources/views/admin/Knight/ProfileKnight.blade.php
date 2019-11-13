@@ -52,6 +52,23 @@
                             <div class="form-group">
                                 <label>Những sự cố đã tham gia</label> <br>
                             </div>
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr align="center">                        
+                                        <th>Mã Sự cố</th>
+                                        <th>Thời gian tham gia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($knight->caseDetail as $caseDetail)
+                                        <tr align="center">  
+                                            <td>
+                                                <a href="{{url('admin/case/detail?id=').$caseDetail->caseId}}">{{$caseDetail->caseId}}</a>
+                                            </td>
+                                            <td>{{$caseDetail->created_at}}</td>            
+                                        </tr>
+                                    @endforeach 
+                            </table>
                             <br>
                             <input type="button" onclick="goBack()" value="Trở về" class="btn btn-primary">
                             
