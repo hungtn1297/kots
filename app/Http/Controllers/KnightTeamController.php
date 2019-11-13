@@ -46,18 +46,26 @@ class KnightTeamController extends Controller
                 $teams = KnightTeam::with('knight')->find($json['teamId']);
                 $leader = Users::find($teams->leaderId);
                 $teams['leaderName'] = $leader->name;
+                $teams['leaderId'] = '+84'.substr($teams['leaderId'],1,strlen($teams['leaderId']));
+                foreach ($teams->knight as $knight) {
+                    $knight['id'] = '+84'.substr($knight['id'],1,strlen($knight['id']));
+                }
             }else{
                 $teams = KnightTeam::with('knight')->get();
                 foreach ($teams as $team) {
                     $leader = Users::find($team->leaderId);
                     $team['leaderName'] = $leader->name;
+                    $team['leaderId'] = '+84'.substr($teams['leaderId'],1,strlen($teams['leaderId']));
+                    foreach ($team->knight as $knight) {
+                        $knight['id'] = '+84'.substr($knight['id'],1,strlen($knight['id']));
+                    }
                 }
             }
             // $teams['member'] = $teams->knight();
             
             return response()->json([
                 'result' => 200,
-                'message' => 'ok',
+                'message' => 'SUCCESS',
                 'data' => $teams
             ]);
         }else{
