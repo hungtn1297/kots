@@ -10,25 +10,31 @@ use App\Knight;
 
 class KnightController extends Controller
 {
-    private $BANNED = 0;
+    private $NOT_APPROVED = 0;
     private $FREE = 1;
     private $INCASE = 2;
+    private $BANNED = 0;
+    private $ACTIVE = 1;
 
     public function get(){
         // Function dùng để lấy danh sách các hiệp sĩ
-        $listKnights = Users::where('role',2)->get();
+        $listKnights = Users::where('role',2)
+                            ->where('status','!=',0)
+                            ->get();
         // dd($listKnights);
         return view('admin/Knight/ListKnight')->with(compact('listKnights'));
     }
 
     public function viewProfile(Request $request){
         // Function dùng để xem thông tin chi tiết của hiệp sĩ
-        $knight = Users::where('role',2)
+        $knights = Users::where('role',2)
                         ->where('id', $request->id)
                         ->get();
         // dd($knight);
-        if($knight->count()>0){
-            $knight = $knight[0];
+        if($knights->count()>0){
+            $knight = $knights[0];
+            $caseDetails = CaseDetail::where('knightId', $knight->id)->get();
+            $knight['caseDetail']  = $caseDetails;
             return view('admin/Knight/ProfileKnight')->with(compact('knight'));
         }else{
             $error = "Không tìm thấy thông tin chi tiết của hiệp sĩ này";
@@ -45,10 +51,10 @@ class KnightController extends Controller
                         ->get();
         if($knight->count()>0){
             $knight = $knight[0];
-            if($knight->isDisable == 0){
-                $knight->isDisable = 1;
+            if($knight->isDisable == $this->BANNED){
+                $knight->isDisable = $this->ACTIVE;
             }else{
-                $knight->isDisable = 0;
+                $knight->isDisable = $this->BANNED;
             }
             $knight->save();
             return redirect()->action('KnightController@get');
@@ -95,6 +101,7 @@ class KnightController extends Controller
 
     public function joinCase($knightId, $caseId){
         $knightIsInAnyCase = CaseDetail::where('knightId', $knightId)
+                                        ->where('isLeave', 0)
                                         ->where('status', 1)
                                         ->latest()
                                         ->first();
@@ -112,13 +119,9 @@ class KnightController extends Controller
             $case = Cases::find($knightIsInAnyCase->caseId);
             $status = $case->status;
             //Nếu sự cố đang được xử lí và Hiệp sĩ vẫn còn tham gia trong sự cố
-            if($status == 1 && $knightIsInAnyCase->status == 1){
+            if(($status == 1 && $knightIsInAnyCase->status == 1)|| $knight->status == $this->INCASE){
                 return 'INCASE';
             }
-        }
-
-        if($knight->status == $this->INCASE){
-            return 'INCASE';
         }
 
         //Kiểm tra Hiệp sĩ đã tham gia vào Sự cố đó hay chưa?
@@ -138,7 +141,7 @@ class KnightController extends Controller
 
             $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'join');
             return $caseDetail;
-        }elseif(isset($knightInCase) && $knightInCase->status == 0){
+        }elseif(isset($knightInCase) && $knightInCase->isLeave == 1){
             return 'ALREADY LEAVED';
         }
 
@@ -149,6 +152,7 @@ class KnightController extends Controller
                                 ->where('caseId', $caseId)
                                 ->first();
         $caseDetail->status = 0;
+        $caseDetail->isLeave = 1;
         $caseDetail->save();
 
         $knight = Knight::find($knightId);
@@ -157,10 +161,39 @@ class KnightController extends Controller
         return true;
     }
 
-    public function changeKnightStatus($knightId, $status){
-        $knight = Users::find($knightId);
-        $knight->status = $status;
-        $knight->save();
+    public function changeKnightStatus($knightId = 0, $status = 0, Request $request){
+        
+        $resultCode = 3000;
+        $message = 'FAIL';
+        $data = [];
+        if($request->is('api/*')){
+            $json = json_decode(file_get_contents('php://input'), true);
+            $knightId = str_replace('+84','0',$json['phone']);
+            $status = $json['status'];
+            $knight = Users::where('id',$knightId)
+                        ->where('role',2)->first();
+            
+            if(isset($knight)){
+                $knight->status = $status;
+                $knight->save();
+                $resultCode = 200;
+                $message = 'SUCCESS';
+                $data = $knight;
+            }
+            return response()->json([
+                'resultCode' => $resultCode,
+                'message' => $message,
+                'data' => $data
+            ]);
+        }else{
+            if(isset($knight)){
+                $knight->status = $status;
+                $knight->save();
+            }else{
+                $knight = null;
+            }
+        }
+        return $knight;
     }
 
     public function confirmCase($knightId, $caseId){
@@ -174,5 +207,13 @@ class KnightController extends Controller
             $case->save();
             // dd($case);
         }
+    }
+
+    public function getJoincaseTime($knightId, $caseId){
+        $caseDetail = CaseDetail::where('knightId', $knightId)
+                                ->where('caseId', $caseId)
+                                ->first();
+        
+        return $caseDetail->created_at;
     }
 }
