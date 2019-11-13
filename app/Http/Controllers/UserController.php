@@ -82,7 +82,7 @@ class UserController extends Controller
             }
             $user->isFirstLogin = 0;
             $user->save();
-
+            $user['id'] = $json['phone'];
             $resultCode = 200;
             $message = "Success";
             $data = $user;
