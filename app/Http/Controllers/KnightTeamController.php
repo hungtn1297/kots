@@ -55,7 +55,7 @@ class KnightTeamController extends Controller
                 foreach ($teams as $team) {
                     $leader = Users::find($team->leaderId);
                     $team['leaderName'] = $leader->name;
-                    $team['leaderId'] = '+84'.substr($teams['leaderId'],1,strlen($teams['leaderId']));
+                    $team['leaderId'] = '+84'.substr($team['leaderId'],1,strlen($team['leaderId']));
                     foreach ($team->knight as $knight) {
                         $knight['id'] = '+84'.substr($knight['id'],1,strlen($knight['id']));
                     }
