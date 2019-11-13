@@ -43,7 +43,7 @@ class KnightTeamController extends Controller
         if($request->is('api/*')){
             $json = json_decode(file_get_contents('php://input'), true);
             if(isset($json['teamId'])){
-                $teams = KnightTeam::find($json['teamId']);
+                $teams = KnightTeam::with('knight')->find($json['teamId']);
                 $leader = Users::find($teams->leaderId);
                 $teams['leaderName'] = $leader->name;
             }else{
