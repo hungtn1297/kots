@@ -42,6 +42,7 @@ Route::get('getPoliceContact','PoliceContactController@get');
 Route::post('getTeamInfoByKnightId','KnightTeamController@getTeamInfoByKnightId');
 Route::post('getTeam','KnightTeamController@getTeam');
 Route::get('createTeam','KnightTeamController@createTeam');
+Route::post('getWaitingKnight','KnightTeamController@getWaitingKnight');
 
 Route::post('sendFeedback', 'FeedbackController@sendFeedback');
 Route::post('getFeedbackById', 'FeedbackController@getFeedbackById');

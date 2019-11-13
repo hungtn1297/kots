@@ -87,4 +87,27 @@ class KnightTeamController extends Controller
 
 
     }
+
+    public function getWaitingKnight(){
+        $resultCode = 3000;
+        $message = 'FAIL';
+        $data = [];
+
+        $json = json_decode(file_get_contents('php://input'), true);
+        $listWaitingKnight = Users::where('team_id', $json['teamId'])
+                                    ->where('status', 0)
+                                    ->get();
+        
+        if(!empty($listWaitingKnight)){
+            $resultCode = 200;
+            $message = 'SUCCESS';
+            $data = $listWaitingKnight;
+        }
+
+        return response()->json([
+            'result' => 200,
+            'message' => 'SUCCESS',
+            'data' => $data
+        ]);
+    }
 }
