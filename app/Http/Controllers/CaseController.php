@@ -212,11 +212,19 @@ class CaseController extends Controller
     public function detail(Request $request){
         $id = $request->id;
         $case = Cases::find($id);
+        $knight = '';
         if(isset($case)){
             // foreach ($case->caseDetail as $detail) {
             //     dd($detail->knight);
             // }
-            return view('admin/Case/DetailCase')->with(compact('case'));
+            $knight = Users::where('id',$case->knightConfirmId)
+                            ->where('role',2)
+                            ->first();
+            // dd($knight);
+            $firebaseController = new FirebaseController();
+            $locationList = $firebaseController->getKnightInTeamLocation($knight->id, $knight->team_id, $case->created_at, $case->updated_at);
+            // dd($locationList);
+            return view('admin/Case/DetailCase')->with(compact('case','locationList'));
         }else{
             $error = "Không tìm thấy Sự cố";
             return view('admin/error')->with(compact('error'));
@@ -259,6 +267,13 @@ class CaseController extends Controller
         $message = "";
         $data = array();
 
+        $firebaseController = new FirebaseController();
+        $knightController = new KnightController();
+        $messageController = new MessageController();
+
+        $knightSendcaseData = '';
+        $knightSendcaseId = '';
+
         $json = json_decode(file_get_contents('php://input'),true);
         if(isset($json)){
             $id = str_replace("+84","0",$json['phone']);
@@ -280,19 +295,22 @@ class CaseController extends Controller
                 }
                 $case = $this->createCase($id, $longitude, $latitude, $userMessage, $media, $mediatype, $type);
             }
-
+            
             $knight = Users::find($id);
             if($knight->role == $this->KNIGHT_ROLE){
-                $knightController = new KnightController();
                 if($knightController->joinCase($knight->id, $case->id) == 'INCASE'){
                     $case->delete();
                     return self::returnAPI($resultCode,'KNIGHT IS IN ANOTHER CASE', []);
                 };
                 $knightController->confirmCase($knight->id, $case->id);
+                $knightSendcaseData = $firebaseController->getKnightLocation($knight->id, $knight->team_id);
+                $knightSendcaseId = $knight->id;
             }
-            $firebaseController = new FirebaseController();
+            //Get list knight nearly
             $knightList = $firebaseController->getKnightInRadius(200, $longitude, $latitude);
-            $messageController = new MessageController();
+            //Create new case in firebase
+            // dd($knightSendcaseData);
+            $firebaseCase = $firebaseController->createFirebaseCase($case->id, $knightSendcaseId, $knightSendcaseData);
             //Send message to Knight
             $messageController->sendMessage($case, $knightList);
             $case['citizenId'] = $json['phone'];

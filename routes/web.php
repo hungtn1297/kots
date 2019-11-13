@@ -42,6 +42,14 @@ Route::prefix('admin')->group(function(){
     });
     Route::prefix('knightTeam')->group(function(){
         Route::get('list','KnightTeamController@getTeam');
+        Route::get('create',function(){
+            $listKnight = App\Users::where('role', 2)
+                                    ->where('team_id', null)
+                                    ->where('status', 1)
+                                    ->get();
+            return view('admin/KnightTeam/CreateKnightTeam')->with(compact('listKnight'));
+        });
+        Route::post('create', 'KnightTeamController@createTeam');
     });
     Route::prefix('news')->group(function(){
         Route::get('crawl', function(){return view('admin/News/CrawlNews');});

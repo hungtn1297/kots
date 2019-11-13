@@ -79,13 +79,18 @@ class KnightTeamController extends Controller
         }
     }
 
-    public function createTeam(){
+    public function createTeam(Request $request){
+        $name = $request->name;
+        $leaderId = $request->leaderId;
+        $address = $request->address;
+
         $team = new KnightTeam();
-        $team->name = 'Siêu nhân cuồng phong';
-        $team->leaderId = '0971930499';
+        $team->name = $name;
+        $team->leaderId = $leaderId;
+        $team->address = $address;
         $team->save();
 
-
+        return redirect()->action('KnightTeamController@getTeam');
     }
 
     public function getWaitingKnight(){
