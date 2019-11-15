@@ -235,12 +235,14 @@ class KnightController extends Controller
         return $caseDetail->created_at;
     }
 
-    public function requestLeaveTeam($knightId){
+    public function requestLeaveTeam(){
 
         $resultCode = 3000;
         $message = 'FAIL';
         $data = [];
 
+        $json = json_decode(file_get_contents('php://input'), true);
+        $knightId = str_replace('+84','0',$json['phone']);
         $knight = Users::find($knightId);
 
         if(isset($knight)){
