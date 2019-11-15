@@ -125,36 +125,57 @@
                                     // marker.setMap(map); 
 
                                     directionsRenderer.setMap(map);
+
                                 }
 
-                                function calcRoute() {
-                                    var start = locationList[0]['latitude']+','+locationList[0]['longitude'];
-                                    var end = locationList[locationList.length - 1]['latitude']+','+locationList[locationList.length - 1]['longitude'];
-                                    var waypoints = [];
-                                    for (let i = 1; i < locationList.length-1; i++) {
-                                        locations = {location: locationList[i]['latitude']+','+locationList[i]['longitude']}
-                                        waypoints.push(locations);
-                                        
+                                function drawPath(){
+                                    var paths = [];
+                                    for (let i = 0; i < locationList.length; i++) {
+                                        var line = {
+                                                    lat:locationList[i]['latitude'],
+                                                    long:locationList[i]['longitude']
+                                                    };
+                                        paths.push(line);
                                     }
-                                    console.log('START: '+ start);
-                                    console.log('END: '+ end);
-                                    console.log('WAYPOINT: '+ waypoints);
-                                    var request = {
-                                        origin:start,
-                                        destination:end,
-                                        waypoints: waypoints,
-                                        travelMode: 'DRIVING'
-                                    };
-                                    directionsService.route(request, function(response, status) {
-                                        if (status == 'OK') {
-                                        directionsRenderer.setDirections(response);
-                                        }
+                                    var path = new.google.maps.Polyline({
+                                        path: paths,
+                                        geodesic: true,
+                                        strokeColor: '#FF0000',
+                                        strokeOpacity: 1.0,
+                                        strokeWeight: 2
                                     });
 
+                                    path.setMap(map)
                                 }
 
+                                // function calcRoute() {
+                                //     var start = locationList[0]['latitude']+','+locationList[0]['longitude'];
+                                //     var end = locationList[locationList.length - 1]['latitude']+','+locationList[locationList.length - 1]['longitude'];
+                                //     var waypoints = [];
+                                //     for (let i = 1; i < locationList.length-1; i++) {
+                                //         locations = {location: locationList[i]['latitude']+','+locationList[i]['longitude']}
+                                //         waypoints.push(locations);
+                                        
+                                //     }
+                                //     console.log('START: '+ start);
+                                //     console.log('END: '+ end);
+                                //     console.log('WAYPOINT: '+ waypoints);
+                                //     var request = {
+                                //         origin:start,
+                                //         destination:end,
+                                //         waypoints: waypoints,
+                                //         travelMode: 'DRIVING'
+                                //     };
+                                //     directionsService.route(request, function(response, status) {
+                                //         if (status == 'OK') {
+                                //         directionsRenderer.setDirections(response);
+                                //         }
+                                //     });
+
+                                // }
+
                                 window.onload = function(){
-                                    calcRoute();
+                                    drawPath();
                                 }
                             </script>
                             @endif
