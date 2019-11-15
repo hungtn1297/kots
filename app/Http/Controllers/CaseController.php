@@ -223,7 +223,7 @@ class CaseController extends Controller
             // dd($knight);
             $firebaseController = new FirebaseController();
             $locationList = $firebaseController->getKnightInTeamLocation($knight->id, $knight->team_id, $case->created_at, $case->updated_at);
-            dd($locationList);
+            // dd($locationList);
             return view('admin/Case/DetailCase')->with(compact('case','locationList'));
         }else{
             $error = "Không tìm thấy Sự cố";
