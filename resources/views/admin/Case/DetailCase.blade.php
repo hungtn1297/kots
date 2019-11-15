@@ -113,7 +113,7 @@
                                     directionsService = new google.maps.DirectionsService();
                                     directionsRenderer = new google.maps.DirectionsRenderer();   
                                     var mapProp= {
-                                        center:new google.maps.LatLng(10.794378,106.731063),
+                                        center:new google.maps.LatLng(locationList[0]['latitude'],locationList[0]['longitude']),
                                         zoom:20,
                                     };
                                     // var marker = new google.maps.Marker({
@@ -137,7 +137,7 @@
                                                     };
                                         paths.push(line);
                                     }
-                                    console.log(paths);
+                                    // console.log(paths);
                                     var drawP = new google.maps.Polyline({
                                         path: paths,
                                         geodesic: true,
