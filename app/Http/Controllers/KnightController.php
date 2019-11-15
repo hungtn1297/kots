@@ -207,7 +207,7 @@ class KnightController extends Controller
             $data = $knight;
         }
         return response()->json([
-            'resultCode' => $resultCode,
+            'result' => $resultCode,
             'message' => $message,
             'data' => $data
         ]);
@@ -253,7 +253,7 @@ class KnightController extends Controller
         }
 
         return response()->json([
-            'resultCode' => $resultCode,
+            'result' => $resultCode,
             'message' => $message,
             'data' => $data
         ]);

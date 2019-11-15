@@ -23,6 +23,7 @@ Route::post('login','OtherController@checkLogin');
 Route::post('findKnight','KnightController@findKnight');
 Route::post('approvedKnight','KnightController@changeKnightStatusAPI');
 Route::post('ignoreKnight','KnightController@changeKnightStatusAPI');
+Route::post('requestLeaveTeam','KnightController@requestLeaveTeam');
 
 Route::post('getCase','CaseController@get');
 Route::post('sendCase','CaseController@sendCase');
