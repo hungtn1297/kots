@@ -133,7 +133,7 @@
                                     for (let i = 0; i < locationList.length; i++) {
                                         var line = {
                                                     lat:locationList[i]['latitude'],
-                                                    long:locationList[i]['longitude']
+                                                    lng:locationList[i]['longitude']
                                                     };
                                         paths.push(line);
                                     }
