@@ -147,7 +147,7 @@
                                     });
 
 
-                                    drawP.setMap(map)
+                                    drawP.setMap(map);
                                 }
 
                                 // function calcRoute() {
