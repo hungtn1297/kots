@@ -185,11 +185,21 @@ class KnightController extends Controller
         $json = json_decode(file_get_contents('php://input'), true);
         $knightId = str_replace('+84','0',$json['phone']);
         $status = $json['status'];
+        $action = $json['action'];
         $knight = Users::where('id',$knightId)
                     ->where('role',2)
                     ->first();
         
         if(isset($knight)){
+            if($action == 'join'){ //Request join team
+                if($status == 0){ //Ignore join
+                    $knight->team_id = null;
+                }
+            }elseif ($action == 'leave') { //Request leave
+                if($status == 0){ //Accept leave
+                    $knight->team_id = null;
+                }
+            }
             $knight->status = $status;
             $knight->save();
             $resultCode = 200;
@@ -223,5 +233,29 @@ class KnightController extends Controller
                                 ->first();
         
         return $caseDetail->created_at;
+    }
+
+    public function requestLeaveTeam($knightId){
+
+        $resultCode = 3000;
+        $message = 'FAIL';
+        $data = [];
+
+        $knight = Users::find($knightId);
+
+        if(isset($knight)){
+            $knight->status = 3;
+            $knight->save();
+
+            $resultCode = 200;
+            $message = 'SUCCESS';
+            $data = $knight;
+        }
+
+        return response()->json([
+            'resultCode' => $resultCode,
+            'message' => $message,
+            'data' => $data
+        ]);
     }
 }

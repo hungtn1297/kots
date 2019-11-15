@@ -70,7 +70,7 @@ class DangerousStreetController extends Controller
         $citizen = Users::find($id);
 
         $messageController = new MessageController();
-        $result = $messageController->sendAlertToCitizen($citizen->token, $streetName);
+        $result = $messageController->sendAlertToCitizen($citizen->token);
         if($result > 0){
             $resultCode = 200;
             $message = 'SUCCESS';
