@@ -49,3 +49,4 @@ Route::post('sendFeedback', 'FeedbackController@sendFeedback');
 Route::post('getFeedbackById', 'FeedbackController@getFeedbackById');
 
 Route::get('getDS','DangerousStreetController@getDS');
+Route::post('alertDS','DangerousStreetController@alertDS');

@@ -137,4 +137,32 @@ class MessageController extends Controller
         
         return 0;
     }
+
+    public function sendAlertToCitizen($citizenToken, $streetName){
+        $optionBuilder = new OptionsBuilder();
+        $dataBuilder = new PayloadDataBuilder();
+        $notificationBuilder = new PayloadNotificationBuilder('Đoạn đường '.$streetName.' nguy hiểm');
+        
+
+        $optionBuilder->setTimeToLive(60*20);
+       
+        $notificationBuilder->setBody('Bạn vừa bước vào một đoạn đường nguy hiểm, xin cẩn thận')
+                            ->setSound('default');     
+        
+        $dataBuilder->addData(['item' => []]);
+        
+
+        $option = $optionBuilder->build();
+        $notification = $notificationBuilder->build();
+        $data = $dataBuilder->build();
+
+        $token = $citizenToken;
+        // dd($token);
+        if(!empty($token)){
+            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+            return $downstreamResponse->numberSuccess();
+        }
+        
+        return 0;
+    }
 }

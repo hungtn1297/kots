@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DangerousStreet;
+use App\Users;
 use Illuminate\Http\Request;
 
 class DangerousStreetController extends Controller
@@ -56,5 +57,30 @@ class DangerousStreetController extends Controller
         $ds->delete();
 
         return redirect()->action('DangerousStreetController@getDS');
+    }
+
+    public function alertDS(){
+        $resultCode = 3000;
+        $message = 'FAIL';
+        $data = [];
+
+        $json = json_decode(file_get_contents('php://input'), true);
+        $id = str_replace('+84','0',$json['phone']);
+        $streetName = $json['streetName'];
+
+        $citizen = Users::find($id);
+
+        $messageController = new MessageController();
+        $result = $messageController->sendAlertToCitizen($citizen->token, $streetName);
+        if($result > 0){
+            $resultCode = 200;
+            $message = 'SUCCESS';
+        }
+
+        return response()->json([
+            'result' => $resultCode,
+            'message' => $message,
+            'data' => $data
+        ]);
     }
 }
