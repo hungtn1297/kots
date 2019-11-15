@@ -248,6 +248,7 @@ class KnightController extends Controller
         if(isset($knight)){
             $knight->status = 3;
             $knight->save();
+            $knight->id = $json['phone'];
 
             $resultCode = 200;
             $message = 'SUCCESS';
