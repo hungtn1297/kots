@@ -109,6 +109,13 @@ class KnightTeamController extends Controller
         if(!empty($listWaitingKnight)){
             $resultCode = 200;
             $message = 'SUCCESS';
+            foreach ($listWaitingKnight as $knight) {
+                $knight->id = '+84'.substr($knight->id,1,strlen($knight->id));
+            }
+            foreach ($listLeaveKnight as $knight) {
+                $knight->id = '+84'.substr($knight->id,1,strlen($knight->id));
+            }
+
             $data['listJoin'] = $listWaitingKnight;
             $data['listLeave'] = $listLeaveKnight;
         }
