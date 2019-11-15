@@ -137,7 +137,8 @@
                                                     };
                                         paths.push(line);
                                     }
-                                    var path = new.google.maps.Polyline({
+                                    console.log(paths);
+                                    var drawP = new google.maps.Polyline({
                                         path: paths,
                                         geodesic: true,
                                         strokeColor: '#FF0000',
@@ -145,7 +146,8 @@
                                         strokeWeight: 2
                                     });
 
-                                    path.setMap(map)
+
+                                    drawP.setMap(map)
                                 }
 
                                 // function calcRoute() {
