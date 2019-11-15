@@ -138,10 +138,10 @@ class MessageController extends Controller
         return 0;
     }
 
-    public function sendAlertToCitizen($citizenToken, $streetName){
+    public function sendAlertToCitizen($citizenToken){
         $optionBuilder = new OptionsBuilder();
         $dataBuilder = new PayloadDataBuilder();
-        $notificationBuilder = new PayloadNotificationBuilder('Đoạn đường '.$streetName.' nguy hiểm');
+        $notificationBuilder = new PayloadNotificationBuilder('Đoạn đường nguy hiểm');
         
 
         $optionBuilder->setTimeToLive(60*20);

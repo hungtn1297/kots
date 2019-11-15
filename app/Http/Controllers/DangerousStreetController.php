@@ -66,7 +66,6 @@ class DangerousStreetController extends Controller
 
         $json = json_decode(file_get_contents('php://input'), true);
         $id = str_replace('+84','0',$json['phone']);
-        $streetName = $json['streetName'];
 
         $citizen = Users::find($id);
 
