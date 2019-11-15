@@ -103,10 +103,14 @@ class KnightTeamController extends Controller
                                     ->where('status', 0)
                                     ->get();
         
+        $listLeaveKnight = Users::where('team_id', $json['teamId'])
+                                    ->where('status', 3)
+                                    ->get();
         if(!empty($listWaitingKnight)){
             $resultCode = 200;
             $message = 'SUCCESS';
-            $data = $listWaitingKnight;
+            $data['listJoin'] = $listWaitingKnight;
+            $data['listLeave'] = $listLeaveKnight;
         }
 
         return response()->json([
