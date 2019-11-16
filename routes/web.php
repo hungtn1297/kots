@@ -25,6 +25,10 @@ Route::post('login', 'OtherController@checkLogin');
 Route::get('message','MessageController@sendMessage');
 
 Route::get('/firebase','FireBaseController@welcome');
+Route::get('test',function(){
+    return view('test');
+});
+Route::get('time','CitizenController@time');
 Route::get('map', function(){
     return view('admin/DangerousStreets/map');
 });
@@ -45,7 +49,7 @@ Route::prefix('admin')->group(function(){
         Route::get('create',function(){
             $listKnight = App\Users::where('role', 2)
                                     ->where('team_id', null)
-                                    ->where('status', 1)
+                                    ->where('status', 0)
                                     ->get();
             return view('admin/KnightTeam/CreateKnightTeam')->with(compact('listKnight'));
         });

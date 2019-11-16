@@ -39,7 +39,7 @@
                                 @endif        
                                         <td>{{$knight->name}}</td>
                                         <td>{{$knight->address}}</td>
-                                        <td>{{substr_replace($knight->id,'***',strlen($knight->id)-3)}}</td>
+                                        <td>{{substr_replace($knight->id,'****',strlen($knight->id)-4)}}</td>
                                         @if ($knight->isDisable == 1)
                                             <td style="color: gray">Bị Khoá</td>
                                         @else
