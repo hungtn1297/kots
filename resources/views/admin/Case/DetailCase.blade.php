@@ -150,34 +150,35 @@
                                     drawP.setMap(map);
                                 }
 
-                                // function calcRoute() {
-                                //     var start = locationList[0]['latitude']+','+locationList[0]['longitude'];
-                                //     var end = locationList[locationList.length - 1]['latitude']+','+locationList[locationList.length - 1]['longitude'];
-                                //     var waypoints = [];
-                                //     for (let i = 1; i < locationList.length-1; i++) {
-                                //         locations = {location: locationList[i]['latitude']+','+locationList[i]['longitude']}
-                                //         waypoints.push(locations);
+                                function calcRoute() {
+                                    var start = locationList[0]['latitude']+','+locationList[0]['longitude'];
+                                    var end = locationList[locationList.length - 1]['latitude']+','+locationList[locationList.length - 1]['longitude'];
+                                    var waypoints = [];
+                                    for (let i = 1; i < locationList.length-1; i++) {
+                                        locations = {location: locationList[i]['latitude']+','+locationList[i]['longitude']}
+                                        waypoints.push(locations);
                                         
-                                //     }
-                                //     console.log('START: '+ start);
-                                //     console.log('END: '+ end);
-                                //     console.log('WAYPOINT: '+ waypoints);
-                                //     var request = {
-                                //         origin:start,
-                                //         destination:end,
-                                //         waypoints: waypoints,
-                                //         travelMode: 'DRIVING'
-                                //     };
-                                //     directionsService.route(request, function(response, status) {
-                                //         if (status == 'OK') {
-                                //         directionsRenderer.setDirections(response);
-                                //         }
-                                //     });
+                                    }
+                                    console.log('START: '+ start);
+                                    console.log('END: '+ end);
+                                    console.log('WAYPOINT: '+ waypoints);
+                                    var request = {
+                                        origin:start,
+                                        destination:end,
+                                        waypoints: waypoints,
+                                        travelMode: 'DRIVING'
+                                    };
+                                    directionsService.route(request, function(response, status) {
+                                        if (status == 'OK') {
+                                        directionsRenderer.setDirections(response);
+                                        }
+                                    });
 
-                                // }
+                                }
 
                                 window.onload = function(){
-                                    drawPath();
+                                    // drawPath();
+                                    calcRoute();
                                 }
                             </script>
                             @endif
