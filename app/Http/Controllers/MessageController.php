@@ -144,13 +144,13 @@ class MessageController extends Controller
 
         
         $optionBuilder->setTimeToLive(60*20);
-        if($action == false){
-            $notificationBuilder = new PayloadNotificationBuilder('Tiến vào đoạn đường nguy hiểm');
-            $notificationBuilder->setBody('Bấm để xem chi tiết')
+        if($action == true){
+            $notificationBuilder = new PayloadNotificationBuilder('Bạn đang đi vào đoạn đường nguy hiểm');
+            $notificationBuilder->setBody('Bấm để xem chi tiết trên bản đồ')
                             ->setSound('default'); 
         }else{
-            $notificationBuilder = new PayloadNotificationBuilder('Ra khỏi đoạn đường nguy hiểm');
-            $notificationBuilder->setBody('Bấm để xem chi tiết')
+            $notificationBuilder = new PayloadNotificationBuilder('Bạn đã ra khỏi đoạn đường nguy hiểm');
+            $notificationBuilder->setBody('Bấm để xem chi tiết trên bản đồ')
                             ->setSound('default'); 
         }
             
