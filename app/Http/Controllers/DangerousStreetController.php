@@ -32,7 +32,7 @@ class DangerousStreetController extends Controller
     }
 
     public function setDS(Request $request){
-        if(isset($start) && isset($end)){
+        if(isset($request->start) && isset($request->end)){
             $start = explode(',',substr($request->start,1,strlen($request->start)-2));
             $end = explode(',',substr($request->end,1,strlen($request->end)-2));
             $startLatitude = $start[0];
@@ -52,7 +52,7 @@ class DangerousStreetController extends Controller
             return redirect()->action('DangerousStreetController@getDS');
         }else{
             $error = "Not Enough Data";
-            return view('error')->with(compact('error'));
+            return view('admin/error')->with(compact('error'));
         }
         
     }
