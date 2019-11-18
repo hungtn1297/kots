@@ -138,16 +138,22 @@ class MessageController extends Controller
         return 0;
     }
 
-    public function sendAlertToCitizen($citizenToken){
+    public function sendAlertToCitizen($citizenToken, $action){
         $optionBuilder = new OptionsBuilder();
         $dataBuilder = new PayloadDataBuilder();
-        $notificationBuilder = new PayloadNotificationBuilder('Đoạn đường nguy hiểm');
-        
 
+        
         $optionBuilder->setTimeToLive(60*20);
-       
-        $notificationBuilder->setBody('Bạn vừa bước vào một đoạn đường nguy hiểm, xin cẩn thận')
-                            ->setSound('default');     
+        if($action == false){
+            $notificationBuilder = new PayloadNotificationBuilder('Tiến vào đoạn đường nguy hiểm');
+            $notificationBuilder->setBody('Bấm để xem chi tiết')
+                            ->setSound('default'); 
+        }else{
+            $notificationBuilder = new PayloadNotificationBuilder('Ra khỏi đoạn đường nguy hiểm');
+            $notificationBuilder->setBody('Bấm để xem chi tiết')
+                            ->setSound('default'); 
+        }
+            
         
         $dataBuilder->addData(['item' => []]);
         

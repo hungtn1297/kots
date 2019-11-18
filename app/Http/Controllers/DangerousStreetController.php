@@ -32,23 +32,29 @@ class DangerousStreetController extends Controller
     }
 
     public function setDS(Request $request){
-        $start = explode(',',substr($request->start,1,strlen($request->start)-2));
-        $end = explode(',',substr($request->end,1,strlen($request->end)-2));
-        $startLatitude = $start[0];
-        $startLongitude = $start[1];
-        $endLatitude = $end[0];
-        $endLongitude = $end[1];
+        if(isset($start) && isset($end)){
+            $start = explode(',',substr($request->start,1,strlen($request->start)-2));
+            $end = explode(',',substr($request->end,1,strlen($request->end)-2));
+            $startLatitude = $start[0];
+            $startLongitude = $start[1];
+            $endLatitude = $end[0];
+            $endLongitude = $end[1];
 
-        $ds = new DangerousStreet();
-        $ds->startLatitude = $startLatitude;
-        $ds->startLongitude = $startLongitude;
-        $ds->endLatitude = $endLatitude;
-        $ds->endLongitude = $endLongitude;
-        $ds->description = 'ABC';
+            $ds = new DangerousStreet();
+            $ds->startLatitude = $startLatitude;
+            $ds->startLongitude = $startLongitude;
+            $ds->endLatitude = $endLatitude;
+            $ds->endLongitude = $endLongitude;
+            $ds->description = 'ABC';
 
-        $ds->save();
+            $ds->save();
 
-        return redirect()->action('DangerousStreetController@getDS');
+            return redirect()->action('DangerousStreetController@getDS');
+        }else{
+            $error = "Not Enough Data";
+            return view('error')->with(compact('error'));
+        }
+        
     }
 
     public function unsetDS(Request $request){
@@ -66,11 +72,12 @@ class DangerousStreetController extends Controller
 
         $json = json_decode(file_get_contents('php://input'), true);
         $id = str_replace('+84','0',$json['phone']);
+        $action = $json['action'];
 
         $citizen = Users::find($id);
 
         $messageController = new MessageController();
-        $result = $messageController->sendAlertToCitizen($citizen->token);
+        $result = $messageController->sendAlertToCitizen($citizen->token, $action);
         if($result > 0){
             $resultCode = 200;
             $message = 'SUCCESS';
