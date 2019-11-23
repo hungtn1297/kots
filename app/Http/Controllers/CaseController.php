@@ -74,7 +74,7 @@ class CaseController extends Controller
 
                     $citizen = Users::find($case->citizenId);
                     $messageController = new MessageController();
-                    $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'closeCase');
+                    $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'close');
 
                     //Release tất cả Hiệp sĩ, set status về bằng free
                     $knightController = new KnightController();
