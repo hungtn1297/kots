@@ -7,6 +7,7 @@ use App\Users;
 use App\CaseDetail;
 use App\Cases;
 use App\Knight;
+use App\KnightTeam;
 
 class KnightController extends Controller
 {
@@ -186,6 +187,7 @@ class KnightController extends Controller
         $knightId = str_replace('+84','0',$json['phone']);
         $status = $json['status'];
         $action = $json['action'];
+        $messageAction = '';
         $knight = Users::where('id',$knightId)
                     ->where('role',2)
                     ->first();
@@ -194,12 +196,20 @@ class KnightController extends Controller
             if($action == 'join'){ //Request join team
                 if($status == 0){ //Ignore join
                     $knight->team_id = null;
+                    $messageAction = 'ignoreJoin';
+                }else{
+                    $messageAction = 'acceptJoin';
                 }
             }elseif ($action == 'leave') { //Request leave
                 if($status == 0){ //Accept leave
                     $knight->team_id = null;
+                    $messageAction = 'acceptLeave';
+                }else{
+                    $messageAction = 'ignoreLeave';
                 }
             }
+            $messageController = new MessageController();
+            $messageController->sendMessageToKnight($knight->token, $messageAction);
             $knight->status = $status;
             $knight->save();
             $resultCode = 200;
@@ -244,12 +254,17 @@ class KnightController extends Controller
         $json = json_decode(file_get_contents('php://input'), true);
         $knightId = str_replace('+84','0',$json['phone']);
         $knight = Users::find($knightId);
-
+        $team = KnightTeam::find($knight->team_id);
+        $leader = Users::find($team->leaerId);
         if(isset($knight)){
             $knight->status = 3;
             $knight->save();
-            $knight->id = $json['phone'];
 
+            $messageController = new MessageController();
+            $messageController->sendMessageToLeader($leader->token, 'leaveGroup', $knight->id);
+
+            $knight->id = $json['phone']; //Set phone to return to client
+            
             $resultCode = 200;
             $message = 'SUCCESS';
             $data = $knight;

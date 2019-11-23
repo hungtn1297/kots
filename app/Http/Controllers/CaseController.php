@@ -48,11 +48,11 @@ class CaseController extends Controller
                     if($caseDetail == 'INCASE'){
                         $case->delete();
                         $resultCode = 3000;
-                        $message = 'KNIGHT IS IN ANOTHER CASE';
+                        $message = 'Xin vui lòng đóng sự cố hoặc rời sự cố đang thực hiện';
                         return self::returnAPI($resultCode, $message, []);
                     }elseif ($caseDetail == 'ALREADY LEAVED') {
                         $resultCode = 3000;
-                        $message = 'KNIGHT ALREADY LEAVED CANNOT JOIN AGAIN';
+                        $message = 'Không thể tham gia sự cố đã rời khỏi';
                         return self::returnAPI($resultCode, $message, []);
                     }
                     DB::commit();
@@ -71,6 +71,10 @@ class CaseController extends Controller
                     $case->endLongitude = $json['longitude'];
                     $case->endLatitude = $json['latitude'];
                     $case->save();
+
+                    $citizen = Users::find($case->citizenId);
+                    $messageController = new MessageController();
+                    $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'closeCase');
 
                     //Release tất cả Hiệp sĩ, set status về bằng free
                     $knightController = new KnightController();

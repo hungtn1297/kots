@@ -84,6 +84,9 @@ class KnightTeamController extends Controller
         $leaderId = $request->leaderId;
         $address = $request->address;
 
+        $knight = Users::find($leaderId);
+        $knight->status = 1;
+        $knight->save();
         $team = new KnightTeam();
         $team->name = $name;
         $team->leaderId = $leaderId;

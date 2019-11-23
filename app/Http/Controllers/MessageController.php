@@ -110,15 +110,19 @@ class MessageController extends Controller
 
         $optionBuilder = new OptionsBuilder();
         $dataBuilder = new PayloadDataBuilder();
-        $notificationBuilder = new PayloadNotificationBuilder('Hiệp Sĩ '.$knight->name.' Tham Gia');
         
-
         $optionBuilder->setTimeToLive(60*20);
         if($type == 'join'){
+            $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' tham gia');
             $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã tham gia xử lí sự cố')
                                 ->setSound('default');     
         }elseif($type == 'leave'){
-            $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã tạm hoãn xử lí sự cố')
+            $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' rời sự cố');
+            $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã rời khỏi sự cố')
+                                ->setSound('default');
+        }elseif($type == 'close'){
+            $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' đóng sự cố');
+            $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã đóng sự cố')
                                 ->setSound('default');
         }
         $dataBuilder->addData(['item' => $case]);
@@ -148,7 +152,7 @@ class MessageController extends Controller
             $notificationBuilder = new PayloadNotificationBuilder('Bạn đang đi vào đoạn đường nguy hiểm');
             $notificationBuilder->setBody('Bấm để xem chi tiết trên bản đồ')
                             ->setSound('default'); 
-        }else{
+        }elseif($action == false){
             $notificationBuilder = new PayloadNotificationBuilder('Bạn đã ra khỏi đoạn đường nguy hiểm');
             $notificationBuilder->setBody('Bấm để xem chi tiết trên bản đồ')
                             ->setSound('default'); 
@@ -171,4 +175,88 @@ class MessageController extends Controller
         
         return 0;
     }
+
+    public function sendMessageToLeader($knightToken, $action, $userId = ''){
+        $optionBuilder = new OptionsBuilder();
+        $dataBuilder = new PayloadDataBuilder();
+
+        
+        $optionBuilder->setTimeToLive(60*20);
+        if($action == 'joinGroup'){
+            $notificationBuilder = new PayloadNotificationBuilder('Có yêu cầu tham gia nhóm');
+            $notificationBuilder->setBody('Bấm để xem chi tiết')
+                            ->setSound('default');
+        }elseif($action == 'leaveGroup'){
+            $notificationBuilder = new PayloadNotificationBuilder('Có yêu cầu rời khỏi nhóm');
+            $notificationBuilder->setBody('Bấm để xem chi tiết')
+                            ->setSound('default'); 
+        }
+        
+        if(!empty($userId)){
+            $user = Users::find($userId);
+            $dataBuilder->addData(['item' => $user]);
+        }
+        
+
+        $option = $optionBuilder->build();
+        $notification = $notificationBuilder->build();
+        $data = $dataBuilder->build();
+
+        $token = $knightToken;
+        // dd($token);
+        if(!empty($token)){
+            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+            return $downstreamResponse->numberSuccess();
+        }
+        
+        return 0;
+    }
+
+    public function sendMessageToKnight($knightToken, $action){
+        $optionBuilder = new OptionsBuilder();
+        $dataBuilder = new PayloadDataBuilder();
+
+        
+        $optionBuilder->setTimeToLive(60*20);
+        switch ($action) {
+            case 'acceptLeave':
+                $notificationBuilder = new PayloadNotificationBuilder('Chấp thuận yêu cầu rời nhóm');
+                break;
+            case 'ignoreLeave':
+                $notificationBuilder = new PayloadNotificationBuilder('Không chấp thuận yêu cầu rời nhóm');
+                break;
+            case 'acceptJoin':
+                $notificationBuilder = new PayloadNotificationBuilder('Chấp thuận yêu cầu tham gia nhóm');
+                break;
+            case 'ignoreJoin':
+                $notificationBuilder = new PayloadNotificationBuilder('Không chấp thuận yêu cầu tham gia nhóm');
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        $notificationBuilder->setBody('Bấm để xem chi tiết')
+                        ->setSound('default'); 
+        
+        // if(!empty($userId)){
+        //     $user = Users::find($userId);
+        //     $dataBuilder->addData(['item' => $user]);
+        // }
+        
+
+        $option = $optionBuilder->build();
+        $notification = $notificationBuilder->build();
+        $data = $dataBuilder->build();
+
+        $token = $knightToken;
+        // dd($token);
+        if(!empty($token)){
+            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+            return $downstreamResponse->numberSuccess();
+        }
+        
+        return 0;
+    }
+
 }
