@@ -51,7 +51,7 @@ class FirebaseController extends Controller
         }
         // dd($knightLocation);
         foreach ($knightLocation as $knight) {
-            $knightDistance = $controller->getDistance($knight['la'],$knight['long'],$latitude,$longitude,'K');
+            $knightDistance = $controller->getDistance($knight['la'],$latitude);
             if($knightDistance < $radius){
                 $knight['distance'] = $knightDistance;
                 array_push($result, $knight);
@@ -74,6 +74,28 @@ class FirebaseController extends Controller
                     'latitude' => end($knight)['latitude'],
                     'longitude' => end($knight)['longitude']
                     ];
+        return $location;
+    }
+
+    public function getKnightLocationByTime($knightId, $teamId, $time){
+        $firebaseDB = $this->getFirebaseDB();
+        $idVN = '+84'.substr($knightId, 1, strlen($knightId));
+        // dd($knightId.' - '.$teamId);
+        $knights = $firebaseDB->getReference('knight/teamID/'.$teamId)
+                            ->getChild($idVN)
+                            ->getValue();
+        $location = array();
+        // dd($knights);
+        $time = Carbon::parse($time);
+        $min = strtotime('23:59:59');
+        foreach ($knights as $knight) {
+            if(strtotime($knight['createdAt']) - strtotime($time) < $min){
+                $location =  [
+                    'latitude' => $knight['latitude'],
+                    'longitude' => $knight['longitude']
+                    ];
+            }
+        }
         return $location;
     }
 
@@ -136,11 +158,6 @@ class FirebaseController extends Controller
             }
         }
         return $location;
-    }
-
-    public function welcome(){
-        $location = $this->getKnightInTeamLocation('0971930499','1','2019-11-08 06:09:45','2019-11-08 11:40:46');
-        echo '<pre>'; print_r($location); echo '</pre>';
     }
 
 }

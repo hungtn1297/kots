@@ -136,6 +136,7 @@ class KnightController extends Controller
             $caseDetail->save();
 
             $case->status = 1;
+            $case->confirmKnightId = $knightInCase->id;
             $case->save();
 
             // dd($knightId);
@@ -276,4 +277,30 @@ class KnightController extends Controller
             'data' => $data
         ]);
     }
-}
+
+    public function getKnightTraveledDistanceInCase($caseId){
+        $case = Cases::find($caseId);
+        $caseDetails = CaseDetail::where('caseId', $caseId)
+                                ->where('isLeave',0)
+                                ->get();
+        $firebaseController = new FirebaseController();
+        $otherController = new OtherController();
+        $min = 100000000000;
+        foreach ($caseDetails as $caseDetail) {
+            $knight = Users::find($caseDetail->knightId);
+            $knightLocationStart = $firebaseController->getKnightLocationByTime($knight->id, $knight->team_id, $case->created_at);
+            $knightLocationEnd = $firebaseController->getKnightLocationByTime($knight->id, $knight->team_id, $case->updated_at);
+            
+            $distanceStart = $otherController->getDistance($knightLocationStart['latitude'],$case->startLatitude);
+            $distanceEnd = $otherController->getDistance($knightLocationEnd['latitude'],$case->endLatitude);
+
+            if(abs($distanceStart-$distanceEnd) < $min){
+                $knightChoose = $knight;
+            }
+        }
+        if(isset($knightChoose)){
+            return $knightChoose;
+        }
+        return null;
+    }
+}    

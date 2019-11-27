@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DangerousStreetController;
+use App\Http\Controllers\OtherController;
 use App\Http\Controllers\PoliceContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

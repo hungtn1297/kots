@@ -48,7 +48,7 @@ class CaseController extends Controller
                     if($caseDetail == 'INCASE'){
                         $case->delete();
                         $resultCode = 3000;
-                        $message = 'Xin vui lòng đóng sự cố hoặc rời sự cố đang thực hiện';
+                        $message = 'Xin vui lòng đóng hoặc rời sự cố đang thực hiện';
                         return self::returnAPI($resultCode, $message, []);
                     }elseif ($caseDetail == 'ALREADY LEAVED') {
                         $resultCode = 3000;
@@ -86,6 +86,21 @@ class CaseController extends Controller
                     $flag = false;
                 }
             }elseif($status == $this->PENDING || $status == $this->CANCEL){
+                if($status == $this->CANCEL){
+                    //Kick all knight
+                    $caseDetails = CaseDetail::where('caseId', $case->id)
+                                            ->where('isLeave',0)
+                                            ->get();
+                    if(!empty($caseDetails)){
+                        foreach ($caseDetails as $caseDetail) {
+                            $caseDetail->status = 0;
+                            $knight = Users::find($caseDetail->knightId);
+                            $knight->status = 1;
+                            $knight->save();
+                            $caseDetail->save();
+                        }
+                    }
+                }
                 $case->status = $status;
                 $case->save();
             }
@@ -217,17 +232,21 @@ class CaseController extends Controller
         $id = $request->id;
         $case = Cases::find($id);
         $knight = '';
+        $locationList = null;
+        $knightController = new KnightController();
         if(isset($case)){
             // foreach ($case->caseDetail as $detail) {
             //     dd($detail->knight);
             // }
-            $knight = Users::where('id',$case->knightConfirmId)
-                            ->where('role',2)
-                            ->first();
+            if($case->status == 2){
+                $knight = $knightController->getKnightTraveledDistanceInCase($case->id);
+                if(isset($knight)){
+                    $firebaseController = new FirebaseController();
+                    $locationList = $firebaseController->getKnightInTeamLocation($knight->id, $knight->team_id, $case->created_at, $case->updated_at);
+                }
+            }
             // dd($knight);
-            $firebaseController = new FirebaseController();
-            $locationList = $firebaseController->getKnightInTeamLocation($knight->id, $knight->team_id, $case->created_at, $case->updated_at);
-            // dd($locationList);
+           // dd($locationList);
             return view('admin/Case/DetailCase')->with(compact('case','locationList'));
         }else{
             $error = "Không tìm thấy Sự cố";
@@ -304,7 +323,7 @@ class CaseController extends Controller
             if($knight->role == $this->KNIGHT_ROLE){
                 if($knightController->joinCase($knight->id, $case->id) == 'INCASE'){
                     $case->delete();
-                    return self::returnAPI($resultCode,'KNIGHT IS IN ANOTHER CASE', []);
+                    return self::returnAPI($resultCode,'Xin vui lòng đóng hoặc rời sự cố đang thực hiện', []);
                 };
                 $knightController->confirmCase($knight->id, $case->id);
                 // $knightSendcaseData = $firebaseController->getKnightLocation($knight->id, $knight->team_id);

@@ -37,6 +37,28 @@
                             </div>
                             <br>
 
+                            @if (!empty($case->image))
+                            <div class="form-group">
+                                <label>Hình ảnh</label>
+                                <img src="{{$case->image}}" width="400" height="400" alt="">
+                            </div>
+                            <br>
+                            @endif
+                            
+                            @if (!empty($case->sound))
+                            <div class="form-group">
+                                <label>Âm thanh</label>
+                                <audio src="{{$case->sound}}"></audio>
+                            </div>
+                            <br>
+                            @endif
+
+                            <div class="form-group">
+                                <label>Tin nhắn</label>
+                                <input class="form-control" name="message" value="{{$case->message}}"  disabled/>
+                            </div>
+                            <br>
+
                             <div class="form-group">
                                 <label>Trạng thái</label>
                                 @switch($case->status)
@@ -100,7 +122,7 @@
                             @endif
                             <br>
 
-                            @if($case->status == 2)
+                            @if($case->status == 2 || $locationList != null)
                             <div class="form-group">
                                 <label for="">Đoạn đường sự cố</label> 
                             </div>
