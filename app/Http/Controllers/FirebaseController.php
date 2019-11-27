@@ -29,7 +29,7 @@ class FirebaseController extends Controller
                     ->create();
 
         $database = $firebase->getDatabase();
-        $ref = $database->getReference('teamID');
+        $ref = $database->getReference('knight/teamID');
         $teamId = $ref->getSnapshot()->getValue();
 
         $result = [];
@@ -65,7 +65,7 @@ class FirebaseController extends Controller
         $firebaseDB = $this->getFirebaseDB();
         $idVN = '+84'.substr($knightId, 1, strlen($knightId));
         // dd($knightId.' - '.$teamId);
-        $knight = $firebaseDB->getReference('teamID/'.$teamId)
+        $knight = $firebaseDB->getReference('knight/teamID/'.$teamId)
                             ->getChild($idVN)
                             ->getValue();
         // dd($knight);
@@ -106,7 +106,7 @@ class FirebaseController extends Controller
     public function getKnightInTeamLocation($knightId, $teamId, $startTime, $endTime = ''){
         $firebaseDB = $this->getFirebaseDB();
         $idVN = '+84'.substr($knightId, 1, strlen($knightId));
-        $knightLocationList = $firebaseDB->getReference('teamID/'.$teamId)
+        $knightLocationList = $firebaseDB->getReference('knight/teamID/'.$teamId)
                                 ->getChild($idVN)
                                 ->getValue();
         $location = array();

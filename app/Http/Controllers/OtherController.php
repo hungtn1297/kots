@@ -75,7 +75,8 @@ class OtherController extends Controller
         
         // Calculate distance between latitude and longitude
         $theta    = $longitudeFrom - $longitudeTo;
-        $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
+        $dist    = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) 
+                +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
         $dist    = acos($dist);
         $dist    = rad2deg($dist);
         $miles    = $dist * 60 * 1.1515;
