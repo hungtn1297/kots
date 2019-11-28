@@ -169,7 +169,7 @@ class CaseController extends Controller
                 $data = $case;
             }elseif($role == $this->KNIGHT_ROLE){
                 $cases = $this->getCaseByKnightId($id);
-                dd($cases);
+                // dd($cases);
                 foreach ($cases as $case) {
                     $case['inCase'] = $this->checkKnightInCase($case->id, $id);
                 }
@@ -208,6 +208,7 @@ class CaseController extends Controller
                 // dd($case);
             }
         }
+        dd($caseDetails);
         foreach ($caseDetails as $caseDetail) {
             // dd($caseDetail->case->id);
             $citizenName = $caseDetail->case->user->name;
