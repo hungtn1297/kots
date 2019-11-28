@@ -109,7 +109,7 @@ class CaseController extends Controller
                 $resultCode = 200;
                 $message = "Success";
                 $data = $case;
-                dd($case);
+                // dd($case);
             }else{
                 $message = "Knight not in case";
             }
