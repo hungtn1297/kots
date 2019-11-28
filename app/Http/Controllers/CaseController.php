@@ -41,8 +41,8 @@ class CaseController extends Controller
                 $knightController = new KnightController();
                 DB::beginTransaction();
                 try{
-                    // $knightController->confirmCase($knightId, $caseId); //Confirm Case
-                    $case->knightConfirmId = $knightId;
+                    $knightController->confirmCase($knightId, $caseId); //Confirm Case
+                    // $case->knightConfirmId = $knightId;
                     $case->status = $status;
                     $case->save();
                     $caseDetail = $knightController->joinCase($knightId, $case->id);
