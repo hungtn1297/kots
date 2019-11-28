@@ -208,7 +208,7 @@ class CaseController extends Controller
                 // dd($case);
             }
         }
-        dd($caseDetails);
+        // dd($caseDetails);
         foreach ($caseDetails as $caseDetail) {
             // dd($caseDetail->case->id);
             $citizenName = $caseDetail->case->user->name;

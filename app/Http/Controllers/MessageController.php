@@ -71,6 +71,12 @@ class MessageController extends Controller
         // }else{
         //     $case['inCase'] = false;
         // }
+        // foreach ($knightList as $knight) {
+        //     if($knight->id == $case->citizenId){
+        //         $case['inCase'] = true;
+        //     }
+        // }
+        $case['inCase'] = false;
         $dataBuilder->addData(['item' => $case]);
         
         $option = $optionBuilder->build();
@@ -80,11 +86,13 @@ class MessageController extends Controller
         // $token = "cd_f6oqOOhM:APA91bEM62sYFugW3Gxu5kLUCGnawXbZpbz0ZPanhAIUiyMEoz0w9pMM8AZLS2NuCW9Ht2I3gHGW_hpQAjQzok_QAKdAdmaOjkQsga6q9G-izGaEo-QFgJXY34m2Y96xbestr5v7fIyC";
         $tokens = array();
         foreach ($knightList as $knight) {
-            $id = $knight['id'];
-            $k = Users::find(str_replace('+84','0',$id));
-            if(!empty($k->token)){
-                if(!in_array($k->token, $tokens)){
-                    array_push($tokens,$k->token);
+            if($knight->id != $case->citizenId){
+                $id = $knight['id'];
+                $k = Users::find(str_replace('+84','0',$id));
+                if(!empty($k->token)){
+                    if(!in_array($k->token, $tokens)){
+                        array_push($tokens,$k->token);
+                    }
                 }
             }           
         }
