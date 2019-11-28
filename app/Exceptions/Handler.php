@@ -47,13 +47,13 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
 
-        if($request->is('api/*')){
-            return response()->json([
-                'result' => 3000,
-                'message' => $exception->getMessage(),
-                'data' => []
-            ]);
-        }
+        // if($request->is('api/*')){
+        //     return response()->json([
+        //         'result' => 3000,
+        //         'message' => $exception->getMessage(),
+        //         'data' => []
+        //     ]);
+        // }
 
         // if ($request->is('api/*')){
         //     $status = $exception->getStatusCode()?$exception->getStatusCode():$exception->getCode();
