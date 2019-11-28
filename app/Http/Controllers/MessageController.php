@@ -87,7 +87,7 @@ class MessageController extends Controller
         $tokens = array();
         foreach ($knightList as $knight) {
             dd($knight);
-            if($knight->id != $case->citizenId){
+            if(str_replace('+84','0',$knight['id']) != $case->citizenId){
                 $id = $knight['id'];
                 $k = Users::find(str_replace('+84','0',$id));
                 if(!empty($k->token)){
