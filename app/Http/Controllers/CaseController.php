@@ -109,7 +109,11 @@ class CaseController extends Controller
                 $resultCode = 200;
                 $message = "Success";
                 $data = $case;
-                return self::returnAPI($resultCode, $message, $data);
+                return response()->json([
+                    'result' => $resultCode,
+                    'message' => $message,
+                    'data' => $data
+                ]);
                 // dd($case);
             }else{
                 $message = "Knight not in case";
