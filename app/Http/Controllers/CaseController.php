@@ -41,7 +41,8 @@ class CaseController extends Controller
                 $knightController = new KnightController();
                 DB::beginTransaction();
                 try{
-                    $knightController->confirmCase($knightId, $caseId); //Confirm Case
+                    // $knightController->confirmCase($knightId, $caseId); //Confirm Case
+                    $case->knightConfirmId = $knightId;
                     $case->status = $status;
                     $case->save();
                     $caseDetail = $knightController->joinCase($knightId, $case->id);
@@ -108,6 +109,7 @@ class CaseController extends Controller
                 $resultCode = 200;
                 $message = "Success";
                 $data = $case;
+                dd($case);
             }else{
                 $message = "Knight not in case";
             }
