@@ -109,6 +109,7 @@ class CaseController extends Controller
                 $resultCode = 200;
                 $message = "Success";
                 $data = $case;
+                return self::returnAPI($resultCode, $message, $data);
                 // dd($case);
             }else{
                 $message = "Knight not in case";
@@ -116,7 +117,7 @@ class CaseController extends Controller
         }else{
             $message = "Not found case";
         }
-        dd($data);
+        // dd($data);
         return self::returnAPI($resultCode, $message, $data);
         
     }
