@@ -53,11 +53,12 @@ class NewsController extends Controller
             @$domDoc->loadHTML($response);
 
             $htmlResult = new \DomXpath($domDoc);
-            $title = $htmlResult->query('//div[@class="nld-detail clearfix fl w828"]/h1[@class="title-content"]')->item(0);
-            $flag = News::where('title', $title->textContent);
+            $title = $htmlResult->query('//div[@class="nld-detail clearfix fl w828"]/div[@class="fl w520 mg_r50"]/h1[@class="title-content"]')->item(0);
+            // dd($title);
+            $flag = News::where('title', $title->textContent)->get();
             if($flag->count() == 0){
                 $content = $htmlResult->query('//div[@id="content-id"]')->item(0);
-                $subContent = $htmlResult->query('//div[@class="fr w684 mg_r50"]/h2[@class="sapo-detail"]')->item(0);
+                $subContent = $htmlResult->query('//div[@class="fl w520 mg_r50"]/h2[@class="sapo-detail"]')->item(0);
                 // $a = trim($content->textContent);
                 // dd($subContent->textContent);
                 $news = new News();
