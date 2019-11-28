@@ -116,7 +116,7 @@ class CaseController extends Controller
         }else{
             $message = "Not found case";
         }
-
+        dd($data);
         return self::returnAPI($resultCode, $message, $data);
         
     }
