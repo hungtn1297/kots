@@ -136,7 +136,7 @@ class KnightController extends Controller
             $caseDetail->save();
 
             $case->status = 1;
-            $case->confirmKnightId = $knightInCase->id;
+            $case->confirmKnightId = $knightId;
             $case->save();
 
             // dd($knightId);
