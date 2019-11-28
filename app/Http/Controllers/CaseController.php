@@ -108,12 +108,8 @@ class CaseController extends Controller
             if($flag){
                 $resultCode = 200;
                 $message = "Success";
+                $case = Cases::find($caseId);
                 $data = $case;
-                return response()->json([
-                    'result' => $resultCode,
-                    'message' => $message,
-                    'data' => $data
-                ]);
                 // dd($case);
             }else{
                 $message = "Knight not in case";
