@@ -20,8 +20,8 @@ class CreateCaseDetailsTable extends Migration
             $table->integer('status')->nullable();
             $table->integer('isLeave')->default(0);
             $table->timestamps();
-            $table->foreign('caseId')->references('id')->on('cases');
-            $table->foreign('knightId')->references('id')->on('users');
+            // $table->foreign('caseId')->references('id')->on('cases');
+            // $table->foreign('knightId')->references('id')->on('users');
         });
     }
 

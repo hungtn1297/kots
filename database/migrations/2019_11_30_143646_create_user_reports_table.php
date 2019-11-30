@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFeedbackTable extends Migration
+class CreateUserReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateFeedbackTable extends Migration
      */
     public function up()
     {
-        Schema::create('feedback', function (Blueprint $table) {
+        Schema::create('user_reports', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('userId');
-            $table->text('content');
-            $table->integer('isAnonymous')->default(0);
             $table->timestamps();
+            $table->string('userId');
+            $table->text('reason');
+            $table->string('reporterId')->nullable();
+            $table->string('caseId')->nullable();
             // $table->foreign('userId')->references('id')->on('users');
+            // $table->foreign('reporterId')->references('id')->on('users');
         });
     }
 
@@ -30,6 +32,6 @@ class CreateFeedbackTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('user_reports');
     }
 }

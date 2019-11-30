@@ -26,9 +26,10 @@ class CreateUsersTable extends Migration
             $table->string('image')->default('images/default-avatar.png');
             $table->integer('isFirstLogin')->default(1);
             $table->bigInteger('team_id')->unsigned()->nullable();
+            $table->integer('isLeader')->default(0);
             $table->string('password')->nullable();
             $table->timestamps();
-            $table->foreign('team_id')->references('id')->on('knight_teams');
+            // $table->foreign('team_id')->references('id')->on('knight_teams');
         });
     }
 

@@ -224,7 +224,10 @@ class CaseController extends Controller
     }
 
     public function getCaseByCitizenId($citizenId){
-        $case = Cases::with('caseDetail')->where('citizenId', $citizenId)->get();
+        $case = Cases::with('caseDetail')
+                    ->with('user')
+                    ->where('citizenId', $citizenId)
+                    ->get();
         if($case->count()>0){
             return $case;
         }else{
