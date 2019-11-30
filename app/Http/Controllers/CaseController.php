@@ -224,12 +224,20 @@ class CaseController extends Controller
     }
 
     public function getCaseByCitizenId($citizenId){
-        $case = Cases::with('caseDetail')
-                    ->with('user')
+        $cases = Cases::with('caseDetail')
                     ->where('citizenId', $citizenId)
                     ->get();
-        if($case->count()>0){
-            return $case;
+        $knightController  = new KnightController();
+        foreach ($cases as $case) {
+            $case['knightConfirmId'] = $knightController->getKnightNamePhoneFormat($case['knightConfirmId']);
+            if(isset($case['knightCloseId'])){
+                $case['knightclosId'] = $knightController->getKnightNamePhoneFormat($case['knightCloseId']);
+            
+            }
+            $case->caseDetail['knightInfo'] = $knightController->getKnightNamePhoneFormat($case->caseDetail->knightId);
+        }
+        if($cases->count()>0){
+            return $cases;
         }else{
             return [];
         }

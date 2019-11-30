@@ -303,4 +303,10 @@ class KnightController extends Controller
         }
         return null;
     }
+
+    public function getKnightNamePhoneFormat($knightId){
+        $knight = Users::find($knightId);
+        $phone = substr_replace($knight->id,'******',0,strlen($knight->id)-4);
+        return 'Hiệp sĩ '. $knight->name. ' - '. $phone;
+    }
 }    
