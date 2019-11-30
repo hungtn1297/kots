@@ -234,7 +234,8 @@ class CaseController extends Controller
                 $case['knightclosId'] = $knightController->getKnightNamePhoneFormat($case['knightCloseId']);
             
             }
-            $case->caseDetail['knightInfo'] = $knightController->getKnightNamePhoneFormat($case->caseDetail->knightId);
+            dd($case->caseDetail);
+            $case->caseDetail['knightInfo'] = $knightController->getKnightNamePhoneFormat($case->caseDetail['knightId']);
         }
         if($cases->count()>0){
             return $cases;
