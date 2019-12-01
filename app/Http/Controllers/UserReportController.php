@@ -34,7 +34,7 @@ class UserReportController extends Controller
             $userReport->reporterId = $json['reporterId'];
         }
         if(!empty($json['caseId'])){
-            $userReport->caseId = $json['reporterId'];
+            $userReport->caseId = str_replace('+84','0',$json['reporterId']);
         }
         $result = $userReport->save();
         if($result){
