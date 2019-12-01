@@ -52,3 +52,5 @@ Route::post('getFeedbackById', 'FeedbackController@getFeedbackById');
 
 Route::get('getDS','DangerousStreetController@getDS');
 Route::post('alertDS','DangerousStreetController@alertDS');
+
+Route::post('reportUser','UserReportController@reportUser');

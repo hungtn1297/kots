@@ -13,12 +13,19 @@ class UserReportController extends Controller
     public function reportUser($userId, $reason, $reporterId='', $caseId = ''){
         $userReport = new UserReport();
         $user = Users::find($userId);
-        if($user->role == $this->ROLE_KNIGHT){
+        // if($user->role == $this->ROLE_KNIGHT){
 
-        }elseif ($user->role == $this->ROLE_CITIZEN) {
+        // }elseif ($user->role == $this->ROLE_CITIZEN) {
             
+        // }
+        $userReport->userId = $userId;
+        $userReport->reason = $reason;
+        if(!empty($reporterId)){
+            $userReport->reporterId = $reporterId;
         }
-
-        
+        if(!empty($caseId)){
+            $userReport->caseId = $caseId;
+        }
+        $userReport->save();
     }
 }
