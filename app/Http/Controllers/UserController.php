@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CetificationInformation;
 use Illuminate\Http\Request;
 use App\Users;
 
@@ -68,21 +69,32 @@ class UserController extends Controller
         $id = str_replace("+84","0",$json['phone']);
         $user = Users::find($id);
         if(isset($user)){
-            if(isset($json['token'])){
-                $user->token = $json['token'];
-            }
-            if(isset($json['teamId'])){
-                $user->team_id = $json['teamId'];
-            }else{
-                $user->name = $json['name'];
-                $user->address = $json['address'];
-                $user->gender = $json['gender'];
-                $dob = explode('-',$json['dateOfBirth']);
-                $user->dateOfBirth = date('Y-m-d',strtotime("$dob[2]-$dob[1]-$dob[0]"));
-            }
+            $cetificationController = new CetificationController();
+            
+            $user->token = $json['token'];
+            $user->team_id = $json['teamId'];
+            $user->name = $json['name'];
+            $user->address = $json['address'];
+            $user->gender = $json['gender'];
+            $dob = explode('-',$json['dateOfBirth']);
+            $user->dateOfBirth = date('Y-m-d',strtotime("$dob[2]-$dob[1]-$dob[0]"));
+
             $user->isFirstLogin = 0;
-            $user->save();
+            $checkUser = $user->save();
             $user['id'] = $json['phone'];
+
+            // if(isset($json['photoIdFront'])){
+            //     $inserFront = $cetificationController->insert($id, $json['photoIdFront'], 'photoIdFront');
+            // }
+            // if(isset($json['photoIdBack'])){
+            //     $insertBack = $cetificationController->insert($id, $json['photoIdBack'], 'photoIdBack');
+            // }
+            // if(isset($json['certification'])){
+            //     foreach ($json['certification'] as $ceti) {
+            //         $insertCeti = $cetificationController->insert($id, $ceti['image'], $ceti['desciption']);
+            //     }
+            // }
+
             $resultCode = 200;
             $message = "Success";
             $data = $user;
