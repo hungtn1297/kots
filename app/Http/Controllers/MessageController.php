@@ -114,49 +114,53 @@ class MessageController extends Controller
     }
 
     public function sendMessageToCitizen($case, $knightId, $citizenToken, $type = 'join'){
-        $case = $case->where("id",$case->id)->with('user')->first();
-        $knight = Users::find($knightId);
+        
 
         $optionBuilder = new OptionsBuilder();
         $dataBuilder = new PayloadDataBuilder();
-        
         $optionBuilder->setTimeToLive(60*20);
-        if($type == 'join'){
-            $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' tham gia');
-            $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã tham gia xử lí sự cố')
-                                ->setSound('default');     
-        }elseif($type == 'leave'){
-            $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' rời sự cố');
-            $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã rời khỏi sự cố')
-                                ->setSound('default');
-        }elseif($type == 'close'){
-            $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' đóng sự cố');
-            $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã đóng sự cố')
-                                ->setSound('default');
-        }elseif($type == 'banned'){
-            $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' vừa đánh sẹo bạn');
-            $notificationBuilder->setBody('Bạn đã bị khoá tài khoản')
-                                ->setSound('default');
-        }elseif($type == 'report'){
-            $notificationBuilder = new PayloadNotificationBuilder('Bạn đã bị khoá tài khoản, sau khi hiệp sĩ '.$knight->name. 'cho bạn ăn sẹo');
-            $notificationBuilder->setBody('Bạn vừa ăn sẹo, hãy cẩn thận')
-                                ->setSound('default');
-        }
-        $dataBuilder->addData(['item' => $case]);
-        
+        try {
+            $case = $case->where("id",$case->id)->with('user')->first();
+            $knight = Users::find($knightId);
 
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
+            if($type == 'join'){
+                $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' tham gia');
+                $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã tham gia xử lí sự cố')
+                                    ->setSound('default');     
+            }elseif($type == 'leave'){
+                $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' rời sự cố');
+                $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã rời khỏi sự cố')
+                                    ->setSound('default');
+            }elseif($type == 'close'){
+                $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' đóng sự cố');
+                $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã đóng sự cố')
+                                    ->setSound('default');
+            }elseif($type == 'banned'){
+                $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' vừa đánh sẹo bạn');
+                $notificationBuilder->setBody('Bạn đã bị khoá tài khoản')
+                                    ->setSound('default');
+            }elseif($type == 'report'){
+                $notificationBuilder = new PayloadNotificationBuilder('Bạn đã bị khoá tài khoản, sau khi hiệp sĩ '.$knight->name. 'cho bạn ăn sẹo');
+                $notificationBuilder->setBody('Bạn vừa ăn sẹo, hãy cẩn thận')
+                                    ->setSound('default');
+            }
+            $dataBuilder->addData(['item' => $case]);
+            
 
-        $token = $citizenToken;
-        // dd($token);
-        if(!empty($token)){
-            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-            return $downstreamResponse->numberSuccess();
+            $option = $optionBuilder->build();
+            $notification = $notificationBuilder->build();
+            $data = $dataBuilder->build();
+
+            $token = $citizenToken;
+            // dd($token);
+            if(!empty($token)){
+                $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+                return $downstreamResponse->numberSuccess();
+            }
+            return 0;
+        } catch (\Throwable $th) {
+            return 0;
         }
-        
-        return 0;
     }
 
     public function sendAlertToCitizen($citizenToken, $action){

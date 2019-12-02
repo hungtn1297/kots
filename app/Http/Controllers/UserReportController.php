@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Cases;
 use App\UserReport;
 use App\Users;
@@ -50,18 +51,19 @@ class UserReportController extends Controller
                 $user->isAvailable = 0;
                 $type = 'banned';
             }
-            $messageController = new MessageController();
-            $messageController->sendMessageToCitizen($case, $repoter, $user->token, $type);
-        }elseif($numberReport->count(0) > 2){
+            if($result == true){
+                $resultCode = 200;
+                $message = 'SUCCESS';
+                $data = $userReport;
+
+                $messageController = new MessageController();
+                $messageController->sendMessageToCitizen($case, $repoter, $user->token, $type);
+            }
+        }elseif($numberReport > 2){
             $resultCode = 200;
             $message = 'Tài khoản người dùng đã bị khoá';
             $data = [];
         }
-        if($result){
-            $resultCode = 200;
-            $message = 'SUCCESS';
-            $data = $userReport;
-        }   
         return $this->returnAPI($resultCode,$message,$data);
     }
 
