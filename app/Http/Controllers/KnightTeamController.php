@@ -91,11 +91,19 @@ class KnightTeamController extends Controller
         DB::beginTransaction();
         $user = Users::find($id);
         $user->isLeader = 1;
+
+        //
+        $user->status = 1;
+        //
+
         $insertUser = $user->save();
 
         $team = new KnightTeam();
         $team->name = $json['name'];
         $team->address = $json['address'];
+        // 
+        $team->status = 1;
+        //
         $insertTeam = $team->save();
 
         if($insertTeam == true && $insertUser == true){
