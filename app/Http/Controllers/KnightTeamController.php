@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\KnightTeam;
 use App\Users;
 use Illuminate\Http\Request;
@@ -80,20 +81,33 @@ class KnightTeamController extends Controller
     }
 
     public function createTeam(Request $request){
-        $name = $request->name;
-        $leaderId = $request->leaderId;
-        $address = $request->address;
+        $resultCode = 3000;
+        $message = "";
+        $data = array();
+    
+        $json = json_decode(file_get_contents('php://input'), true);
 
-        $knight = Users::find($leaderId);
-        $knight->status = 1;
-        $knight->save();
+        $id = str_replace('+84','0',$json['phone']);
+        DB::beginTransaction();
+        $user = Users::find($id);
+        $user->isLeader = 1;
+        $insertUser = $user->save();
+
         $team = new KnightTeam();
-        $team->name = $name;
-        $team->leaderId = $leaderId;
-        $team->address = $address;
-        $team->save();
+        $team->name = $json['name'];
+        $team->address = $json['address'];
+        $insertTeam = $team->save();
 
-        return redirect()->action('KnightTeamController@getTeam');
+        if($insertTeam == true && $insertUser == true){
+            DB::commit();
+            $resultCode = 200;
+            $message = 'SUCCESS';
+            $data = $team;
+        }else{
+            DB::rollback();
+        }
+
+        return $this->returnAPI($resultCode,$message,$data);
     }
 
     public function getWaitingKnight(){
