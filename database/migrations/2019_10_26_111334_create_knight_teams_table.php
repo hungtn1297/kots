@@ -17,7 +17,7 @@ class CreateKnightTeamsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('address');
-            $table->integer('status');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

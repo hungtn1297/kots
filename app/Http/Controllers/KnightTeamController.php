@@ -71,9 +71,19 @@ class KnightTeamController extends Controller
             ]);
         }else{
             $teams = KnightTeam::with('knight')->get();
+            // dd($teams);
             foreach ($teams as $team) {
-                $leader = Users::find($team->leaderId);
-                $team['leaderName'] = $leader->name;
+                foreach ($team->knight as $knight) {
+                    if($knight->isLeader = 1){
+                        $leader = $knight;
+                    }
+                    $team['leaderName'] = $leader->name;
+                    $flag = 1;
+                    break;
+                }
+                if($flag == 1){
+                    break;
+                }
             }
             // dd($teams);
             return view('admin/KnightTeam/ListKnightTeam')->with(compact('teams'));
@@ -101,6 +111,7 @@ class KnightTeamController extends Controller
         $team = new KnightTeam();
         $team->name = $json['name'];
         $team->address = $json['address'];
+        $team->status = 0;
         // 
         // $team->status = 1;
         //

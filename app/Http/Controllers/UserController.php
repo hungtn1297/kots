@@ -18,46 +18,39 @@ class UserController extends Controller
         $resultCode = 3000;
         $message = "";
         $data = array();
-        try{
-            $json = json_decode(file_get_contents('php://input'), true);
-            // dd($json);
-            $id = str_replace("+84","0",$json['phone']);
-            $user = Users::find($id);
-            if(!isset($user)){
-                $user = new Users();
-                $user->id = $id;
-                $user->token = $json['token'];
-                $user->isFirstLogin = 1;
-                // $user->name = $json['name'];
-                // $user->address = $json['address']; 
-                // $user->gender = $json['gender'];
-                $role = $json['role'];
-                if($role == $this->CITIZEN_ROLE){
-                    $user->role = 1;
-                    $user->status = $this->ACTIVE;
-                }elseif($role == $this->KNIGHT_ROLE){
-                    $user->role = 2;
-                    $user->status = $this->WAIT;
-                    // $user->team_id = $json['teamId'];
-                }
-                $user->save();
-                $resultCode = 200;
-                $message = "Success";
-                $data = $user;
-            }else{
-                $message = "User Exist";
+        
+        $json = json_decode(file_get_contents('php://input'), true);
+        // dd($json);
+        $id = str_replace("+84","0",$json['phone']);
+        $user = Users::find($id);
+        if(!isset($user)){
+            $user = new Users();
+            $user->id = $id;
+            $user->token = $json['token'];
+            $user->isFirstLogin = 1;
+            // $user->name = $json['name'];
+            // $user->address = $json['address']; 
+            // $user->gender = $json['gender'];
+            $role = $json['role'];
+            if($role == $this->CITIZEN_ROLE){
+                $user->role = 1;
+                $user->status = $this->ACTIVE;
+            }elseif($role == $this->KNIGHT_ROLE){
+                $user->role = 2;
+                $user->status = $this->WAIT;
+                $user->isLeader = $json['isLeader'];
+                // $user->team_id = $json['teamId'];
             }
-        }catch(Exception $e){
-            $message = $e->getMessage();
-            dd($message);
+            $user->save();
+            $resultCode = 200;
+            $message = "Success";
+            $data = $user;
+        }else{
+            $message = "User Exist";
         }
-        finally{
-            return response()->json([
-                'result' => $resultCode,
-                'message' => $message,
-                'data' => $data
-            ]);
-        }
+
+        return $this->returnAPI($resultCode,$message,$data);
+        
     }
 
     public function updateProfile(){
