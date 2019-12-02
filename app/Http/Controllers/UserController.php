@@ -71,8 +71,13 @@ class UserController extends Controller
         if(isset($user)){
             $cetificationController = new CetificationController();
             
-            $user->token = $json['token'];
-            $user->team_id = $json['teamId'];
+            if(isset($json['teamId'])){
+                $user->team_id = $json['teamId'];
+            }
+            if(isset($json['token'])){
+                $user->token = $json['token'];
+            }
+
             $user->name = $json['name'];
             $user->address = $json['address'];
             $user->gender = $json['gender'];
