@@ -93,7 +93,7 @@ class KnightTeamController extends Controller
         $user->isLeader = 1;
 
         //
-        $user->status = 1;
+        // $user->status = 1;
         //
 
         $insertUser = $user->save();
@@ -102,7 +102,7 @@ class KnightTeamController extends Controller
         $team->name = $json['name'];
         $team->address = $json['address'];
         // 
-        $team->status = 1;
+        // $team->status = 1;
         //
         $insertTeam = $team->save();
 
