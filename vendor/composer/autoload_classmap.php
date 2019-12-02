@@ -8,7 +8,9 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\CaseDetail' => $baseDir . '/app/CaseDetail.php',
     'App\\Cases' => $baseDir . '/app/Cases.php',
+    'App\\CetificationInformation' => $baseDir . '/app/CetificationInformation.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
+    'App\\Criminal' => $baseDir . '/app/Criminal.php',
     'App\\DangerousStreet' => $baseDir . '/app/DangerousStreet.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Feedback' => $baseDir . '/app/Feedback.php',
@@ -30,6 +32,7 @@ return array(
     'App\\Http\\Controllers\\OtherController' => $baseDir . '/app/Http/Controllers/OtherController.php',
     'App\\Http\\Controllers\\PoliceContactController' => $baseDir . '/app/Http/Controllers/PoliceContactController.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
+    'App\\Http\\Controllers\\UserReportController' => $baseDir . '/app/Http/Controllers/UserReportController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
     'App\\Http\\Middleware\\CheckForMaintenanceMode' => $baseDir . '/app/Http/Middleware/CheckForMaintenanceMode.php',

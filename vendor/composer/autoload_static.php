@@ -530,7 +530,9 @@ class ComposerStaticInit70dc1427aaba1a3727b9983d019c8712
     public static $classMap = array (
         'App\\CaseDetail' => __DIR__ . '/../..' . '/app/CaseDetail.php',
         'App\\Cases' => __DIR__ . '/../..' . '/app/Cases.php',
+        'App\\CetificationInformation' => __DIR__ . '/../..' . '/app/CetificationInformation.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
+        'App\\Criminal' => __DIR__ . '/../..' . '/app/Criminal.php',
         'App\\DangerousStreet' => __DIR__ . '/../..' . '/app/DangerousStreet.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Feedback' => __DIR__ . '/../..' . '/app/Feedback.php',
@@ -552,6 +554,7 @@ class ComposerStaticInit70dc1427aaba1a3727b9983d019c8712
         'App\\Http\\Controllers\\OtherController' => __DIR__ . '/../..' . '/app/Http/Controllers/OtherController.php',
         'App\\Http\\Controllers\\PoliceContactController' => __DIR__ . '/../..' . '/app/Http/Controllers/PoliceContactController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
+        'App\\Http\\Controllers\\UserReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserReportController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',

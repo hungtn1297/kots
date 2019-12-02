@@ -133,6 +133,14 @@ class MessageController extends Controller
             $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' đóng sự cố');
             $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã đóng sự cố')
                                 ->setSound('default');
+        }elseif($type == 'banned'){
+            $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' vừa đánh sẹo bạn');
+            $notificationBuilder->setBody('Bạn đã bị khoá tài khoản')
+                                ->setSound('default');
+        }elseif($type == 'report'){
+            $notificationBuilder = new PayloadNotificationBuilder('Bạn đã bị khoá tài khoản, sau khi hiệp sĩ '.$knight->name. 'cho bạn ăn sẹo');
+            $notificationBuilder->setBody('Bạn vừa ăn sẹo, hãy cẩn thận')
+                                ->setSound('default');
         }
         $dataBuilder->addData(['item' => $case]);
         

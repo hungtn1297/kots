@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateKnightTeamsTable extends Migration
+class CreateCetificationInformationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateKnightTeamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('knight_teams', function (Blueprint $table) {
+        Schema::create('cetification_information', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('address');
-            $table->integer('status');
+            $table->string('userId');
+            $table->string('image');
+            $table->string('description');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateKnightTeamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('knight_teams');
+        Schema::dropIfExists('cetification_information');
     }
 }
