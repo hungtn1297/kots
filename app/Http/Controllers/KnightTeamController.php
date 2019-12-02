@@ -45,20 +45,22 @@ class KnightTeamController extends Controller
             $json = json_decode(file_get_contents('php://input'), true);
             if(isset($json['teamId'])){
                 $teams = KnightTeam::with('knight')->find($json['teamId']);
-                $leader = Users::find($teams->leaderId);
+                $leader = Users::where('team_id', $teams->id)
+                                ->where('isLeader',1)->first();
                 $teams['leaderName'] = $leader->name;
-                $teams['leaderId'] = '+84'.substr($teams['leaderId'],1,strlen($teams['leaderId']));
+                $teams['leaderId'] = '+84'.substr($leader->id,1,strlen($leader->id));
                 foreach ($teams->knight as $knight) {
-                    $knight['id'] = '+84'.substr($knight['id'],1,strlen($knight['id']));
+                    $knight->id = '+84'.substr($knight->id,1,strlen($knight->id));
                 }
             }else{
                 $teams = KnightTeam::with('knight')->get();
                 foreach ($teams as $team) {
-                    $leader = Users::find($team->leaderId);
+                    $leader = Users::where('team_id', $team->id)
+                                    ->where('isLeader',1)->first();
                     $team['leaderName'] = $leader->name;
-                    $team['leaderId'] = '+84'.substr($team['leaderId'],1,strlen($team['leaderId']));
+                    $team['leaderId'] = '+84'.substr($leader->id,1,strlen($leader->id));
                     foreach ($team->knight as $knight) {
-                        $knight['id'] = '+84'.substr($knight['id'],1,strlen($knight['id']));
+                        $knight->id = '+84'.substr($knight->id,1,strlen($knight->id));
                     }
                 }
             }

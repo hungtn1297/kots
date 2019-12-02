@@ -38,7 +38,6 @@ class UserController extends Controller
             }elseif($role == $this->KNIGHT_ROLE){
                 $user->role = 2;
                 $user->status = $this->WAIT;
-                $user->isLeader = $json['isLeader'];
                 // $user->team_id = $json['teamId'];
             }
             $user->save();
@@ -70,7 +69,9 @@ class UserController extends Controller
             if(isset($json['token'])){
                 $user->token = $json['token'];
             }
-
+            if(isset($json['isLeader'])){
+                $user->isLeader = $json['isLeader'];
+            }
             $user->name = $json['name'];
             $user->address = $json['address'];
             $user->gender = $json['gender'];
