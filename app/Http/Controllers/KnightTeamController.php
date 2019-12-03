@@ -111,15 +111,6 @@ class KnightTeamController extends Controller
 
         $id = str_replace('+84','0',$json['phone']);
         DB::beginTransaction();
-        $user = Users::find($id);
-        $user->isLeader = 1;
-
-        //
-        // $user->status = 1;
-        //
-
-        $insertUser = $user->save();
-
         $team = new KnightTeam();
         $team->name = $json['name'];
         $team->address = $json['address'];
@@ -128,6 +119,16 @@ class KnightTeamController extends Controller
         // $team->status = 1;
         //
         $insertTeam = $team->save();
+
+        $user = Users::find($id);
+        $user->isLeader = 1;
+        $user->team_id = $team->id;
+
+        //
+        // $user->status = 1;
+        //
+
+        $insertUser = $user->save();
 
         if($insertTeam == true && $insertUser == true){
             DB::commit();
