@@ -48,7 +48,7 @@ class KnightTeamController extends Controller
                 $leader = Users::where('team_id', $teams->id)
                                     ->where('isLeader',1)
                                     ->where('status',0)
-                                    ->where('isAvailable',1)
+                                    ->where('isDisable',1)
                                     ->first();
                 if(isset($leader)){
                     $teams['leaderName'] = $leader->name;
@@ -63,7 +63,7 @@ class KnightTeamController extends Controller
                     $leader = Users::where('team_id', $team->id)
                                     ->where('isLeader',1)
                                     ->where('status',0)
-                                    ->where('isAvailable',1)
+                                    ->where('isDisable',1)
                                     ->first();
                     if(isset($leader)){
                         $team['leaderName'] = $leader->name;

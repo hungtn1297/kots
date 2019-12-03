@@ -30,7 +30,7 @@ class UserReportController extends Controller
             
         // }
         //Nếu user đã bị banned thì không cần report nữa
-        if($user->isAvailable == 0){
+        if($user->isDisable == 0){
             return $this->returnAPI(200,'Tài khoản người dùng đã bị khoá',[])
         }
 
@@ -51,7 +51,7 @@ class UserReportController extends Controller
             // Sau khi report đã ăn 3 sẹo, ban acc
             $type = 'report';
             if($numberReport == 2){ 
-                $user->isAvailable = 0;
+                $user->isDisable = 0;
                 $type = 'banned';
             }
             if($result == true){
