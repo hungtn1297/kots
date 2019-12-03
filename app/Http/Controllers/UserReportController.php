@@ -29,10 +29,13 @@ class UserReportController extends Controller
         // }elseif ($user->role == $this->ROLE_CITIZEN) {
             
         // }
+        //Nếu user đã bị banned thì không cần report nữa
+        if($user->isAvailable == 0){
+            return $this->returnAPI(200,'Tài khoản người dùng đã bị khoá',[])
+        }
 
         //Kiểm tra user ăn mấy sẹo
         $numberReport = UserReport::where('userId',$userId)->count();
-        
         if($numberReport <= 2){
             $userReport->userId = $userId;
             $userReport->reason = $reason;

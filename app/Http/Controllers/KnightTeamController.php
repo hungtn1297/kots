@@ -46,9 +46,14 @@ class KnightTeamController extends Controller
             if(isset($json['teamId'])){
                 $teams = KnightTeam::with('knight')->find($json['teamId']);
                 $leader = Users::where('team_id', $teams->id)
-                                ->where('isLeader',1)->first();
-                $teams['leaderName'] = $leader->name;
-                $teams['leaderId'] = '+84'.substr($leader->id,1,strlen($leader->id));
+                                    ->where('isLeader',1)
+                                    ->where('status',0)
+                                    ->where('isAvailable',1)
+                                    ->first();
+                if(isset($leader)){
+                    $teams['leaderName'] = $leader->name;
+                    $teams['leaderId'] = '+84'.substr($leader->id,1,strlen($leader->id));
+                }
                 foreach ($teams->knight as $knight) {
                     $knight->id = '+84'.substr($knight->id,1,strlen($knight->id));
                 }
@@ -56,9 +61,14 @@ class KnightTeamController extends Controller
                 $teams = KnightTeam::with('knight')->get();
                 foreach ($teams as $team) {
                     $leader = Users::where('team_id', $team->id)
-                                    ->where('isLeader',1)->first();
-                    $team['leaderName'] = $leader->name;
-                    $team['leaderId'] = '+84'.substr($leader->id,1,strlen($leader->id));
+                                    ->where('isLeader',1)
+                                    ->where('status',0)
+                                    ->where('isAvailable',1)
+                                    ->first();
+                    if(isset($leader)){
+                        $team['leaderName'] = $leader->name;
+                        $team['leaderId'] = '+84'.substr($leader->id,1,strlen($leader->id));
+                    }
                     foreach ($team->knight as $knight) {
                         $knight->id = '+84'.substr($knight->id,1,strlen($knight->id));
                     }
