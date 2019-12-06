@@ -200,11 +200,6 @@ class CaseController extends Controller
             foreach ($newCases as $newCase) {
                 // dd($newCase->case->id);
                 // dd($newCase->user);
-                if(isset($newCase->user)){
-                    dd($newCase->user);
-                }else{
-                    dd($newCase);
-                }
                 $citizenName = $newCase->user->name;
                 $newCase['citizenName']  = $citizenName;
                 $caseId = $newCase->id;
