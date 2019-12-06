@@ -61,6 +61,7 @@ class UserController extends Controller
         $json = json_decode(file_get_contents('php://input'), true);
         $id = str_replace("+84","0",$json['phone']);
         $user = Users::find($id);
+        $flag = true;
         if(isset($user)){
             $cetificationController = new CetificationController();
             DB::beginTransaction();
@@ -87,23 +88,22 @@ class UserController extends Controller
             $user['id'] = $json['phone'];
 
             if(isset($json['photoIdFront'])){
-                $insertFront = $cetificationController->insert($id, $json['photoIdFront'], 'photoIdFront');
+                $flag = $flag && $cetificationController->insert($id, $json['photoIdFront'], 'photoIdFront');
             }
             if(isset($json['photoIdBack'])){
-                $insertBack = $cetificationController->insert($id, $json['photoIdBack'], 'photoIdBack');
+                $flag = $flag && $cetificationController->insert($id, $json['photoIdBack'], 'photoIdFront');
             }
             if(isset($json['certification1'])){
-                $insertCeti1 = $cetificationController->insert($id, $json['certification1'], 'certificationInfo');
+                $flag = $flag && $cetificationController->insert($id, $json['certification1'], 'photoIdFront');
             }
-            if(isset($json['certification1'])){
-                $insertCeti2 = $cetificationController->insert($id, $json['certification2'], 'certificationInfo');
+            if(isset($json['certification2'])){
+                $flag = $flag && $cetificationController->insert($id, $json['certification2'], 'photoIdFront');
             }
-            if(isset($json['certification1'])){
-                $insertCeti3 = $cetificationController->insert($id, $json['certification3'], 'certificationInfo');
+            if(isset($json['certification3'])){
+                $flag = $flag && $cetificationController->insert($id, $json['certification3'], 'photoIdFront');
             }
             
-            if($checkUser == true && $insertFront == true 
-            && $insertBack == true){
+            if($flag == true){
                 DB::commit();
             }else{
                 DB::rollback();
