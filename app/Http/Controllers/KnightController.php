@@ -233,9 +233,10 @@ class KnightController extends Controller
         if(isset($case) && !isset($caseDetail)){
             // dd($case);
             $case->knightConfirmId = $knightId;
-            $case->save();
+            $checkCase = $case->save();
             // dd($case);
         }
+        return $checkCase;
     }
 
     public function getJoincaseTime($knightId, $caseId){

@@ -319,7 +319,7 @@ class CaseController extends Controller
 
         // $knightSendcaseData = '';
         // $knightSendcaseId = '';
-
+        $flag = 1;
         $json = json_decode(file_get_contents('php://input'),true);
         if(isset($json)){
             $id = str_replace("+84","0",$json['phone']);
@@ -327,8 +327,8 @@ class CaseController extends Controller
             $longitude = $json['longitude'];
             $latitude = $json['latitude'];
             $type = $json['type'];
-            // $radius = $json['radius'];
-            
+            $radius = $json['radius'];
+            DB::beginTransaction();
             if($type == $this->SOS){
                 $case = $this->createSOS($id, $longitude, $latitude, $userMessage, $type);
             }elseif($type == $this->NORMAL_CASE){
@@ -341,6 +341,9 @@ class CaseController extends Controller
                 }
                 $case = $this->createCase($id, $longitude, $latitude, $userMessage, $media, $mediatype, $type);
             }
+            if(!isset($case)){
+                $flag = 0;
+            }
             
             $user = Users::find($id);
             // dd($user);
@@ -350,28 +353,33 @@ class CaseController extends Controller
                     $case->delete();
                     return self::returnAPI($resultCode,'Xin vui lòng đóng hoặc rời sự cố đang thực hiện', []);
                 };
-                $knightController->confirmCase($knight->id, $case->id);
+                $checkConfirm = $knightController->confirmCase($knight->id, $case->id);
+                if($checkConfirm == false){
+                    $flag = 0;
+                }
                 // $knightSendcaseData = $firebaseController->getKnightLocation($knight->id, $knight->team_id);
                 // $knightSendcaseId = $knight->id;
             }
             //Get list knight nearly
-            $knightList = $firebaseController->getKnightInRadius(200, $longitude, $latitude);
+            $knightList = $firebaseController->getKnightInRadius($radius, $longitude, $latitude);
             //Create new case in firebase
             // dd($knightSendcaseData);
             // $firebaseCase = $firebaseController->createFirebaseCase($case->id, $knightSendcaseId, $knightSendcaseData);
             //Send message to Knight
             $messageController->sendMessage($case, $knightList);
             $case['citizenId'] = $json['phone'];
-            $resultCode = 200;
-            $data = $case;
+            if($flag == 1){
+                DB::commit();
+                $resultCode = 200;
+                $data = $case;
+            }
+            else{
+                DB::rollback();
+            }
         }else{
             $message = 'Not found json';
         }
-        return response()->json([
-            'result' => $resultCode,
-            'message' => $message,
-            'data' => $data,
-        ]);
+        return $this->returnAPI($resultCode,$message,$data);
     }
     
     public function leaveCase(){

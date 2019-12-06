@@ -63,54 +63,59 @@ class MessageController extends Controller
                             ->setSound('default');
 
         $dataBuilder = new PayloadDataBuilder();
-        $case = $case->where("id",$case->id)->with('user')->first();
-        // dd($case);
-        // $user = Users::find($case->citizenId);
-        // if($user->role == 2 && $user->id == $case->knightConfirmId){
-        //     $case['inCase'] = true;
-        // }else{
-        //     $case['inCase'] = false;
-        // }
-        // foreach ($knightList as $knight) {
-        //     if($knight->id == $case->citizenId){
-        //         $case['inCase'] = true;
-        //     }
-        // }
-        $case['inCase'] = false;
-        $dataBuilder->addData(['item' => $case]);
-        
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
+        try {
+            $case = $case->where("id",$case->id)->with('user')->first();
+            // dd($case);
+            // $user = Users::find($case->citizenId);
+            // if($user->role == 2 && $user->id == $case->knightConfirmId){
+            //     $case['inCase'] = true;
+            // }else{
+            //     $case['inCase'] = false;
+            // }
+            // foreach ($knightList as $knight) {
+            //     if($knight->id == $case->citizenId){
+            //         $case['inCase'] = true;
+            //     }
+            // }
+            $case['inCase'] = false;
+            $dataBuilder->addData(['item' => $case]);
+            
+            $option = $optionBuilder->build();
+            $notification = $notificationBuilder->build();
+            $data = $dataBuilder->build();
 
-        // $token = "cd_f6oqOOhM:APA91bEM62sYFugW3Gxu5kLUCGnawXbZpbz0ZPanhAIUiyMEoz0w9pMM8AZLS2NuCW9Ht2I3gHGW_hpQAjQzok_QAKdAdmaOjkQsga6q9G-izGaEo-QFgJXY34m2Y96xbestr5v7fIyC";
-        $tokens = array();
-        foreach ($knightList as $knight) {
-            // dd($knight);
-            if(str_replace('+84','0',$knight['id']) != $case->citizenId){
-                $id = $knight['id'];
-                $k = Users::find(str_replace('+84','0',$id));
-                if(!empty($k->token)){
-                    if(!in_array($k->token, $tokens)){
-                        array_push($tokens,$k->token);
+            // $token = "cd_f6oqOOhM:APA91bEM62sYFugW3Gxu5kLUCGnawXbZpbz0ZPanhAIUiyMEoz0w9pMM8AZLS2NuCW9Ht2I3gHGW_hpQAjQzok_QAKdAdmaOjkQsga6q9G-izGaEo-QFgJXY34m2Y96xbestr5v7fIyC";
+            $tokens = array();
+            foreach ($knightList as $knight) {
+                // dd($knight);
+                if(str_replace('+84','0',$knight['id']) != $case->citizenId){
+                    $id = $knight['id'];
+                    $k = Users::find(str_replace('+84','0',$id));
+                    if(!empty($k->token)){
+                        if(!in_array($k->token, $tokens)){
+                            array_push($tokens,$k->token);
+                        }
                     }
-                }
-            }           
-        }
-        // array_push($token,"djVTbMvNrLI:APA91bHAhY0Y0ZAnzVzrX3eWqveogdxpa2j2vcPLVcwKUdAVzfx735TgxXGVyj2gl7z9EavgGoPajN8YCr2rTgHAOG9k8pj52V5JdsZHrAc2EtXO6SruPwIY04xnx16Gd7U07EmfGFy-");
-        foreach ($tokens as $token) {
-            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-        }
-        if(isset($downstreamResponse)){
-            return $downstreamResponse->numberSuccess();
+                }           
+            }
+            // array_push($token,"djVTbMvNrLI:APA91bHAhY0Y0ZAnzVzrX3eWqveogdxpa2j2vcPLVcwKUdAVzfx735TgxXGVyj2gl7z9EavgGoPajN8YCr2rTgHAOG9k8pj52V5JdsZHrAc2EtXO6SruPwIY04xnx16Gd7U07EmfGFy-");
+            foreach ($tokens as $token) {
+                $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+            }
+            if(isset($downstreamResponse)){
+                return $downstreamResponse->numberSuccess();
+            }
+            
+            // dd($tokens);
+            // $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
+            
+            // $token = 'd3NfHPDPLUg:APA91bHyADW0w7qceVMPM0vsdsejHNGDxsdugGVXfr5Rb14KCSPJQl2mHqopojCKz0rBeDA8zsGzokIKIAvzUTda6zifC700vWnlbmF_y9QHnTzaPuxZzaEaiUH19bW41pKxIxAUFt2X';
+            // FCM::sendTo($token, $option, $notification, $data);
+            return 0;
+        } catch (\Throwable $th) {
+            return 0;
         }
         
-        // dd($tokens);
-        // $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
-        
-        // $token = 'd3NfHPDPLUg:APA91bHyADW0w7qceVMPM0vsdsejHNGDxsdugGVXfr5Rb14KCSPJQl2mHqopojCKz0rBeDA8zsGzokIKIAvzUTda6zifC700vWnlbmF_y9QHnTzaPuxZzaEaiUH19bW41pKxIxAUFt2X';
-        // FCM::sendTo($token, $option, $notification, $data);
-        return 0;
     }
 
     public function sendMessageToCitizen($case, $knightId, $citizenToken, $type = 'join'){
