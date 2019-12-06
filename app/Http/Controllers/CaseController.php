@@ -196,28 +196,32 @@ class CaseController extends Controller
                         ->get();
         $case = array();
         $listCaseId = array();
-        foreach ($newCases as $newCase) {
-            // dd($newCase->case->id);
-            // dd($newCase->user);
-            $citizenName = $newCase->user->name;
-            $newCase['citizenName']  = $citizenName;
-            $caseId = $newCase->id;
-            if(!in_array($caseId, $listCaseId)){
-                array_push($listCaseId, $caseId);
-                array_push($case, $newCase);    
-                // dd($case);
+        if($newCases->count() > 0){
+            foreach ($newCases as $newCase) {
+                // dd($newCase->case->id);
+                // dd($newCase->user);
+                $citizenName = $newCase->user->name;
+                $newCase['citizenName']  = $citizenName;
+                $caseId = $newCase->id;
+                if(!in_array($caseId, $listCaseId)){
+                    array_push($listCaseId, $caseId);
+                    array_push($case, $newCase);    
+                    // dd($case);
+                }
             }
         }
         // dd($caseDetails);
-        foreach ($caseDetails as $caseDetail) {
-            // dd($caseDetail->case->id);
-            $citizenName = $caseDetail->case->user->name;
-            $caseDetail->case['citizenName']  = $citizenName;
-            $caseId = $caseDetail->case->id;
-            if(!in_array($caseId, $listCaseId)){
-                array_push($listCaseId, $caseId);
-                array_push($case, $caseDetail->case);    
-                // dd($case);
+        if($caseDetails->count() > 0){
+            foreach ($caseDetails as $caseDetail) {
+                // dd($caseDetail->case->id);
+                $citizenName = $caseDetail->case->user->name;
+                $caseDetail->case['citizenName']  = $citizenName;
+                $caseId = $caseDetail->case->id;
+                if(!in_array($caseId, $listCaseId)){
+                    array_push($listCaseId, $caseId);
+                    array_push($case, $caseDetail->case);    
+                    // dd($case);
+                }
             }
         }
         return $case;
