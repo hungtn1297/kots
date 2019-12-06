@@ -230,13 +230,15 @@ class KnightController extends Controller
                                 ->first();
         // // dd($caseDetail);
         $case = Cases::find($caseId);
-        if(isset($case) && !isset($caseDetail)){
+        // dd($caseId . ' - '. $knightId);
+        if(isset($case) && $caseDetail->count()>0){
             // dd($case);
             $case->knightConfirmId = $knightId;
             $checkCase = $case->save();
             // dd($case);
+            return $checkCase;
         }
-        return $checkCase;
+        return false;
     }
 
     public function getJoincaseTime($knightId, $caseId){

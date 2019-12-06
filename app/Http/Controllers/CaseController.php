@@ -112,10 +112,10 @@ class CaseController extends Controller
                 $data = $case;
                 // dd($case);
             }else{
-                $message = "Knight not in case";
+                $message = "Hiệp sĩ không có trong sự cố";
             }
         }else{
-            $message = "Not found case";
+            $message = "Không tìm thấy sự cố";
         }
         // dd($data);
         return self::returnAPI($resultCode, $message, $data);
@@ -310,7 +310,7 @@ class CaseController extends Controller
 
     public function sendCase(){
         $resultCode = 3000;
-        $message = "";
+        $message = "FAIL";
         $data = array();
 
         $firebaseController = new FirebaseController();
@@ -319,7 +319,7 @@ class CaseController extends Controller
 
         // $knightSendcaseData = '';
         // $knightSendcaseId = '';
-        $flag = 1;
+        $flag = true;
         $json = json_decode(file_get_contents('php://input'),true);
         if(isset($json)){
             $id = str_replace("+84","0",$json['phone']);
@@ -341,6 +341,7 @@ class CaseController extends Controller
                 }
                 $case = $this->createCase($id, $longitude, $latitude, $userMessage, $media, $mediatype, $type);
             }
+            // dd($case);
             if(!isset($case)){
                 $flag = 0;
             }
@@ -353,10 +354,8 @@ class CaseController extends Controller
                     $case->delete();
                     return self::returnAPI($resultCode,'Xin vui lòng đóng hoặc rời sự cố đang thực hiện', []);
                 };
-                $checkConfirm = $knightController->confirmCase($knight->id, $case->id);
-                if($checkConfirm == false){
-                    $flag = 0;
-                }
+                $knightController->confirmCase($knight->id, $case->id);
+                
                 // $knightSendcaseData = $firebaseController->getKnightLocation($knight->id, $knight->team_id);
                 // $knightSendcaseId = $knight->id;
             }
@@ -368,7 +367,7 @@ class CaseController extends Controller
             //Send message to Knight
             $messageController->sendMessage($case, $knightList);
             $case['citizenId'] = $json['phone'];
-            if($flag == 1){
+            if($flag == true){
                 DB::commit();
                 $resultCode = 200;
                 $data = $case;
@@ -384,7 +383,7 @@ class CaseController extends Controller
     
     public function leaveCase(){
         $resultCode = 3000;
-        $message = "";
+        $message = "FAIL";
         $data = array();
         
         $json = json_decode(file_get_contents('php://input'), true);

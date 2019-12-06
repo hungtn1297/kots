@@ -208,34 +208,39 @@ class MessageController extends Controller
 
         
         $optionBuilder->setTimeToLive(60*20);
-        if($action == 'joinGroup'){
-            $notificationBuilder = new PayloadNotificationBuilder('Có yêu cầu tham gia nhóm');
-            $notificationBuilder->setBody('Bấm để xem chi tiết')
-                            ->setSound('default');
-        }elseif($action == 'leaveGroup'){
-            $notificationBuilder = new PayloadNotificationBuilder('Có yêu cầu rời khỏi nhóm');
-            $notificationBuilder->setBody('Bấm để xem chi tiết')
-                            ->setSound('default'); 
+        try {
+            if($action == 'joinGroup'){
+                $notificationBuilder = new PayloadNotificationBuilder('Có yêu cầu tham gia nhóm');
+                $notificationBuilder->setBody('Bấm để xem chi tiết')
+                                ->setSound('default');
+            }elseif($action == 'leaveGroup'){
+                $notificationBuilder = new PayloadNotificationBuilder('Có yêu cầu rời khỏi nhóm');
+                $notificationBuilder->setBody('Bấm để xem chi tiết')
+                                ->setSound('default'); 
+            }
+            
+            if(!empty($userId)){
+                $user = Users::find($userId);
+                $dataBuilder->addData(['item' => $user]);
+            }
+            
+    
+            $option = $optionBuilder->build();
+            $notification = $notificationBuilder->build();
+            $data = $dataBuilder->build();
+    
+            $token = $knightToken;
+            // dd($token);
+            if(!empty($token)){
+                $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+                return $downstreamResponse->numberSuccess();
+            }
+            
+            return 0;
+        } catch (\Throwable $th) {
+            return 0;
         }
         
-        if(!empty($userId)){
-            $user = Users::find($userId);
-            $dataBuilder->addData(['item' => $user]);
-        }
-        
-
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
-
-        $token = $knightToken;
-        // dd($token);
-        if(!empty($token)){
-            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-            return $downstreamResponse->numberSuccess();
-        }
-        
-        return 0;
     }
 
     public function sendMessageToKnight($knightToken, $action){

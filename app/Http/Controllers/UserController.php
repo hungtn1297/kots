@@ -73,7 +73,6 @@ class UserController extends Controller
                 $user->gender = $json['gender'];
                 $dob = explode('-',$json['dateOfBirth']);
                 $user->dateOfBirth = date('Y-m-d',strtotime("$dob[2]-$dob[1]-$dob[0]"));
-
                 $user->isFirstLogin = 0;
             }
             if(isset($json['token'])){
@@ -93,16 +92,16 @@ class UserController extends Controller
                 $flag = $flag && $cetificationController->insert($id, $json['photoIdFront'], 'photoIdFront');
             }
             if(isset($json['photoIdBack'])){
-                $flag = $flag && $cetificationController->insert($id, $json['photoIdBack'], 'photoIdFront');
+                $flag = $flag && $cetificationController->insert($id, $json['photoIdBack'], 'photoIdBack');
             }
             if(isset($json['certification1'])){
-                $flag = $flag && $cetificationController->insert($id, $json['certification1'], 'photoIdFront');
+                $flag = $flag && $cetificationController->insert($id, $json['certification1'], 'certification1');
             }
             if(isset($json['certification2'])){
-                $flag = $flag && $cetificationController->insert($id, $json['certification2'], 'photoIdFront');
+                $flag = $flag && $cetificationController->insert($id, $json['certification2'], 'certification2');
             }
             if(isset($json['certification3'])){
-                $flag = $flag && $cetificationController->insert($id, $json['certification3'], 'photoIdFront');
+                $flag = $flag && $cetificationController->insert($id, $json['certification3'], 'certification3');
             }
             
             if($flag == true){
