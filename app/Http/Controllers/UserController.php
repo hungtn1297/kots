@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\CetificationInformation;
 use Illuminate\Http\Request;
 use App\Users;
@@ -62,7 +63,7 @@ class UserController extends Controller
         $user = Users::find($id);
         if(isset($user)){
             $cetificationController = new CetificationController();
-            
+            DB::beginTransaction();
             if(isset($json['teamId'])){
                 $user->team_id = $json['teamId'];
             }
@@ -82,18 +83,27 @@ class UserController extends Controller
             $checkUser = $user->save();
             $user['id'] = $json['phone'];
 
-            // if(isset($json['photoIdFront'])){
-            //     $inserFront = $cetificationController->insert($id, $json['photoIdFront'], 'photoIdFront');
-            // }
-            // if(isset($json['photoIdBack'])){
-            //     $insertBack = $cetificationController->insert($id, $json['photoIdBack'], 'photoIdBack');
-            // }
-            // if(isset($json['certification'])){
-            //     foreach ($json['certification'] as $ceti) {
-            //         $insertCeti = $cetificationController->insert($id, $ceti['image'], $ceti['desciption']);
-            //     }
-            // }
-
+            if(isset($json['photoIdFront'])){
+                $insertFront = $cetificationController->insert($id, $json['photoIdFront'], 'photoIdFront');
+            }
+            if(isset($json['photoIdBack'])){
+                $insertBack = $cetificationController->insert($id, $json['photoIdBack'], 'photoIdBack');
+            }
+            if(isset($json['certification'])){
+                $flag = true;
+                foreach ($json['certification'] as $ceti) {
+                    $insertCeti = $cetificationController->insert($id, $ceti, 'certificationInfo');
+                    if($insertCeti == false){
+                        $flag = false;
+                    }
+                }
+            }
+            if($checkUser == true && $insertFront == true 
+            && $insertBack == true && $flag == true){
+                DB::commit();
+            }else{
+                DB::rollback();
+            }
             $resultCode = 200;
             $message = "Success";
             $data = $user;

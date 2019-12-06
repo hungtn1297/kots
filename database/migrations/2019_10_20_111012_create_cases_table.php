@@ -27,8 +27,9 @@ class CreateCasesTable extends Migration
             $table->string('startLatitude');
             $table->string('endLongitude')->nullable();
             $table->string('endLatitude')->nullable();
+            $table->integer('rate')->nullable();
+            $table->text('message')->nullable();
             $table->string('key')->nullable();
-            $table->text('notice');
             $table->timestamps();
             // $table->foreign('citizenId')->references('id')->on('users');
             // $table->foreign('knightConfirmId')->references('id')->on('users');

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DangerousStreetController;
 use App\Http\Controllers\FeedbackController;
+use App\KnightTeam;
 use Illuminate\Http\Request;
 
 /*
