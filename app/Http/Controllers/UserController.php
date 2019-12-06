@@ -67,6 +67,14 @@ class UserController extends Controller
             DB::beginTransaction();
             if(isset($json['teamId'])){
                 $user->team_id = $json['teamId'];
+            }else{
+                $user->name = $json['name'];
+                $user->address = $json['address'];
+                $user->gender = $json['gender'];
+                $dob = explode('-',$json['dateOfBirth']);
+                $user->dateOfBirth = date('Y-m-d',strtotime("$dob[2]-$dob[1]-$dob[0]"));
+
+                $user->isFirstLogin = 0;
             }
             if(isset($json['token'])){
                 $user->token = $json['token'];
@@ -77,13 +85,7 @@ class UserController extends Controller
             if(isset($json['avatar'])){
                 $user->image = $json['avatar'];
             }
-            $user->name = $json['name'];
-            $user->address = $json['address'];
-            $user->gender = $json['gender'];
-            $dob = explode('-',$json['dateOfBirth']);
-            $user->dateOfBirth = date('Y-m-d',strtotime("$dob[2]-$dob[1]-$dob[0]"));
-
-            $user->isFirstLogin = 0;
+            
             $checkUser = $user->save();
             $user['id'] = $json['phone'];
 
