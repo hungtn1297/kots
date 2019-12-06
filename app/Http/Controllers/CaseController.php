@@ -229,7 +229,9 @@ class CaseController extends Controller
                     ->get();
         $knightController  = new KnightController();
         foreach ($cases as $case) {
-            $case['knightConfirmId'] = $knightController->getKnightNamePhoneFormat($case['knightConfirmId']);
+            if(isset($case['knightConfirmId'])){
+                $case['knightConfirmId'] = $knightController->getKnightNamePhoneFormat($case['knightConfirmId']);
+            }
             if(isset($case['knightCloseId'])){
                 $case['knightCloseId'] = $knightController->getKnightNamePhoneFormat($case['knightCloseId']);
             
