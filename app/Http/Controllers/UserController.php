@@ -73,6 +73,9 @@ class UserController extends Controller
             if(isset($json['isLeader'])){
                 $user->isLeader = $json['isLeader'];
             }
+            if(isset($json['avatar'])){
+                $user->image = $json['avatar'];
+            }
             $user->name = $json['name'];
             $user->address = $json['address'];
             $user->gender = $json['gender'];

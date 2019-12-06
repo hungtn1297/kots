@@ -33,6 +33,7 @@ Route::post('closeCase','CaseController@changeCaseStatus');
 Route::post('pendingCase','CaseController@changeCaseStatus');
 Route::post('leaveCase', 'CaseController@leaveCase');
 Route::post('cancelCase', 'CaseController@changeCaseStatus');
+Route::post('rateCase', 'CaseController@rateCase');
 
 Route::post('findUser','UserController@findUser');
 Route::post('updateProfile','UserController@updateProfile');

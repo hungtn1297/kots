@@ -342,8 +342,10 @@ class CaseController extends Controller
                 $case = $this->createCase($id, $longitude, $latitude, $userMessage, $media, $mediatype, $type);
             }
             
-            $knight = Users::find($id);
-            if($knight->role == $this->KNIGHT_ROLE){
+            $user = Users::find($id);
+            // dd($user);
+            if($user->role == $this->KNIGHT_ROLE){
+                $knight = $user;
                 if($knightController->joinCase($knight->id, $case->id) == 'INCASE'){
                     $case->delete();
                     return self::returnAPI($resultCode,'Xin vui lòng đóng hoặc rời sự cố đang thực hiện', []);
@@ -397,5 +399,32 @@ class CaseController extends Controller
             'message' => $message,
             'data' => $data
         ]);
+    }
+
+    public function rateCase(){
+        $resultCode = 3000;
+        $message = 'Có lỗi';
+        $data = [];
+
+        $json = json_decode(file_get_contents('php://input'), true);
+        $case = Cases::find($json['caseId']);
+        if(isset($case)){
+            if(!isset($case->rate)){ //Sự cố chưa được đánh giá
+                $case->rate = $json['rate'];
+                $case->notice = $json['notice'];
+                $checkCase = $case->save();
+
+                if($checkCase == true){
+                    $resultCode = 200;
+                    $message = 'Đánh giá thành công';
+                    $data = $case;
+                }
+            }else{
+                $message = 'Bạn đã đánh giá sự cố này rồi';
+            }
+        }else{
+            $message = 'Không tìm thấy sự cố';
+        }
+        return $this->returnAPI($resultCode,$message,$data);
     }
 }
