@@ -92,17 +92,18 @@ class UserController extends Controller
             if(isset($json['photoIdBack'])){
                 $insertBack = $cetificationController->insert($id, $json['photoIdBack'], 'photoIdBack');
             }
-            if(isset($json['certification'])){
-                $flag = true;
-                foreach ($json['certification'] as $ceti) {
-                    $insertCeti = $cetificationController->insert($id, $ceti, 'certificationInfo');
-                    if($insertCeti == false){
-                        $flag = false;
-                    }
-                }
+            if(isset($json['certification1'])){
+                $insertCeti1 = $cetificationController->insert($id, $json['certification1'], 'certificationInfo');
             }
+            if(isset($json['certification1'])){
+                $insertCeti2 = $cetificationController->insert($id, $json['certification2'], 'certificationInfo');
+            }
+            if(isset($json['certification1'])){
+                $insertCeti3 = $cetificationController->insert($id, $json['certification3'], 'certificationInfo');
+            }
+            
             if($checkUser == true && $insertFront == true 
-            && $insertBack == true && $flag == true){
+            && $insertBack == true){
                 DB::commit();
             }else{
                 DB::rollback();
@@ -164,7 +165,7 @@ class UserController extends Controller
 
     public function removeToken(){
         $resultCode = 3000;
-        $message = "";
+        $message = "FAIL";
         $data = array();
         $json = $json = json_decode(file_get_contents('php://input'), true);
 
@@ -179,11 +180,7 @@ class UserController extends Controller
             $message = "Not found user";
         }
 
-        return response()->json([
-            'result' => $resultCode,
-            'message' => $message,
-            'data' => $data
-        ]);
+        return $this->returnAPI($resultCode, $message, $data);
     }
 
 
