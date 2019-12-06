@@ -264,8 +264,8 @@ class KnightController extends Controller
             $knight->status = 3;
             $knight->save();
 
-            $messageController = new MessageController();
-            $messageController->sendMessageToLeader($leader->token, 'leaveGroup', $knight->id);
+            // $messageController = new MessageController();
+            // $messageController->sendMessageToLeader($leader->token, 'leaveGroup', $knight->id);
 
             $knight->id = $json['phone']; //Set phone to return to client
             

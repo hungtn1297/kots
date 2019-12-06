@@ -235,7 +235,6 @@ class MessageController extends Controller
                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
                 return $downstreamResponse->numberSuccess();
             }
-            
             return 0;
         } catch (\Throwable $th) {
             return 0;
