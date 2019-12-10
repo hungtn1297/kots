@@ -18,11 +18,13 @@ class CaseController extends Controller
     private $FAIL = 3;
     private $PENDING = 4;
     private $CANCEL = 5;
+    private $FAKE = 6;
     private $NORMAL_CASE = 1;
     private $SOS = 2;
     private $CITIZEN_ROLE = 1;
     private $KNIGHT_ROLE = 2;
     private $FREE = 1;
+    private $API_KEY = "AIzaSyDRJl0JFqHhM8jQ24VrJnzJE8HarKJ1qF0";
 
     public function changeCaseStatus(){
         $resultCode = 3000;
@@ -36,47 +38,45 @@ class CaseController extends Controller
         // dd(isset($case));     
         if(isset($case)){
             $flag = true;
+            DB::beginTransaction();
             if($status == $this->CONFIRM){
                 $knightId = str_replace("+84","0",$json['phone']);
                 $knightController = new KnightController();
-                DB::beginTransaction();
-                try{
+                $userReportController = new UserReportController();
+                $caseDetail = $knightController->joinCase($knightId, $case->id);
+                if($caseDetail == 'INCASE'){
+                    $case->delete();
+                    $resultCode = 3000;
+                    $message = 'Xin vui lòng đóng hoặc rời sự cố đang thực hiện';
+                    return self::returnAPI($resultCode, $message, []);
+                }elseif ($caseDetail == 'ALREADY LEAVED') {
+                    $resultCode = 3000;
+                    $message = 'Không thể tham gia sự cố đã rời khỏi';
+                    return self::returnAPI($resultCode, $message, []);
+                }else{
                     $knightController->confirmCase($knightId, $caseId); //Confirm Case
                     // $case->knightConfirmId = $knightId;
                     $case->status = $status;
-                    $case->save();
-                    $caseDetail = $knightController->joinCase($knightId, $case->id);
-                    if($caseDetail == 'INCASE'){
-                        $case->delete();
-                        $resultCode = 3000;
-                        $message = 'Xin vui lòng đóng hoặc rời sự cố đang thực hiện';
-                        return self::returnAPI($resultCode, $message, []);
-                    }elseif ($caseDetail == 'ALREADY LEAVED') {
-                        $resultCode = 3000;
-                        $message = 'Không thể tham gia sự cố đã rời khỏi';
-                        return self::returnAPI($resultCode, $message, []);
-                    }
-                    DB::commit();
-                }catch (Exception $e) {
-                    DB::rollBack();
-                    $resultCode = 3000;
-                    $message = $e->getMessage();
-                }       
-            }elseif($status == $this->SUCCESS || $status == $this->FAIL){
+                    $flag = $flag && $case->save();
+                }
+            }elseif($status == $this->SUCCESS || $status == $this->FAIL || $status == $this->FAKE){
                 $knightId = str_replace("+84","0",$json['phone']);
                 $caseDetail = CaseDetail::where('caseId', $caseId)
                                         ->where('knightId',$knightId)->first();
                 if(isset($caseDetail)){
                     $case->knightCloseId = $knightId;
                     $case->status = $status;
-                    $case->endLongitude = $json['longitude'];
-                    $case->endLatitude = $json['latitude'];
-                    $case->save();
+                    if($status == $this->SUCCESS || $status == $this->FAIL){
+                        $case->endLongitude = $json['longitude'];
+                        $case->endLatitude = $json['latitude'];
 
-                    $citizen = Users::find($case->citizenId);
-                    $messageController = new MessageController();
-                    $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'close');
-
+                        $citizen = Users::find($case->citizenId);
+                        $messageController = new MessageController();
+                        $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'close');
+                    }elseif ($status == $this->FAKE) {
+                        $userReportController->report
+                    }
+                    $flag = $flag && $case->save();
                     //Release tất cả Hiệp sĩ, set status về bằng free
                     $knightController = new KnightController();
                     $caseDetails = CaseDetail::where('caseId',$case->id)->get();
@@ -106,12 +106,14 @@ class CaseController extends Controller
                 $case->save();
             }
             if($flag){
+                DB::commit();
                 $resultCode = 200;
                 $message = "Success";
                 $case = Cases::find($caseId);
                 $data = $case;
                 // dd($case);
             }else{
+                DB::rollback();
                 $message = "Hiệp sĩ không có trong sự cố";
             }
         }else{
@@ -130,6 +132,11 @@ class CaseController extends Controller
         $case->message = $message;
         $case->type = $type;
         $case->status = 0;
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&key=".$this->API_KEY;
+        // dd($url);
+        $json = json_decode(file_get_contents($url));
+        $address = ($json->status=="OK")?$json->results[1]->formatted_address:'';
+        $case->address = $address;
         $case->save();
 
         // $case->key = base64_encode($case->id);
@@ -151,6 +158,10 @@ class CaseController extends Controller
         if($mediatype =='image'){
             $case->image = $media;
         }
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&key=".$this->API_KEY;
+        $json = json_decode(file_get_contents($url));
+        $address = ($json->status=="OK")?$json->results[1]->formatted_address:'';
+        $case->address = $address;
         $case->save();
 
         // $case->key = base64_encode($case->id);
@@ -343,9 +354,13 @@ class CaseController extends Controller
             }
             // dd($case);
             if(!isset($case)){
-                $flag = 0;
+                $flag = false;
             }
-            
+            else{
+                $dangerousStreetController = new DangerousStreetController();
+                $dangerousStreetController->checkDS($case);
+            }
+            // dd($flag);
             $user = Users::find($id);
             // dd($user);
             if($user->role == $this->KNIGHT_ROLE){

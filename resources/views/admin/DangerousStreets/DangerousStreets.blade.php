@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Danh sách sự cố</title>
+    <title>Đoạn đường nguy hiểm</title>
 </head>
 <body>
     @include('admin/header')
@@ -32,6 +32,7 @@
                     function myMap() {
                         directionsService = new google.maps.DirectionsService();
                         directionsRenderer = new google.maps.DirectionsRenderer();   
+                        geocoder = new google.maps.Geocoder();
                         var mapProp= {
                             center:new google.maps.LatLng(10.794378,106.731063),
                             zoom:20,
@@ -47,6 +48,7 @@
                         directionsRenderer.setMap(map);
                         google.maps.event.addListener(map,'click', function(e) {
                             placeMarker(e.latLng, map);
+                            console.log(codeAddress(e.latLng));
                             // console.log(allLocation);
                         });
 
@@ -80,9 +82,19 @@
                                 alert('You must delete one to select another one');
                             }
 
-                            
                         }
                     }
+
+                    function codeAddress(location) {
+                                var point = new google.maps.LatLng(10.838312, 106.672020)
+                                geocoder.geocode( { 'location': location}, function(results, status) {
+                                if (status == 'OK') {
+                                    return console.log(results[0].formatted_address);
+                                } else {
+                                    alert('Geocode was not successful for the following reason: ' + status);
+                                }
+                                });
+                            }
 
                     function drawRoute(startLatitude, startLongitude, endLatitude, endLongitude){
                         // console.log('STARTLA: ' + startLatitude);

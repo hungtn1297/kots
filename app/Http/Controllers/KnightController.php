@@ -106,7 +106,7 @@ class KnightController extends Controller
                                         ->where('status', 1)
                                         ->latest()
                                         ->first();
-        
+
         $knight = Users::find($knightId);
 
         $knightInCase = CaseDetail::where('caseId', $caseId)

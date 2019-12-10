@@ -84,6 +84,7 @@ class KnightTeamController extends Controller
         }else{
             $teams = KnightTeam::with('knight')->get();
             // dd($teams);
+            $flag = 0;
             foreach ($teams as $team) {
                 foreach ($team->knight as $knight) {
                     if($knight->isLeader = 1){

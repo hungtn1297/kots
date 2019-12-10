@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    <title>Tin tức</title>
+    <title>Chỉnh sửa tin tức</title>
 </head>
 <body>
     @include('admin/header')
@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">Tin tức
-                            <small>Tạo mới</small>
+                            <small>Chỉnh sửa</small>
                         </h1>
                     </div>
                     <!-- /.col-lg-12 -->

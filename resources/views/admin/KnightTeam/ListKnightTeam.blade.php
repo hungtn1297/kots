@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    <title>Danh sách hiệp sĩ</title>
+    <title>Danh sách nhóm hiệp sĩ</title>
 </head>
 <body>
     @include('admin/header')
@@ -13,7 +13,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Hiệp sĩ
+                        <h1 class="page-header">Nhóm hiệp sĩ
                             <small>Danh sách</small>
                         </h1>
                     </div>

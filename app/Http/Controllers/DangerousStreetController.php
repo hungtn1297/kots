@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Cases;
 use App\DangerousStreet;
 use App\Users;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DangerousStreetController extends Controller
@@ -57,6 +59,16 @@ class DangerousStreetController extends Controller
         
     }
 
+    public function setDSByLatLng($latStr, $latEnd, $longStr, $longEnd, $des){
+        $dangerousStreet = new DangerousStreet();
+        $dangerousStreet->startLongitude = $longStr;
+        $dangerousStreet->endLongitude = $longEnd;
+        $dangerousStreet->startLatitude = $latStr;
+        $dangerousStreet->endLatitude = $latEnd;
+        $dangerousStreet->description = $des;
+        $dangerousStreet->save();
+    }
+
     public function unsetDS(Request $request){
         $ds = DangerousStreet::find($request->id);
         
@@ -88,5 +100,54 @@ class DangerousStreetController extends Controller
             'message' => $message,
             'data' => $data
         ]);
+    }
+
+    public function checkDS(){
+        $casesInMonth = Cases::where(
+            'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
+        )->get();
+        // dd($casesInMonth);
+        $dsStreet = [];
+        foreach ($casesInMonth as $case) {
+            $address = explode(',',$case->address)[0];
+            $address = trim(preg_replace('/\d/', '', $address));
+            $address = trim(preg_replace('/\//', '', $address));
+            $latLng = [
+                'lat' => $case->startLatitude,
+                'long' => $case->startLongitude
+            ];
+            $latLongArr = [];
+            if (!array_key_exists($address, $dsStreet)) {
+                array_push($latLongArr, $latLng);
+                $dsStreet[$address] = $latLongArr;
+            }else{
+                $latLongArr = $dsStreet[$address];
+                array_push($latLongArr, $latLng);
+                $dsStreet[$address] = $latLongArr;
+                if(count($dsStreet[$address]) == 5){
+                    $latLng = $this->getLatLongStartEnd($dsStreet[$address]);
+                    $this->setDSByLatLng($latLng[0], $latLng[1], $latLng[2], $latLng[3], $address);
+                }
+            }
+            
+        }
+        // dd($dsStreet);
+    }
+
+    public function getLatLongStartEnd($latLngArr){
+        $max = 0;
+        $otherController = new OtherController();
+        $returnArr = [];
+        for ($i=0; $i < count($latLngArr)-1; $i++) { 
+            if($otherController->getDistance($latLngArr[$i]['lat'], $latLngArr[$i+1]['lat']) > $max){
+                $max = $otherController->getDistance($latLngArr[$i]['lat'], $latLngArr[$i+1]['lat']);
+                // $latStr, $latEnd, $longStr, $longEnd, $des
+                array_push($returnArr, $latLngArr[$i]['lat']);
+                array_push($returnArr, $latLngArr[$i+1]['lat']);
+                array_push($returnArr, $latLngArr[$i]['long']);
+                array_push($returnArr, $latLngArr[$i+1]['long']);
+            }
+        }
+        return $returnArr;
     }
 }
