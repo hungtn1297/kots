@@ -74,7 +74,7 @@ class CaseController extends Controller
                         $messageController = new MessageController();
                         $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'close');
                     }elseif ($status == $this->FAKE) {
-                        $userReportController->report
+                        $userReportController->report;
                     }
                     $flag = $flag && $case->save();
                     //Release tất cả Hiệp sĩ, set status về bằng free
