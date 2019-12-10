@@ -57,3 +57,5 @@ Route::post('alertDS','DangerousStreetController@alertDS');
 
 Route::post('reportUser','UserReportController@reportUser');
 Route::post('userGetReportInfo','UserReportController@userGetReportInfo');
+
+Route::get('getCriminal', 'CriminalController@get');

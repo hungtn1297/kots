@@ -16,8 +16,10 @@ class CreateCriminalsTable extends Migration
         Schema::create('criminals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->integer('age');
+            $table->integer('status')->default(1);
             $table->string('image')->nullable();
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

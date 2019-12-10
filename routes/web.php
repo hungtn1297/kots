@@ -66,6 +66,9 @@ Route::prefix('admin')->group(function(){
         Route::post('create','NewsController@create');
         Route::delete('delete','NewsController@delete');
     });
+    Route::prefix('criminal')->group(function(){
+        Route::get('list', 'CriminalController@getCriminal');
+    });
     Route::prefix('case')->group(function(){
         Route::get('list','CaseController@get');
         Route::get('detail','CaseController@detail');
