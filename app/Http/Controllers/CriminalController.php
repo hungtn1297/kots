@@ -9,7 +9,7 @@ class CriminalController extends Controller
 {
     public function getCriminal(){
         $listCriminals = Criminal::get();
-        return view('admin/criminal/ListCriminal')->with(compact('listCriminals'));
+        return view('admin/Criminal/ListCriminal')->with(compact('listCriminals'));
     }
 
     public function get(){
