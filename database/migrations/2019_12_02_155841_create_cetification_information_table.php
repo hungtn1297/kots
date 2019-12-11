@@ -19,6 +19,7 @@ class CreateCetificationInformationTable extends Migration
             $table->string('image');
             $table->string('description');
             $table->timestamps();
+            $table->foreign('userId')->references('id')->on('users');
         });
     }
 

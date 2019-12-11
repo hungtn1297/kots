@@ -15,9 +15,11 @@ class CreateCriminalInCasesTable extends Migration
     {
         Schema::create('criminal_in_cases', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('caseId');
-            $table->integer('criminalId');
+            $table->unsignedBigInteger('caseId');
+            $table->unsignedBigInteger('criminalId');
             $table->timestamps();
+            $table->foreign('caseId')->references('id')->on('cases');
+            $table->foreign('criminalId')->references('id')->on('criminals');
         });
     }
 
