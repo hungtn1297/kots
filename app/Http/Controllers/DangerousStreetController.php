@@ -126,7 +126,10 @@ class DangerousStreetController extends Controller
                 $dsStreet[$address] = $latLongArr;
                 if(count($dsStreet[$address]) == 5){
                     $latLng = $this->getLatLongStartEnd($dsStreet[$address]);
-                    $this->setDSByLatLng($latLng[0], $latLng[1], $latLng[2], $latLng[3], $address);
+                    // dd($latLng);
+                    if(!empty($latLng)){
+                        $this->setDSByLatLng($latLng[0], $latLng[1], $latLng[2], $latLng[3], $address);
+                    }
                 }
             }
             
@@ -135,7 +138,7 @@ class DangerousStreetController extends Controller
     }
 
     public function getLatLongStartEnd($latLngArr){
-        $max = 0;
+        $max = -1;
         $otherController = new OtherController();
         $returnArr = [];
         for ($i=0; $i < count($latLngArr)-1; $i++) { 

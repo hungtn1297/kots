@@ -18,8 +18,8 @@ class CreateCriminalInCasesTable extends Migration
             $table->unsignedBigInteger('caseId');
             $table->unsignedBigInteger('criminalId');
             $table->timestamps();
-            $table->foreign('caseId')->references('id')->on('cases');
-            $table->foreign('criminalId')->references('id')->on('criminals');
+            // $table->foreign('caseId')->references('id')->on('cases')->onDelete('cascade');
+            // $table->foreign('criminalId')->references('id')->on('criminals')->onDelete('cascade');
         });
     }
 

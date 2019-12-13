@@ -87,15 +87,11 @@ class KnightTeamController extends Controller
             $flag = 0;
             foreach ($teams as $team) {
                 foreach ($team->knight as $knight) {
-                    if($knight->isLeader = 1){
+                    if($knight->isLeader == 1){
                         $leader = $knight;
+                        $team['leaderName'] = $leader->name;
+                        $flag = 1;
                     }
-                    $team['leaderName'] = $leader->name;
-                    $flag = 1;
-                    break;
-                }
-                if($flag == 1){
-                    break;
                 }
             }
             // dd($teams);
@@ -175,5 +171,56 @@ class KnightTeamController extends Controller
             'message' => 'SUCCESS',
             'data' => $data
         ]);
+    }
+
+    public function changeTeamStatus(Request $request){
+        $flag = true;
+        $teamId = $request->id;
+        $status = $request->status;
+        // dd($teamId);
+        DB::beginTransaction();
+        $team = KnightTeam::find($teamId);
+        $team->status = $status;
+        $flag =  $flag && $team->save();
+        // dd($flag);
+        
+        if($status = 1){
+            $leaderInTeam = Users::where('team_id', $teamId)
+                            ->where('isLeader', 1)->first();
+            $leaderInTeam->status = 1;
+            $flag = $flag && $leaderInTeam->save();
+            // dd($flag);
+        }
+
+        if($status  = -1){
+            $teamMembers = Users::where('team_id', $teamId)->get();
+            foreach ($teamMembers as $member) {
+                $member->isDisable = 1;
+                $flag =  $flag && $member->save();
+            }
+        }
+        
+        if($flag == true){
+            DB::commit();
+            return redirect()->action('KnightTeamController@getTeam');
+        }else{
+            DB::rollback();
+            $error = 'Đã xảy ra lỗi';
+            return view('error')->with(compact('error'));
+        }
+    }
+
+    public function getTeamDetail(Request $request){
+        $teamId = $request->id;
+        // dd($teamId);
+        $knightTeam = KnightTeam::find($teamId);
+
+        $teamMembers = Users::where('team_id', $teamId)
+                            ->where('role', 2)
+                            ->get();
+
+        // dd($knightTeam);
+
+        return view('admin/KnightTeam/DetailKnightTeam')->with(compact('knightTeam','teamMembers'));
     }
 }

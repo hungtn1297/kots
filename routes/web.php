@@ -33,6 +33,8 @@ Route::get('map', function(){
 });
 
 Route::prefix('admin')->group(function(){
+    Route::get('/','AnalyticController@get');
+    Route::get('/analytic','AnalyticController@get');
     Route::prefix('citizen')->group(function(){
         Route::get('list','CitizenController@get');
         Route::get('viewprofile','CitizenController@viewProfile');
@@ -53,6 +55,8 @@ Route::prefix('admin')->group(function(){
             return view('admin/KnightTeam/CreateKnightTeam')->with(compact('listKnight'));
         });
         Route::post('create', 'KnightTeamController@createTeam');
+        Route::post('changeTeamStatus', 'KnightTeamController@changeTeamStatus');
+        Route::get('detail','KnightTeamController@getTeamDetail');
     });
     Route::prefix('news')->group(function(){
         Route::get('crawl', function(){return view('admin/News/CrawlNews');});

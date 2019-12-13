@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
             $table->integer('isLeader')->default(0);
             $table->string('password')->nullable();
             $table->timestamps();
-            $table->foreign('team_id')->references('id')->on('knight_teams')->onDelete('cascade');
+            // $table->foreign('team_id')->references('id')->on('knight_teams')->onDelete('cascade');
         });
     }
 

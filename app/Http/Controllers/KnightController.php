@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Users;
 use App\CaseDetail;
 use App\Cases;
+use App\Criminal;
+use App\CriminalInCase;
 use App\Knight;
 use App\KnightTeam;
+use DB;
 
 class KnightController extends Controller
 {
@@ -309,7 +312,9 @@ class KnightController extends Controller
 
     public function getKnightNamePhoneFormat($knightId){
         $knight = Users::find($knightId);
-        $phone = substr_replace($knight->id,'******',0,strlen($knight->id)-4);
+        // $phone = substr_replace($knight->id,'******',0,strlen($knight->id)-4);
+        $phone = $knight->id;
         return 'Hiệp sĩ '. $knight->name. ' - '. $phone;
     }
+
 }    

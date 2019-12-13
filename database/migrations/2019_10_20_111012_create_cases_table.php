@@ -30,11 +30,12 @@ class CreateCasesTable extends Migration
             $table->string('endLatitude')->nullable();
             $table->integer('rate')->nullable();
             $table->text('notice')->nullable();
+            $table->text('knightReport')->nullable();
             $table->string('key')->nullable();
             $table->timestamps();
-            $table->foreign('citizenId')->references('id')->on('users');
-            $table->foreign('knightConfirmId')->references('id')->on('users');
-            $table->foreign('knightCloseId')->references('id')->on('users');
+            // $table->foreign('citizenId')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('knightConfirmId')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('knightCloseId')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

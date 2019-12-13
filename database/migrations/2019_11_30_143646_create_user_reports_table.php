@@ -20,8 +20,8 @@ class CreateUserReportsTable extends Migration
             $table->string('reporterId')->nullable();
             $table->string('caseId')->nullable();
             $table->timestamps();
-            $table->foreign('userId')->references('id')->on('users');
-            $table->foreign('reporterId')->references('id')->on('users');
+            // $table->foreign('userId')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('reporterId')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

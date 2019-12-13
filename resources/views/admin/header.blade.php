@@ -80,7 +80,7 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                                <a href="#"><img src="{{URL::asset('admin/image/report.png')}}" width="20" height="20"> Thống kê</a>
+                                <a href="{{url('admin/analytic')}}"><img src="{{URL::asset('admin/image/report.png')}}" width="20" height="20"> Thống kê</a>
                                 
                                 <!-- /.nav-second-level -->
                             </li>
@@ -107,9 +107,6 @@
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="{{url('admin/knightTeam/list')}}">Danh sách nhóm hiệp sĩ</a>
-                                </li>
-                                <li>
-                                    <a href="{{url('admin/knightTeam/create')}}">Tạo mới nhóm hiệp sĩ</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

@@ -38,8 +38,17 @@ class UserReportController extends Controller
     public function reportUserById($userId, $reason, $reporter, $caseId){
         $userReport = new UserReport();
         $user = Users::find($userId);
+        // dd($user);
         $result = false;
-        if($user->isDisable == 0){
+
+        $userAlreadyReported = UserReport::where('userId', $userId)
+                                        ->where('caseId', $caseId)
+                                        ->first();
+        if(isset($userAlreadyReported)){
+            return $this->returnAPI(200, 'Sự cố này đã được báo cáo',[]);
+        }
+        
+        if($user->isDisable == 1){
             return 2;
         }
 
@@ -63,6 +72,7 @@ class UserReportController extends Controller
                 $messageController = new MessageController();
                 $messageController->sendMessageToCitizen($case, $reporter, $user->token, $type);
             }
+            // dd($userReport);
         }
 
         return $result;

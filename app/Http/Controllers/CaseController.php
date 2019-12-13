@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use DB;
 use App\Cases;
 use App\Users;
+use App\Criminal;
 use App\CaseDetail;
-use App\Http\Controllers\Controller;
+use App\CriminalInCase;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\KnightController;
 use App\Http\Controllers\FirebaseController;
 
@@ -35,14 +37,14 @@ class CaseController extends Controller
         $status = $json['status'];
         $caseId = $json['caseId'];
         $case = Cases::find($caseId);
+        $knightController = new KnightController();
+        $userReportController = new UserReportController();
         // dd(isset($case));     
         if(isset($case)){
             $flag = true;
             DB::beginTransaction();
             if($status == $this->CONFIRM){
                 $knightId = str_replace("+84","0",$json['phone']);
-                $knightController = new KnightController();
-                $userReportController = new UserReportController();
                 $caseDetail = $knightController->joinCase($knightId, $case->id);
                 if($caseDetail == 'INCASE'){
                     $case->delete();
@@ -74,7 +76,8 @@ class CaseController extends Controller
                         $messageController = new MessageController();
                         $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'close');
                     }elseif ($status == $this->FAKE) {
-                        $userReportController->report;
+                        // dd(1234);
+                        $flag = $flag && $userReportController->reportUserById($case->citizenId, 'Gửi thông tin giả', $knightId, $case->id);
                     }
                     $flag = $flag && $case->save();
                     //Release tất cả Hiệp sĩ, set status về bằng free
@@ -385,6 +388,7 @@ class CaseController extends Controller
             if($flag == true){
                 DB::commit();
                 $resultCode = 200;
+                $message = 'SUCCESS';
                 $data = $case;
             }
             else{
@@ -448,5 +452,45 @@ class CaseController extends Controller
             $message = 'Không tìm thấy sự cố';
         }
         return $this->returnAPI($resultCode,$message,$data);
+    }
+
+    
+    public function reportCase(){
+        $resultCode = 3000;
+        $message  = 'FAIL';
+        $data = [];
+
+        $flag = true;
+        $json = json_decode(file_get_contents('php://input'), true);
+        $caseId = $json['caseId'];
+        $case = Cases::find($caseId);
+        DB::beginTransaction();
+        if(isset($json['report'])){
+            $case->knightReport = $json['report'];
+            $flag = $flag && $case->save();
+        }
+        if(isset($json['criminalName'])){
+            $criminal = new Criminal();
+            $criminal->name = $json['criminalName'];
+            $criminal->age = $json['criminalAge'];
+            $criminal->image = $json['criminalImage'];
+            $flag = $flag && $criminal->save();
+
+            $criminalInCase = new CriminalInCase();
+            $criminalInCase->caseId = $caseId;
+            $criminalInCase->criminalId = $criminal->id;
+            $flag  = $flag && $criminalInCase->save();
+
+            $data = $criminal;
+        }
+        if($flag ==true){
+            DB::commit();
+            $resultCode = 200;
+            $message = 'SUCCESS';
+        }else{
+            DB::rollback();
+        }
+        return $this->returnAPI($resultCode, $message, $data);
+
     }
 }
