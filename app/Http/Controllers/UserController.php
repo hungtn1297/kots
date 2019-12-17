@@ -173,9 +173,11 @@ class UserController extends Controller
         $id = str_replace('+84','0',$json['phone']);
         $user = Users::find($id);
 
-        if(isset($user)){
+        if($user){
             $user->token = '';
             $user->save();
+            $resultCode = 200;
+            $message = 'SUCCESS';
             $data = $user;
         }else{
             $message = "Not found user";
