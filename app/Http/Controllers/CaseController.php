@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\KnightController;
 use App\Http\Controllers\FirebaseController;
+use App\UserReport;
 
 class CaseController extends Controller
 {
@@ -64,7 +65,9 @@ class CaseController extends Controller
             }elseif($status == $this->SUCCESS || $status == $this->FAIL || $status == $this->FAKE){
                 $knightId = str_replace("+84","0",$json['phone']);
                 $caseDetail = CaseDetail::where('caseId', $caseId)
-                                        ->where('knightId',$knightId)->first();
+                                        ->where('knightId',$knightId)
+                                        ->where('isIgnore',0)
+                                        ->first();
                 if(isset($caseDetail)){
                     $case->knightCloseId = $knightId;
                     $case->status = $status;
@@ -204,7 +207,10 @@ class CaseController extends Controller
     }
 
     public function getCaseByKnightId($knightId){
-        $caseDetails  = CaseDetail::where('knightId', $knightId)->get();
+        $caseDetails  = CaseDetail::where('knightId', $knightId)
+                                ->where('isIgnore',0)
+                                ->get();
+        // dd($caseDetails);
         $newCases = Cases::where('status',0)
                         ->orWhere('status',1)
                         ->get();
@@ -212,16 +218,20 @@ class CaseController extends Controller
         $listCaseId = array();
         if($newCases->count() > 0){
             foreach ($newCases as $newCase) {
+                // dd($this->checkKnightIgnoreCase($knightId, $newCase->id));
+                if($this->checkKnightIgnoreCase($knightId, $newCase->id) == false){
+                    $citizenName = $newCase->user->name;
+                    $newCase['citizenName']  = $citizenName;
+                    $caseId = $newCase->id;
+                    if(!in_array($caseId, $listCaseId)){
+                        array_push($listCaseId, $caseId);
+                        array_push($case, $newCase);    
+                        // dd($case);
+                    }
+                }
                 // dd($newCase->case->id);
                 // dd($newCase->user);
-                $citizenName = $newCase->user->name;
-                $newCase['citizenName']  = $citizenName;
-                $caseId = $newCase->id;
-                if(!in_array($caseId, $listCaseId)){
-                    array_push($listCaseId, $caseId);
-                    array_push($case, $newCase);    
-                    // dd($case);
-                }
+                
             }
         }
         // dd($caseDetails);
@@ -492,5 +502,52 @@ class CaseController extends Controller
         }
         return $this->returnAPI($resultCode, $message, $data);
 
+    }
+
+    public function getReportInfo($caseId){
+        $reportInfo = UserReport::where('caseId', $caseId)->first();
+
+        $criminalInfo = CriminalInCase::where('caseId',$caseId)->first();
+
+        if(isset($criminalInfo)){
+            $criminal = Criminal::find($criminalInfo->criminalId);
+            $reportInfo['criminalInfo'] = $criminal;
+        }
+
+        $reportInfo = $reportInfo ?? 0;
+
+        return $reportInfo;
+    }
+
+    public function ignoreCase(){
+        $resultCode = 3000;
+        $message = 'FAIL';
+        $data = [];
+
+        $json = json_decode(file_get_contents('php://input'), true);
+        $knightId = str_replace('+84','0', $json['phone']);
+        $caseId = $json['caseId'];
+
+        $knightController = new KnightController();
+        $result = $knightController->ignoreCase($knightId, $caseId);
+
+        if($result == true){
+            $resultCode = 200;
+            $message = 'SUCCESS';
+        }
+        return $this->returnAPI($resultCode, $message, $data);
+    }
+
+    public function checkKnightIgnoreCase($knightId, $caseId){
+        $caseDetail = CaseDetail::where('knightId', $knightId)
+                                ->where('caseId', $caseId)
+                                ->where('isIgnore', 1)
+                                ->first();
+        // dd($caseDetail);
+        if(!$caseDetail){
+            // dd(123);
+            return true;
+        }
+        return false;
     }
 }

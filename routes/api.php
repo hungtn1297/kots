@@ -25,6 +25,7 @@ Route::post('findKnight','KnightController@findKnight');
 Route::post('approvedKnight','KnightController@changeKnightStatusAPI');
 Route::post('ignoreKnight','KnightController@changeKnightStatusAPI');
 Route::post('requestLeaveTeam','KnightController@requestLeaveTeam');
+Route::post('callSupport','KnightController@callSupport');
 
 Route::post('getCase','CaseController@get');
 Route::post('sendCase','CaseController@sendCase');
@@ -36,6 +37,7 @@ Route::post('cancelCase', 'CaseController@changeCaseStatus');
 Route::post('rateCase', 'CaseController@rateCase');
 Route::post('reportCase','CaseController@reportCase');
 Route::post('fakeCase','CaseController@changeCaseStatus');
+Route::post('ignoreCase','CaseController@ignoreCase');
 
 Route::post('findUser','UserController@findUser');
 Route::post('updateProfile','UserController@updateProfile');

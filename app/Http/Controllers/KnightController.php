@@ -106,6 +106,7 @@ class KnightController extends Controller
     public function joinCase($knightId, $caseId){
         $knightIsInAnyCase = CaseDetail::where('knightId', $knightId)
                                         ->where('isLeave', 0)
+                                        ->where('isIgnore',0)
                                         ->where('status', 1)
                                         ->latest()
                                         ->first();
@@ -114,6 +115,8 @@ class KnightController extends Controller
 
         $knightInCase = CaseDetail::where('caseId', $caseId)
                                     ->where('knightId',$knightId)
+                                    ->where('isLeave', 0)
+                                    ->where('isIgnore', 0)
                                     ->first();
         $messageController = new MessageController();
 
@@ -244,6 +247,17 @@ class KnightController extends Controller
         return false;
     }
 
+    public function ignoreCase($knightId, $caseId){
+        $caseDetail = new CaseDetail();
+
+        $caseDetail->knightId = $knightId;
+        $caseDetail->caseId = $caseId;
+        $caseDetail->status = 0;
+        $caseDetail->isIgnore = 1;
+
+        return $caseDetail->save();
+    }
+
     public function getJoincaseTime($knightId, $caseId){
         $caseDetail = CaseDetail::where('knightId', $knightId)
                                 ->where('caseId', $caseId)
@@ -315,6 +329,30 @@ class KnightController extends Controller
         // $phone = substr_replace($knight->id,'******',0,strlen($knight->id)-4);
         $phone = $knight->id;
         return 'Hiệp sĩ '. $knight->name. ' - '. $phone;
+    }
+
+    public function callSupport(){
+        $resultCode = 3000;
+        $message = 'FAIL';
+        $data = [];
+
+        $json = json_decode(file_get_contents('php://input'), true);
+        $knightId = str_replace('+84','0',$json['phone']);
+        $caseId = $json['caseId'];
+        $knight = Users::find($knightId);
+        
+        if($knight){
+            $messageController = new MessageController();
+            $team = Users::where('team_id', $knight->team_id)
+                        ->where('id','!=',$knightId)
+                        ->get();
+            foreach ($team as $knight) {
+                $messageController->sendMessageToKnight($knight->token,'support', $caseId);
+            }
+            $resultCode = 200;
+            $message = 'SUCCESS';
+        }
+        return $this->returnAPI($resultCode,$message,$data);
     }
 
 }    

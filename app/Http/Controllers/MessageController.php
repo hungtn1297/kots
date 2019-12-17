@@ -242,7 +242,7 @@ class MessageController extends Controller
         
     }
 
-    public function sendMessageToKnight($knightToken, $action){
+    public function sendMessageToKnight($knightToken, $action, $caseId = 0){
         $optionBuilder = new OptionsBuilder();
         $dataBuilder = new PayloadDataBuilder();
 
@@ -261,7 +261,12 @@ class MessageController extends Controller
             case 'ignoreJoin':
                 $notificationBuilder = new PayloadNotificationBuilder('Không chấp thuận yêu cầu tham gia nhóm');
                 break;
-            
+            case 'support':
+                if($caseId != 0){
+                    $notificationBuilder = new PayloadNotificationBuilder('Một hiệp sĩ trong nhóm đang yêu cầu trợ giúp');
+                    $case = Cases::find($caseId);
+                    $dataBuilder->addData(['item' => $case]);
+                }
             default:
                 # code...
                 break;
