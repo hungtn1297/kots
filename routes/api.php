@@ -38,6 +38,7 @@ Route::post('rateCase', 'CaseController@rateCase');
 Route::post('reportCase','CaseController@reportCase');
 Route::post('fakeCase','CaseController@changeCaseStatus');
 Route::post('ignoreCase','CaseController@ignoreCase');
+Route::post('getCaseById','CaseController@getCaseById');
 
 Route::post('findUser','UserController@findUser');
 Route::post('updateProfile','UserController@updateProfile');

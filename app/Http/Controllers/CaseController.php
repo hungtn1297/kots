@@ -551,4 +551,23 @@ class CaseController extends Controller
         }
         return false;
     }
+
+    public function getCaseById(){
+        $resultCode = 3000;
+        $message = 'FAIL';
+        $data = [];
+
+        $json = json_decode(file_get_contents('php://input'), true);
+        $caseId = $json['caseId'];
+        $case = Cases::with('caseDetail')
+                    ->where('id',$caseId)
+                    ->first();
+        // dd($case);
+        if(isset($case)){
+            $resultCode = 200;
+            $message = 'SUCCESS';
+            $data = $case;
+        }
+        return $this->returnAPI($resultCode, $message, $data);
+    }
 }

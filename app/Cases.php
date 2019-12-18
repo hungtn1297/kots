@@ -13,6 +13,8 @@ class Cases extends Model
     }
 
     public function caseDetail(){
-        return $this->hasMany('App\CaseDetail','caseId');
+        return $this->hasMany('App\CaseDetail','caseId')
+                    ->where('isLeave', 0)
+                    ->where('isIgnore', 0);
     }
 }
