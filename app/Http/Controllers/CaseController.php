@@ -216,7 +216,7 @@ class CaseController extends Controller
                         ->get();
         $case = array();
         $listCaseId = array();
-        dd($newCases);
+        // dd($newCases);
         if($newCases->count() > 0){
             foreach ($newCases as $newCase) {
                 echo "CHECK: ". $this->checkKnightIgnoreCase($knightId, $newCase->id);
