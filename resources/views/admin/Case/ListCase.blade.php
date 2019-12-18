@@ -46,7 +46,11 @@
                                     @elseif($case->status == 3)
                                         <td style="color: red">Thất bại</td> 
                                     @elseif($case->status == 4)
-                                        <td style="color: gray">Đang chờ</td>               
+                                        <td style="color: gray">Đang chờ</td>
+                                    @elseif($case->status == 5)
+                                        <td style="color: orange">Bị huỷ</td>
+                                    @elseif($case->status == 6)
+                                        <td style="color: darkblue">Sự cố giả</td>              
                                     @else
                                         <td style="color: green">Thua =))</td>
                                     @endif

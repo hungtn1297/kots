@@ -106,8 +106,8 @@
                     }
                     
                     createAxisAndSeries("totalCase", "Tất cả sự cố", false, "circle");
-                    createAxisAndSeries("successCase", "Sự cố thành công", true, "triangle");
-                    createAxisAndSeries("failCase", "Sự cố thất bại", true, "rectangle");
+                    // createAxisAndSeries("successCase", "Sự cố thành công", true, "triangle");
+                    // createAxisAndSeries("failCase", "Sự cố thất bại", true, "rectangle");
                     
                     // Add legend
                     chart.legend = new am4charts.Legend();
