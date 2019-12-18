@@ -558,12 +558,23 @@ class CaseController extends Controller
         $data = [];
 
         $json = json_decode(file_get_contents('php://input'), true);
+        $knightId = str_replace('+84','0',$json['phone']);
         $caseId = $json['caseId'];
         $case = Cases::with('caseDetail')
                     ->where('id',$caseId)
                     ->first();
         // dd($case);
         if(isset($case)){
+            $caseDetail = CaseDetail::where('knightId', $knightId)
+                                ->where('caseId', $caseId)
+                                ->where('isLeave', 0)
+                                ->where('isIgnore', 0)
+                                ->first();
+            if(isset($caseDetail)){
+                $case['inCase'] = true;
+            }else{
+                $case['inCase'] = false;
+            }
             $resultCode = 200;
             $message = 'SUCCESS';
             $data = $case;
