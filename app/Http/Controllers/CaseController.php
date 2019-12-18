@@ -219,7 +219,7 @@ class CaseController extends Controller
         // dd($newCases);
         if($newCases->count() > 0){
             foreach ($newCases as $newCase) {
-                echo "CHECK: ". $this->checkKnightIgnoreCase($knightId, $newCase->id);
+                // echo "CHECK: ". $this->checkKnightIgnoreCase($knightId, $newCase->id);
                 if($this->checkKnightIgnoreCase($knightId, $newCase->id) == false){
                     $citizenName = $newCase->user->name;
                     $newCase['citizenName']  = $citizenName;
@@ -545,7 +545,7 @@ class CaseController extends Controller
                                 ->where('isIgnore', 1)
                                 ->first();
         // dd($caseDetail);
-        if(!$caseDetail){
+        if($caseDetail){
             // dd(123);
             return true;
         }
