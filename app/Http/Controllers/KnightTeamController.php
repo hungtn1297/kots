@@ -82,11 +82,11 @@ class KnightTeamController extends Controller
                 'data' => $teams
             ]);
         }else{
-            $teams = KnightTeam::with('knight')->get();
+            $teams = KnightTeam::with('adminGetKnight')->get();
             // dd($teams);
             $flag = 0;
             foreach ($teams as $team) {
-                foreach ($team->knight as $knight) {
+                foreach ($team->adminGetKnight as $knight) {
                     if($knight->isLeader == 1){
                         $leader = $knight;
                         $team['leaderName'] = $leader->name;

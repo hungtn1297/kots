@@ -11,4 +11,7 @@ class KnightTeam extends Model
     public function knight(){
         return $this->hasMany('App\Users','team_id')->whereIn('status',[1,2,3]);
     }
+    public function adminGetKnight(){
+        return $this->hasMany('App\Users','team_id')->whereIn('status',[0,1,2,3]);
+    }
 }
