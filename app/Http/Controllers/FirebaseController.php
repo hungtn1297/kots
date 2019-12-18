@@ -160,4 +160,15 @@ class FirebaseController extends Controller
         return $location;
     }
 
+    public function getKnightInCaseLocation($knightId, $caseId){
+        $db = $this->getFirebaseDB();
+        $locationList = [];
+        $knightLocationList = $db->getReference('knight/caseID/'.$caseId)
+                    ->getChild($knightId)
+                    ->getValue();
+        foreach ($knightLocationList as $knightLocation) {
+            $knightLocation;
+        }
+    }
+
 }

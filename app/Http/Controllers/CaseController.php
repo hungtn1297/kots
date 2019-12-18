@@ -216,9 +216,10 @@ class CaseController extends Controller
                         ->get();
         $case = array();
         $listCaseId = array();
+        echo $newCases;
         if($newCases->count() > 0){
             foreach ($newCases as $newCase) {
-                // dd($this->checkKnightIgnoreCase($knightId, $newCase->id));
+                echo "CHECK: ". $this->checkKnightIgnoreCase($knightId, $newCase->id);
                 if($this->checkKnightIgnoreCase($knightId, $newCase->id) == false){
                     $citizenName = $newCase->user->name;
                     $newCase['citizenName']  = $citizenName;

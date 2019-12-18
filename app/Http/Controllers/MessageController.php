@@ -271,6 +271,7 @@ class MessageController extends Controller
                 # code...
                 break;
         }
+        $dataBuilder->addData(['action' => $action]);
         $notificationBuilder->setBody('Bấm để xem chi tiết')
                         ->setSound('default'); 
         
