@@ -143,6 +143,8 @@ class CaseController extends Controller
         $json = json_decode(file_get_contents($url));
         $address = ($json->status=="OK")?$json->results[1]->formatted_address:'';
         $case->address = $address;
+        $address = explode(',', $address);
+        $case->district = trim($address[count($address) - 3]);
         $case->save();
 
         // $case->key = base64_encode($case->id);
@@ -168,6 +170,8 @@ class CaseController extends Controller
         $json = json_decode(file_get_contents($url));
         $address = ($json->status=="OK")?$json->results[1]->formatted_address:'';
         $case->address = $address;
+        $address = explode(',', $address);
+        $case->district = trim($address[count($address) - 3]);
         $case->save();
 
         // $case->key = base64_encode($case->id);

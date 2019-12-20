@@ -26,6 +26,7 @@ class CreateCasesTable extends Migration
             $table->string('startLongitude');
             $table->string('startLatitude');
             $table->string('address');
+            $table->string('district');
             $table->string('endLongitude')->nullable();
             $table->string('endLatitude')->nullable();
             $table->integer('rate')->nullable();
