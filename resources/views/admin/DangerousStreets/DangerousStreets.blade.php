@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Đoạn đường nguy hiểm</title>
-</head>
-<body>
-    @include('admin/header')
+@extends('admin/master')
+@section('content')
+@section('title')
+    Đoạn đường nguy hiểm
+@endsection
     <div id="page-wrapper">
             <div class="container-fluid">
                 {{-- {{$listDSs}} --}}
@@ -222,9 +217,6 @@
         <!-- /#page-wrapper -->
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRJl0JFqHhM8jQ24VrJnzJE8HarKJ1qF0&callback=myMap"></script>
         
-    @include('admin/footer')
-</body>
-
-</html>
+@stop
 
 

@@ -31,6 +31,12 @@ Route::get('time','CitizenController@time');
 Route::get('map', function(){
     return view('admin/DangerousStreets/map');
 });
+Route::get('test1',function(){
+    return view('test1');
+});
+Route::get('test2',function(){
+    return view('test2');
+});
 
 Route::prefix('admin')->group(function(){
     Route::get('/','AnalyticController@get');

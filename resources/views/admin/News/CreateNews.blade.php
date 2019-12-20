@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-    <title>Tạo mới tin tức</title>
-</head>
-<body>
-    @include('admin/header')
+@extends('admin/master')
+@section('content')
+@section('title')
+    Tạo mới tin tức
+@endsection
     <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row">
@@ -47,12 +41,11 @@
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
-    @include('admin/footer')
-    <script>
-        // Thay thế <textarea id="post_content"> với CKEditor
-        CKEDITOR.replace( 'content' );// tham số là biến name của textarea
-    </script>
-</body>
-</html>
+        <script>
+            // Thay thế <textarea id="post_content"> với CKEditor
+            CKEDITOR.replace( 'content' );// tham số là biến name của textarea
+        </script>
+@stop
+
 
 

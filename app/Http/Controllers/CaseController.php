@@ -111,7 +111,7 @@ class CaseController extends Controller
                 $case->status = $status;
                 $case->save();
             }
-            if($flag){
+            if($flag == true){
                 DB::commit();
                 $resultCode = 200;
                 $message = "Success";
