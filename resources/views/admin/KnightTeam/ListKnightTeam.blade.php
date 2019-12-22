@@ -11,20 +11,7 @@
                         <small>Danh sách</small>
                     </h1>
                 </div>
-                @if (count($countTeam) != 0)
-                    @section('requestTeam')
-                    <span style="color: white; 
-                                            border: 1px solid red; 
-                                            background-color: red;
-                                            display: inline-block;
-                                            border-radius: 50%;
-                                            width: 20px;
-                                            height: 20px;
-                                            text-align: center;
-                                "><b>{{count($countTeam)}}</b>
-                    </span>
-                    @endsection
-                @endif
+                {{--  --}}
                 
                 <!-- /.col-lg-12 -->
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
