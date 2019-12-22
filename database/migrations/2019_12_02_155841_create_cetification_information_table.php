@@ -16,7 +16,7 @@ class CreateCetificationInformationTable extends Migration
         Schema::create('cetification_information', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('userId');
-            $table->string('image');
+            $table->text('image');
             $table->string('description');
             $table->timestamps();
             // $table->foreign('userId')->references('id')->on('users')->onDelete('cascade');

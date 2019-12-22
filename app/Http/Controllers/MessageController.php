@@ -120,12 +120,12 @@ class MessageController extends Controller
 
     public function sendMessageToCitizen($case, $knightId, $citizenToken, $type = 'join'){
         
-
+        $knightController = new KnightController();
         $optionBuilder = new OptionsBuilder();
         $dataBuilder = new PayloadDataBuilder();
         $optionBuilder->setTimeToLive(60*20);
         try {
-            $case = $case->where("id",$case->id)->with('user')->first();
+            $case = $case->where("id",$case->id)->with('user')->with('caseDetail')->first();
             $knight = Users::find($knightId);
 
             if($type == 'join'){
@@ -141,14 +141,26 @@ class MessageController extends Controller
                 $notificationBuilder->setBody('Hiệp sĩ '.$knight->name.' đã đóng sự cố')
                                     ->setSound('default');
             }elseif($type == 'banned'){
-                $notificationBuilder = new PayloadNotificationBuilder('Bạn đã bị khoá tài khoản, sau khi hiệp sĩ '.$knight->name. 'cho bạn ăn sẹo');
+                $notificationBuilder = new PayloadNotificationBuilder('Bạn đã bị khoá tài khoản, sau khi hiệp sĩ '.$knight->name. 'báo cáo bạn');
                 $notificationBuilder->setBody('Bạn đã bị khoá tài khoản')
                                     ->setSound('default');
             }elseif($type == 'report'){
-                $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' vừa đánh sẹo bạn');
-                $notificationBuilder->setBody('Bạn vừa ăn sẹo, hãy cẩn thận')
+                $notificationBuilder = new PayloadNotificationBuilder('Hiệp sĩ '.$knight->name.' vừa báo cáo bạn');
+                $notificationBuilder->setBody('Bạn vừa báo cáo, hãy cẩn thận')
                                     ->setSound('default');
             }
+
+            if(isset($case['knightConfirmId'])){
+                $case['knightConfirmId'] = $knightController->getKnightNamePhoneFormat($case['knightConfirmId']);
+            }
+            if(isset($case['knightCloseId'])){
+                $case['knightCloseId'] = $knightController->getKnightNamePhoneFormat($case['knightCloseId']);
+            
+            }
+            foreach ($case->caseDetail as $detail) {
+                $detail['knightInfo'] = $knightController->getKnightNamePhoneFormat($detail->knightId);
+            }
+            // dd($case);
             $dataBuilder->addData(['item' => $case]);
             
 

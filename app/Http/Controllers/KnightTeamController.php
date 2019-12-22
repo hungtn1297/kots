@@ -95,8 +95,8 @@ class KnightTeamController extends Controller
                 }
             }
             // dd($teams);
-            $countTeam = KnightTeam::where('status',0)->get();
-            return view('admin/KnightTeam/ListKnightTeam')->with(compact('teams', 'countTeam'));
+            // $countTeam = KnightTeam::where('status',0)->get();
+            return view('admin/KnightTeam/ListKnightTeam')->with(compact('teams'));
         }
     }
 

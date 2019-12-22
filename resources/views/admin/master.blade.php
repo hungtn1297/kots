@@ -104,7 +104,19 @@
                         </li>
                         <li>
                             <a href="#"><img src="{{URL::asset('admin/image/team.png')}}" width="20" height="20">Nhóm hiệp sĩ 
-                                @yield('requestTeam')
+                                {{-- @yield('requestTeam') --}}
+                                @if ($countTeam != 0)
+                                    <span style="color: white; 
+                                                border: 1px solid red; 
+                                                background-color: red;
+                                                display: inline-block;
+                                                border-radius: 50%;
+                                                width: 20px;
+                                                height: 20px;
+                                                text-align: center;
+                                    "><b>{{$countTeam}}</b>
+                                    </span>
+                                @endif
                                 <span class="fa arrow"></span>
                             </a>
                             <ul class="nav nav-second-level">
