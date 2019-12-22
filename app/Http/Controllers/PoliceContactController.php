@@ -63,4 +63,13 @@ class PoliceContactController extends Controller
             return view('admin/error')->with(compact('error'));
         }
     }
+
+    public function redirectCreate(){
+        return view('admin/PoliceContact/CreatePoliceContact');
+    }
+
+    public function redirectEdit(Request $request){
+        $policeContact = PoliceContact::find($request->id);
+        return view('admin/PoliceContact/EditPoliceContact')->with(compact('policeContact'));
+    }
 }

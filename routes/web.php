@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DangerousStreetController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OtherController;
 use App\Http\Controllers\PoliceContactController;
 use Illuminate\Http\Request;
@@ -53,26 +54,23 @@ Route::prefix('admin')->group(function(){
     });
     Route::prefix('knightTeam')->group(function(){
         Route::get('list','KnightTeamController@getTeam');
-        Route::get('create',function(){
-            $listKnight = App\Users::where('role', 2)
-                                    ->where('team_id', null)
-                                    ->where('status', 0)
-                                    ->get();
-            return view('admin/KnightTeam/CreateKnightTeam')->with(compact('listKnight'));
-        });
-        Route::post('create', 'KnightTeamController@createTeam');
+        // Route::get('create',function(){
+        //     $listKnight = App\Users::where('role', 2)
+        //                             ->where('team_id', null)
+        //                             ->where('status', 0)
+        //                             ->get();
+        //     return view('admin/KnightTeam/CreateKnightTeam')->with(compact('listKnight'));
+        // });
+        // Route::post('create', 'KnightTeamController@createTeam');
         Route::post('changeTeamStatus', 'KnightTeamController@changeTeamStatus');
         Route::get('detail','KnightTeamController@getTeamDetail');
     });
     Route::prefix('news')->group(function(){
-        Route::get('crawl', function(){return view('admin/News/CrawlNews');});
+        Route::get('crawl', 'NewsController@redirectCrawl');
         Route::post('crawl', 'NewsController@crawlNews');
         Route::get('list', 'NewsController@get');
-        Route::get('create', function(){return view('admin/News/CreateNews');});
-        Route::get('edit',function(Request $request){
-            $news = App\News::find($request->id);
-            return view('admin/News/EditNews')->with(compact('news'));
-        });
+        Route::get('create', 'NewsController@redirectCreate');
+        Route::get('edit', 'NewsController@redirectEdit');
         Route::post('create','NewsController@create');
         Route::delete('delete','NewsController@delete');
     });
@@ -85,14 +83,9 @@ Route::prefix('admin')->group(function(){
     });
     Route::prefix('policeContact')->group(function(){
         Route::get('list','PoliceContactController@get');
-        Route::get('create', function(){
-            return view('admin/PoliceContact/CreatePoliceContact');
-        });
+        Route::get('create', 'PoliceContactController@redirectCreate');
         Route::post('create', 'PoliceContactController@create');
-        Route::get('edit', function(Request $request){
-            $policeContact = App\PoliceContact::find($request->id);
-            return view('admin/PoliceContact/EditPoliceContact')->with(compact('policeContact'));
-        });
+        Route::get('edit', 'PoliceContactController@redirectEdit');
         Route::delete('delete','PoliceContactController@delete');
     });
     Route::prefix('dangerousStreets')->group(function(){
@@ -102,10 +95,7 @@ Route::prefix('admin')->group(function(){
     });
     Route::prefix('feedback')->group(function(){
         Route::get('/list','FeedbackController@getFeedback');
-        Route::get('/detail',function(Request $request){
-            $feedback = App\Feedback::with('user')->find($request->id);
-            return view('admin/Feedback/DetailFeedback')->with(compact('feedback'));
-        });
+        Route::get('/detail','FeedbackController@redirectDetail');
     });
 });
 

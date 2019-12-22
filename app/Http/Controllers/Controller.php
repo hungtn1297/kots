@@ -14,7 +14,7 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        $countTeam = count(KnightTeam::where('status',1)->get());
+        $countTeam = count(KnightTeam::where('status',0)->get());
         // dd($countTeam);
         view()->share('countTeam', $countTeam);
     }

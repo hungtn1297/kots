@@ -137,4 +137,18 @@ class NewsController extends Controller
             return view('admin/error')->with(compact('error'));
         }
     }
+
+    public function redirectCrawl(){
+        return view('admin/News/CrawlNews');
+    }
+
+    public function redirectCreate(){
+        return view('admin/News/CreateNews');
+    }
+
+    public function redirectEdit(Request $request){
+            $news = News::find($request->id);
+            return view('admin/News/EditNews')->with(compact('news'));
+    }
+    
 }

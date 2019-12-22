@@ -69,4 +69,9 @@ class FeedbackController extends Controller
         // dd($listFeedbacks);
         return view('admin/Feedback/ListFeedback')->with(compact('listFeedbacks'));
     }
+
+    public function redirectDetail(Request $request){
+        $feedback = Feedback::with('user')->find($request->id);
+        return view('admin/Feedback/DetailFeedback')->with(compact('feedback'));
+    }
 }
