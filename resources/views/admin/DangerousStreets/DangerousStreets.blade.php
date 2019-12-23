@@ -203,7 +203,7 @@
                             <td>{{$ds->id}}</td>
                             <td>{{$ds->description}}</td>
                             <td>
-                                <form action="{{url('admin/dangerousStreets/unsetDS')}}" method="post">
+                                <form action="{{url('admin/dangerousStreets/unsetDS')}}" method="post" onsubmit="submitDelete();">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" name="id" value="{{$ds->id}}">

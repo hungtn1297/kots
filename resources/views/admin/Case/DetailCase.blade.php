@@ -49,12 +49,6 @@
                             @endif
 
                             <div class="form-group">
-                                <label>Tin nhắn</label>
-                                <input class="form-control" name="message" value="{{$case->message}}"  disabled/>
-                            </div>
-                            <br>
-
-                            <div class="form-group">
                                 <label>Trạng thái</label>
                                 @switch($case->status)
                                     @case(0)
@@ -88,11 +82,58 @@
                                 @else
                                     <input class="form-control" name="type" value="Tín hiệu khẩn cấp"  disabled/>
                                 @endif
-                                
                             </div>
                             <br>
+
+                            <hr>
+                            {{-- User Rate --}}
+                            @if ($case->rate != 0)
+                            <div class="form-group">
+                                <label>Đánh giá của người dân</label>
+                                @if ($case->rate == 1)
+                                    <input class="form-control" name="rate" value="Xấu"  disabled/>
+                                @elseif($case->rate == 2)
+                                    <input class="form-control" name="rate" value="Trung bình"  disabled/>
+                                @elseif($case->rate == 3)
+                                    <input class="form-control" name="rate" value="Tốt"  disabled/>
+                                @endif
+                            </div>
+                            <br>
+                            @endif
+                            
+                            @if($case->notice != null)
+                            <div class="form-group">
+                                <label>Lời đánh giá của người dân</label>
+                                <input class="form-control" name="notice" value="{{$case->notice}}"  disabled/>
+                            </div>
+                            <br>
+                            <hr>
+                            @endif
+                            
+
+                            {{-- Knight Report --}}
+                            @if (count($case->report) > 0)
+                            <div class="form-group">
+                                <label>Báo cáo của hiệp sĩ</label>
+                                <table class="table">
+                                    <tr>
+                                        <th>Hiệp sĩ</th>
+                                        <th>Lí do</th>
+                                    </tr>
+                                    @foreach ($case->report as $report)
+                                    <tr>
+                                        <td>{{$report->reporter}}</td>
+                                        <td>{{$report->reason}}</td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                            <br>
+                            <hr>
+                            @endif
+
                             {{-- {{ $case->caseDetail }} --}}
-                            @if (!empty($case->caseDetail))
+                            @if (count($case->caseDetail) > 0)
                             <div class="form-group">
                                 <label>Các hiệp sĩ tham gia</label>
                             </div>
@@ -119,7 +160,7 @@
 
                             @if($case->status == 2 || $locationList != null)
                             <div class="form-group">
-                                <label for="">Đoạn đường sự cố</label> 
+                                <label for="">Đoạn đường xử lí sự cố</label> 
                             </div>
 
                             <div id="googleMap" style="width:100%;height:450px;"></div>

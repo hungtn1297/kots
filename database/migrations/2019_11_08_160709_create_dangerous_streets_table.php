@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -20,6 +21,7 @@ class CreateDangerousStreetsTable extends Migration
             $table->string('endLongitude');
             $table->string('endLatitude');
             $table->string('description');
+            $table->timestamp('expiredDate')->default(Carbon::now()->addDay(7));
             $table->timestamps();
         });
     }

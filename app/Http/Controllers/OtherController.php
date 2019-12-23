@@ -37,7 +37,7 @@ class OtherController extends Controller
                         ->where('password', $password)
                         ->where('role', 3)->get();
             if($user->count()>0){
-                return redirect()->action('CitizenController@get');
+                return redirect()->action('AnalyticController@get');
             }else{
                 $error = "Wrong phone or password";
                 return view('login')->with(compact('error'));

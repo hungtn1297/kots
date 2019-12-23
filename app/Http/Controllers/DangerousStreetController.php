@@ -12,7 +12,7 @@ class DangerousStreetController extends Controller
 {
     public function getDS(Request $request){
         if($request->is('api/*')){
-            $listDSs = DangerousStreet::get();
+            $listDSs = DangerousStreet::where('expiredDate','>',Carbon::now())->get();
             $data = [];
             foreach ($listDSs as $ds) {
                 $ds['origin'] = ['latitude' => $ds->startLatitude,
@@ -109,9 +109,11 @@ class DangerousStreetController extends Controller
         // dd($casesInMonth);
         $dsStreet = [];
         foreach ($casesInMonth as $case) {
-            $address = explode(',',$case->address)[0];
-            $address = trim(preg_replace('/\d/', '', $address));
-            $address = trim(preg_replace('/\//', '', $address));
+            // $address = explode(',',$case->address)[0];
+            $address = $case->address;
+            $address = str_replace('/',' ',$address);
+            $address = trim(preg_replace('/\d{1,} /', '', $address));
+            // $address = trim(preg_replace('/\//', '', $address));
             $latLng = [
                 'lat' => $case->startLatitude,
                 'long' => $case->startLongitude
@@ -124,11 +126,19 @@ class DangerousStreetController extends Controller
                 $latLongArr = $dsStreet[$address];
                 array_push($latLongArr, $latLng);
                 $dsStreet[$address] = $latLongArr;
-                if(count($dsStreet[$address]) == 5){
+                if(count($dsStreet[$address]) >= 5){
                     $latLng = $this->getLatLongStartEnd($dsStreet[$address]);
                     // dd($latLng);
                     if(!empty($latLng)){
-                        $this->setDSByLatLng($latLng[0], $latLng[1], $latLng[2], $latLng[3], $address);
+                        $ds = DangerousStreet::where('description',$address)->first();
+                        if(count($ds) > 0){
+                            $ds->expiredDate = Carbon::now()->addDay(7);
+                            $ds->endLongitude = $latLng[3];
+                            $ds->endLatitude = $latLng[1];
+                            $ds->save();
+                        }else{
+                            $this->setDSByLatLng($latLng[0], $latLng[1], $latLng[2], $latLng[3], $address);
+                        }
                     }
                 }
             }

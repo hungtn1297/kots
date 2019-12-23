@@ -31,7 +31,7 @@
                         </div>
                         <br>
         
-                            <button type="submit" class="btn btn-success">Cập nhật</button>
+                            <button type="submit" class="btn btn-success" onsubmit="submitDelete();">Cập nhật</button>
                             <button onclick="goBack()" class="btn btn-warning">Trở về</button>
                     </form>
                 </div>

@@ -48,6 +48,7 @@
                                         <th>Địa Chỉ</th>
                                         <th>Số Điện Thoại</th>
                                         <th>Trạng Thái Tài Khoản</th>
+                                        <th>Chức vụ</th>
                                         <th>Ảnh đại diện</th>
                                         <th>Chi tiết</th>
                                     </tr>
@@ -69,6 +70,17 @@
                                                         <td style="color: coral">Đang chờ xét duyệt</td>
                                                     @elseif($knight->status == 1) --}}
                                                         <td style="color: green">Đang hoạt động</td>
+                                                    {{-- @elseif($knight->status == 2)
+                                                        <td style="color: orange">Đang truy đuổi</td>
+                                                    @endif   --}}
+                                                @endif
+                                                @if ($knight->isLeader == 1)
+                                                    <td style="color: gray">Đội trưởng</td>
+                                                @else
+                                                    {{-- @if ($knight->status == 0)
+                                                        <td style="color: coral">Đang chờ xét duyệt</td>
+                                                    @elseif($knight->status == 1) --}}
+                                                    <td style="color: green">Đội viên</td>
                                                     {{-- @elseif($knight->status == 2)
                                                         <td style="color: orange">Đang truy đuổi</td>
                                                     @endif   --}}

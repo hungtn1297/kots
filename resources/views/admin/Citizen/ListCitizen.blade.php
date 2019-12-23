@@ -49,19 +49,16 @@
                                             </form>    
                                         </td>
                                         <td>
-                                            @if ($citizen->isDisable == 1)
-                                                <form action="{{url('admin/citizen/disable')}}" method="post">
+                                                <form action="{{url('admin/citizen/disable')}}" method="post" onsubmit="submitDelete();">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{sprintf('%010d',$citizen->id)}}">
-                                                    <input type="submit" class="btn btn-success" value="Kích hoạt">
+                                                    
+                                                    @if ($citizen->isDisable == 1)
+                                                        <input type="submit" class="btn btn-success" value="Kích hoạt">
+                                                    @else
+                                                        <input type="submit" class="btn btn-danger" value="Khoá">
+                                                    @endif 
                                                 </form>
-                                            @else
-                                                <form action="{{url('admin/citizen/disable')}}" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{sprintf('%010d',$citizen->id)}}">
-                                                    <input type="submit" class="btn btn-danger" value="Khoá">
-                                                </form>
-                                            @endif 
                                         </td>                    
                                     </tr>
                             @endforeach 

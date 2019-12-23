@@ -17,4 +17,8 @@ class Cases extends Model
                     ->where('isLeave', 0)
                     ->where('isIgnore', 0);
     }
+
+    public function report(){
+        return $this->hasMany('App\UserReport', 'caseId');
+    }
 }

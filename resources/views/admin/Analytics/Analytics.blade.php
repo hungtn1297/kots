@@ -202,10 +202,36 @@
                 <br>
                 <p style="text-align:center; font-size: x-large">Biểu đồ thống kê số lượng sự cố trong 1 năm</p>
                 <hr>
+                <div style="text-align: right;">
+                    <form action="{{url('admin/analytic')}}" method="get">
+                        <b>Từ ngày</b>: <input  type="date" name="startDate" id="startDate" style="margin-right: 3%;">
+                        <b>Đến ngày</b>: <input  type="date" name="endDate" id="endDate" style="margin-right: 3%;">
+                        <input type="submit" value="Kiểm tra" class="btn btn-info" style="margin-right: 3%;">
+                    </form>
+                </div>
                 <div id="chartdiv2"></div>
                 <br>
-                <p style="text-align:center; font-size: x-large">Các quận xảy ra nhiều sự cố nhất</p>
+                <p style="text-align:center; font-size: x-large">Các quận xảy ra nhiều sự cố nhất từ ngày <b id="startDateText"></b> đến ngày <b id="endDateText"></b> </p>
                 <!-- /.container-fluid -->
             </div>  
             <!-- /#page-wrapper -->
+    {{-- <script>
+        var startDateVar = {!! json_encode($startDate) !!};
+        var endDateVar = {!! json_encode($endDate) !!};
+        console.log(startDateVar);
+        console.log(endDateVar);
+        if(startDateVar != null && endDateVar != null){
+            var startDate = new Date(startDateVar);
+            var endDate = new Date(endDateVar);
+        }else{
+            var endDate = new Date();
+            var startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - 7);
+        }
+        console.log(startDate);
+        console.log(endDate);
+        document.getElementById('startDate').valueAsDate = startDate;
+        document.getElementById('endDate').valueAsDate = endDate;
+        document.getElementById('startDateText').innerText = startDate.toLocaleDateString();
+        document.getElementById('endDateText').innerText = endDate.toLocaleDateString();
+    </script> --}}
 @stop

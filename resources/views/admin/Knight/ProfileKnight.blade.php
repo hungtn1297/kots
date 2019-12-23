@@ -42,6 +42,15 @@
                             </div>   
                             <img src="{{URL::asset("$knight->image")}}" alt="" width="200" height="200">
                             <br>
+                            
+                            <div class="form-group">
+                                <label>Thông tin xác thực</label>
+                            </div>
+                            @foreach ($knight->certificationInfo as $certi)
+                                <img src="{{$certi->image}}" alt="" width="200" height="200">
+                            @endforeach   
+                            
+                            <br>
         
                             <br>
                             <div class="form-group">

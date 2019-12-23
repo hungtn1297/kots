@@ -37,19 +37,17 @@
                                             </form>    
                                         </td>
                                         <td>
-                                            @if ($criminal->status == 1)
-                                                <form action="{{url('admin/criminal/disable')}}" method="post">
+                                            
+                                                <form action="{{url('admin/criminal/disable')}}" method="post" onsubmit="submitDelete();">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{$criminal->id}}">
-                                                    <input type="submit" class="btn btn-default" value="Ẩn đi">
+                                                    @if ($criminal->status == 1)
+                                                        <input type="submit" class="btn btn-default" value="Ẩn đi">
+                                                    @else
+                                                        <input type="submit" class="btn btn-success" value="Hiển thị">
+                                                    @endif 
                                                 </form>
-                                            @else
-                                                <form action="{{url('admin/criminal/disable')}}" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{$criminal->id}}">
-                                                    <input type="submit" class="btn btn-success" value="Hiển thị">
-                                                </form>
-                                            @endif 
+                                            
                                         </td>                    
                                     </tr>
                             @endforeach 

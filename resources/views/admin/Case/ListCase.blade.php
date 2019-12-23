@@ -18,6 +18,7 @@
                                 <th>Người gửi</th>
                                 <th>Tin nhắn</th>
                                 <th>Trạng thái</th>
+                                <th>Phân loại</th>
                                 <th>Thời gian khởi tạo</th>
                                 <th>Chi tiết</th>
                             </tr>
@@ -47,6 +48,11 @@
                                         <td style="color: darkblue">Sự cố giả</td>              
                                     @else
                                         <td style="color: green">Thua =))</td>
+                                    @endif
+                                    @if ($case->type == 1)
+                                        <td>Cần Liên Lạc</td>
+                                    @else
+                                        <td>Khẩn cấp</td>
                                     @endif
                                     <td>{{$case->created_at}}</td>
                                     <td>

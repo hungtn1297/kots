@@ -212,6 +212,11 @@
     <script src="{{ URL::asset('admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <script>
+
+    function submitDelete(){
+        return confirm('Bạn chắc chắn về tác vụ này chứ?');
+    }
+
     $(document).ready(function() {
         // $('#dataTables-example thead tr').clone(true).appendTo( '#dataTables-example thead' );
         // $('#dataTables-example thead tr:eq(1) th').each( function (i) {

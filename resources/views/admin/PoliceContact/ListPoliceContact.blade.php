@@ -36,7 +36,7 @@
                                             </form>    
                                         </td>
                                         <td>
-                                            <form action="{{url('admin/policeContact/delete')}}" method="post">
+                                            <form action="{{url('admin/policeContact/delete')}}" method="post" onsubmit="submitDelete();">
                                                 @csrf
                                                 @method('delete')
                                                 <input type="hidden" name="id" value="{{$policeContact->id}}">

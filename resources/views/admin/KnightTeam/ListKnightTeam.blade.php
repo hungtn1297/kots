@@ -36,7 +36,7 @@
                                     <td style="color: gray">Đang chờ xét duyệt</td>
                                 @endif
                                 @if ($team->status == -1)
-                                    <td style="color: gray">Khoá</td>
+                                    <td style="color: gray">Bị khoá</td>
                                 @endif
                                 <td>
                                     <form action="{{url('admin/knightTeam/detail')}}" method="get">
@@ -46,7 +46,7 @@
                                     </form>
                                 </td> 
                                 <td>
-                                    <form action="{{url('admin/knightTeam/changeTeamStatus')}}" method="post">
+                                    <form action="{{url('admin/knightTeam/changeTeamStatus')}}" method="post" onsubmit="submitDelete();">
                                         @csrf
                                         <input type="hidden" name="id" value="{{$team->id}}">
                                         @if ($team->status  == 0 || $team->status  == -1)

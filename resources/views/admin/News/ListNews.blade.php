@@ -35,7 +35,7 @@
                                             </form>    
                                         </td>
                                         <td>
-                                            <form action="{{url('admin/news/delete')}}" method="post">
+                                            <form action="{{url('admin/news/delete')}}" method="post" onsubmit="submitDelete();">
                                                 @csrf
                                                 @method('delete')
                                                 <input type="hidden" name="id" value="{{$news->id}}">

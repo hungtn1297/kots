@@ -37,7 +37,7 @@
                         </div>
                         <br>
                         
-                            <button type="submit" class="btn btn-success">Cập nhật</button>
+                            <button type="submit" class="btn btn-success" onsubmit="submitDelete();">Cập nhật</button>
                             <br>
                             <br>
                     </form>

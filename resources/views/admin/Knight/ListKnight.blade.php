@@ -55,19 +55,17 @@
                                             </form>    
                                         </td>
                                         <td>
-                                            @if ($knight->isDisable == 1)
-                                                <form action="{{url('admin/knight/disable')}}" method="post">
+                                            
+                                                <form action="{{url('admin/knight/disable')}}" method="post" onsubmit="submitDelete();">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{sprintf('%010d',$knight->id)}}">
-                                                    <input type="submit" class="btn btn-success" value="Kích hoạt">
+                                                    @if ($knight->isDisable == 1)
+                                                        <input type="submit" class="btn btn-success" value="Kích hoạt">
+                                                    @else
+                                                        <input type="submit" class="btn btn-danger" value="Khoá">
+                                                    @endif 
                                                 </form>
-                                            @else
-                                                <form action="{{url('admin/knight/disable')}}" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{sprintf('%010d',$knight->id)}}">
-                                                    <input type="submit" class="btn btn-danger" value="Khoá">
-                                                </form>
-                                            @endif 
+                                            
                                         </td>                    
                                     </tr>
                             @endforeach 

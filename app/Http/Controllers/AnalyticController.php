@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AnalyticController extends Controller
 {
-    public function get(){
+    public function get(Request $request){
         // dd($case);
         $data = [];
         $totalCase = [];
@@ -38,18 +38,34 @@ class AnalyticController extends Controller
                             'Tân Bình', 'Tân Phú', 'Phú Nhuận', 'Bình Tân', 'Củ Chi',
                             'Hóc Môn', 'Bình Chánh', 'Nhà Bè', 'Cần Giờ'];
             
+            $startDate = $request->startDate;
+            $endDate = $request->endDate;
+            
             $barDataAllDistrict = [];
             foreach ($districtArr as $district) {
+                if(isset($startDate) && isset($endDate)){
+                    $case = Cases::where('district', $district)
+                            ->where('created_at','>',$startDate)
+                            ->where('created_at','<',$endDate)
+                            ->get();
+                }else{
+                    $case = Cases::where('district', $district)
+                            ->where('created_at','>',Carbon::now()->subWeek(1))
+                            ->get();
+                }
                 $tmpDisArr['district'] = $district;
-                $tmpDisArr['all'] = count(Cases::where('district', $district)->get());
-                $tmpDisArr['success'] = count(Cases::where('district', $district)->where('status',2)->get());
-                $tmpDisArr['fail'] = count(Cases::where('district', $district)->where('status',3)->get());
+                $tmpDisArr['all'] = count($case);
+                $tmpDisArr['success'] = count($case->where('status',2));
+                $tmpDisArr['fail'] = count($case->where('status',3));
 
                 array_push($barDataAllDistrict,(object) $tmpDisArr);
             }
             $all = array_column($barDataAllDistrict,'all');
             array_multisort($all, SORT_DESC, $barDataAllDistrict);
             $barData = array_slice($barDataAllDistrict,0,5,true);
+        }
+        if(isset($startDate) && isset($endDate)){
+            return view('admin/Analytics/Analytics')->with(compact('totalCase', 'successCase', 'failCase','barData','startDate','endDate'));
         }
         return view('admin/Analytics/Analytics')->with(compact('totalCase', 'successCase', 'failCase','barData'));
     }
