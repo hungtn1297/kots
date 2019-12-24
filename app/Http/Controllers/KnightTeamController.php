@@ -45,9 +45,7 @@ class KnightTeamController extends Controller
             $json = json_decode(file_get_contents('php://input'), true);
             if(isset($json['teamId'])){
                 $teams = KnightTeam::with('knight')
-                                    ->where('status',1)
-                                    ->where('id',$json['teamId'])
-                                    ->first();
+                                    ->find($json['teamId']);
                 $leader = Users::where('team_id', $teams->id)
                                     ->where('isLeader',1)
                                     ->where('status',0)
