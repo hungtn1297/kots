@@ -115,8 +115,6 @@ class KnightController extends Controller
 
         $knightInCase = CaseDetail::where('caseId', $caseId)
                                     ->where('knightId',$knightId)
-                                    ->where('isLeave', 0)
-                                    ->where('isIgnore', 0)
                                     ->first();
         $messageController = new MessageController();
 
