@@ -64,10 +64,11 @@ class AnalyticController extends Controller
             array_multisort($all, SORT_DESC, $barDataAllDistrict);
             $barData = array_slice($barDataAllDistrict,0,5,true);
         }
-        if(isset($startDate) && isset($endDate)){
-            return view('admin/Analytics/Analytics')->with(compact('totalCase', 'successCase', 'failCase','barData','startDate','endDate'));
+        if(!isset($startDate) && !isset($endDate)){
+            $startDate = 0;
+            $endDate = 0;
         }
-        return view('admin/Analytics/Analytics')->with(compact('totalCase', 'successCase', 'failCase','barData'));
+        return view('admin/Analytics/Analytics')->with(compact('totalCase', 'successCase', 'failCase','barData','startDate','endDate'));
     }
 
 }

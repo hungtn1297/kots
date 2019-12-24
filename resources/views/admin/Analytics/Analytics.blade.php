@@ -216,11 +216,13 @@
             </div>  
             <!-- /#page-wrapper -->
     <script>
-        var startDateVar = {!! json_encode($startDate) !!};
-        var endDateVar = {!! json_encode($endDate) !!};
+
+        startDateVar = {!! json_encode($startDate) !!};
+        endDateVar = {!! json_encode($endDate) !!};
+
         console.log(startDateVar);
         console.log(endDateVar);
-        if(startDateVar != null && endDateVar != null){
+        if(startDateVar != 0 && endDateVar != 0){
             var startDate = new Date(startDateVar);
             var endDate = new Date(endDateVar);
         }else{
@@ -231,7 +233,12 @@
         console.log(endDate);
         document.getElementById('startDate').valueAsDate = startDate;
         document.getElementById('endDate').valueAsDate = endDate;
-        document.getElementById('startDateText').innerText = startDate.toLocaleDateString();
-        document.getElementById('endDateText').innerText = endDate.toLocaleDateString();
+        document.getElementById('startDateText').innerText = changeFormat(document.getElementById('startDate').value);
+        document.getElementById('endDateText').innerText = changeFormat(document.getElementById('endDate').value);
+
+        function changeFormat(date){
+            var date = date.split('-');
+            return date[2] + '/' + date[1] + '/' + date[0];
+        }
     </script>
 @stop
