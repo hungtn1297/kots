@@ -206,7 +206,7 @@
                     <form action="{{url('admin/analytic')}}" method="get">
                         <b>Từ ngày</b>: <input  type="date" name="startDate" id="startDate" style="margin-right: 3%;">
                         <b>Đến ngày</b>: <input  type="date" name="endDate" id="endDate" style="margin-right: 3%;">
-                        <input type="submit" value="Kiểm tra" class="btn btn-info" style="margin-right: 3%;">
+                        <input type="submit" value="Xem" class="btn btn-info" style="margin-right: 3%;">
                     </form>
                 </div>
                 <div id="chartdiv2"></div>
@@ -215,7 +215,7 @@
                 <!-- /.container-fluid -->
             </div>  
             <!-- /#page-wrapper -->
-    {{-- <script>
+    <script>
         var startDateVar = {!! json_encode($startDate) !!};
         var endDateVar = {!! json_encode($endDate) !!};
         console.log(startDateVar);
@@ -233,5 +233,5 @@
         document.getElementById('endDate').valueAsDate = endDate;
         document.getElementById('startDateText').innerText = startDate.toLocaleDateString();
         document.getElementById('endDateText').innerText = endDate.toLocaleDateString();
-    </script> --}}
+    </script>
 @stop

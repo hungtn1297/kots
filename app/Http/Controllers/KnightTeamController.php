@@ -44,7 +44,10 @@ class KnightTeamController extends Controller
         if($request->is('api/*')){
             $json = json_decode(file_get_contents('php://input'), true);
             if(isset($json['teamId'])){
-                $teams = KnightTeam::with('knight')->find($json['teamId']);
+                $teams = KnightTeam::with('knight')
+                                    ->where('status',1)
+                                    ->where('id',$json['teamId'])
+                                    ->first();
                 $leader = Users::where('team_id', $teams->id)
                                     ->where('isLeader',1)
                                     ->where('status',0)
@@ -58,7 +61,9 @@ class KnightTeamController extends Controller
                     $knight->id = '+84'.substr($knight->id,1,strlen($knight->id));
                 }
             }else{
-                $teams = KnightTeam::with('knight')->get();
+                $teams = KnightTeam::with('knight')
+                                    ->where('status',1)
+                                    ->get();
                 foreach ($teams as $team) {
                     $leader = Users::where('team_id', $team->id)
                                     ->where('isLeader',1)
@@ -189,6 +194,7 @@ class KnightTeamController extends Controller
             $leaderInTeam = Users::where('team_id', $teamId)
                             ->where('isLeader', 1)->first();
             $leaderInTeam->status = 1;
+            $leaderInTeam->isDisable = 0;
             $flag = $flag && $leaderInTeam->save();
             // dd($flag);
         }
