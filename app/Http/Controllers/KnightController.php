@@ -328,7 +328,7 @@ class KnightController extends Controller
         $knight = Users::find($knightId);
         // $phone = substr_replace($knight->id,'******',0,strlen($knight->id)-4);
         $phone = $knight->id;
-        return 'Hiệp sĩ '. $knight->name. ' - '. $phone;
+        return $knight->name. ' - '. $phone;
     }
 
     public function callSupport(){
