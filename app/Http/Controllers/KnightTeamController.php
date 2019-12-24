@@ -188,16 +188,15 @@ class KnightTeamController extends Controller
         $flag =  $flag && $team->save();
         // dd($flag);
         
-        if($status = 1){
+        if($status == 1){
             $leaderInTeam = Users::where('team_id', $teamId)
                             ->where('isLeader', 1)->first();
             $leaderInTeam->status = 1;
-            $leaderInTeam->isDisable = 0;
             $flag = $flag && $leaderInTeam->save();
             // dd($flag);
         }
 
-        if($status  = -1){
+        if($status == -1){
             $teamMembers = Users::where('team_id', $teamId)->get();
             foreach ($teamMembers as $member) {
                 $member->isDisable = 1;
