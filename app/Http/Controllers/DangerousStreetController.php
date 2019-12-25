@@ -105,7 +105,7 @@ class DangerousStreetController extends Controller
     public function checkDS(){
         $casesInMonth = Cases::where(
             'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
-        )->get();
+        )->whereIn('status',[2,3])->get();
         // dd($casesInMonth);
         $dsStreet = [];
         foreach ($casesInMonth as $case) {

@@ -40,6 +40,7 @@ class CaseController extends Controller
         $case = Cases::find($caseId);
         $knightController = new KnightController();
         $userReportController = new UserReportController();
+        $dangerousStreetController = new DangerousStreetController();
         // dd(isset($case));     
         if(isset($case)){
             $flag = true;
@@ -81,6 +82,8 @@ class CaseController extends Controller
                         $citizen = Users::find($case->citizenId);
                         $messageController = new MessageController();
                         $messageController->sendMessageToCitizen($case, $knightId, $citizen->token, $type = 'close');
+                        
+                        $dangerousStreetController->checkDS($case);
                     }elseif ($status == $this->FAKE) {
                         // dd(1234);
                         $flag = $flag && $userReportController->reportUserById($case->citizenId, 'Gửi thông tin giả', $knightId, $case->id);
@@ -376,10 +379,6 @@ class CaseController extends Controller
             // dd($case);
             if(!isset($case)){
                 $flag = false;
-            }
-            else{
-                $dangerousStreetController = new DangerousStreetController();
-                $dangerousStreetController->checkDS($case);
             }
             // dd($flag);
             $user = Users::find($id);
