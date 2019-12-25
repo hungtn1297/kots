@@ -63,6 +63,9 @@ class CaseController extends Controller
                     $flag = $flag && $case->save();
                 }
             }elseif($status == $this->SUCCESS || $status == $this->FAIL || $status == $this->FAKE){
+                if(in_array($case->status,[2,3,5,6])){
+                    return $this->returnAPI(3000,'Sự cố này đã bị đóng',$case);
+                }
                 $knightId = str_replace("+84","0",$json['phone']);
                 $caseDetail = CaseDetail::where('caseId', $caseId)
                                         ->where('knightId',$knightId)
