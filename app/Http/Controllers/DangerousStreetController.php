@@ -126,13 +126,15 @@ class DangerousStreetController extends Controller
                 $latLongArr = $dsStreet[$address];
                 array_push($latLongArr, $latLng);
                 $dsStreet[$address] = $latLongArr;
-                if(count($dsStreet[$address]) >= 5){
+                if(count($dsStreet[$address]) >= 3){
                     $latLng = $this->getLatLongStartEnd($dsStreet[$address]);
                     // dd($latLng);
                     if(!empty($latLng)){
                         $ds = DangerousStreet::where('description',$address)->first();
                         if(count($ds) > 0){
                             $ds->expiredDate = Carbon::now()->addDay(7);
+                            $ds->startLongitude = $latLng[2];
+                            $ds->startLatitude = $latLng[0];
                             $ds->endLongitude = $latLng[3];
                             $ds->endLatitude = $latLng[1];
                             $ds->save();
