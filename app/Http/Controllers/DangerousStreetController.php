@@ -131,6 +131,7 @@ class DangerousStreetController extends Controller
                     // dd($latLng);
                     if(!empty($latLng)){
                         $ds = DangerousStreet::where('description',$address)->first();
+                        dd($ds);
                         if(count($ds) > 0){
                             $ds->expiredDate = Carbon::now()->addDay(7);
                             $ds->startLongitude = $latLng[2];
