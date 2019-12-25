@@ -231,11 +231,11 @@ class KnightController extends Controller
 
     public function confirmCase($knightId, $caseId){
         $caseDetail = CaseDetail::where('caseId', $caseId)
-                                ->first();
+                                ->get();
         // // dd($caseDetail);
         $case = Cases::find($caseId);
         // dd($caseId . ' - '. $knightId);
-        if(isset($case) && $caseDetail->count()>0){
+        if(isset($case) && $caseDetail->count() == 0){
             // dd($case);
             $case->knightConfirmId = $knightId;
             $checkCase = $case->save();
