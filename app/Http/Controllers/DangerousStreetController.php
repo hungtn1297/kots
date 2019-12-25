@@ -126,7 +126,7 @@ class DangerousStreetController extends Controller
                 $latLongArr = $dsStreet[$address];
                 array_push($latLongArr, $latLng);
                 $dsStreet[$address] = $latLongArr;
-                if(count($dsStreet[$address]) >= 3){
+                if(count($dsStreet[$address]) >= 2){
                     $latLng = $this->getLatLongStartEnd($dsStreet[$address]);
                     // dd($latLng);
                     if(!empty($latLng)){
